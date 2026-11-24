@@ -12,7 +12,7 @@ const files = [
   'README.md', 'LICENSE', 'LICENSE-ASSETS.md', 'THIRD_PARTY_NOTICES.md', 'TRADEMARKS.md', 'CONTRIBUTING.md', 'SECURITY.md',
   'Dockerfile', 'Dockerfile.directory', 'compose.yaml', 'compose.directory.yaml',
   'package.json', 'package-lock.json', 'tsconfig.base.json', 'tsconfig.json', 'tsconfig.runtime.json', 'vite.config.ts',
-  'index.html', 'ui.css', 'favicon.svg', 'replay.html', 'replay.css',
+  'index.html', 'ui.css', 'favicon.svg', 'replay.html', 'replay.css', 'sobre.html', 'public/sobre-campo.webp',
   'docs/automatic-services.md', 'docs/balanceamento.md', 'docs/client-context.md', 'docs/faction-commander.md',
   'docs/field-base49-conversion.md', 'docs/field-recovery.md', 'docs/game-design.md', 'docs/glossario-es.md',
   'docs/industrial-progression.md', 'docs/localization.md', 'docs/maintenance-map.md', 'docs/mobile-performance.md',

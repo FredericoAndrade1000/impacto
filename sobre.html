@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e1512">
+  <title data-copy="title">Sobre o Impacto</title>
+  <meta name="description" data-copy="intro" content="Impacto é um jogo 2D em vista lateral feito para uma comunidade de RP. Monte veículos na Oficina e jogue em um campo online persistente.">
+  <link rel="canonical" href="https://impacto.hexarail.com/sobre">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Impacto">
+  <meta property="og:title" data-copy="title" content="Sobre o Impacto">
+  <meta property="og:description" data-copy="intro" content="Impacto é um jogo 2D em vista lateral feito para uma comunidade de RP. Monte veículos na Oficina e jogue em um campo online persistente.">
+  <meta property="og:url" content="https://impacto.hexarail.com/sobre">
+  <meta property="og:locale" data-copy="locale" content="pt_BR">
+  <meta property="og:image" content="https://impacto.hexarail.com/sobre-campo.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" data-copy="imageAlt" content="Montanhas e floresta do Impacto">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/sobre.css">
+  <script type="module" src="/src/sobre.ts"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand"><img src="/favicon.svg" width="32" height="32" alt=""> Impacto</div>
+      <nav class="languages" aria-label="Idioma" data-copy="language" hidden>
+        <a href="/sobre" lang="pt-BR" hreflang="pt-BR">Português</a>
+        <a href="/sobre?lang=en" lang="en" hreflang="en">English</a>
+        <a href="/sobre?lang=es" lang="es" hreflang="es">Español</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="intro">
+        <div class="intro-copy">
+          <h1 data-copy="title">Sobre o Impacto</h1>
+          <p data-copy="intro">Impacto é um jogo 2D em vista lateral feito para uma comunidade de RP. Monte veículos na Oficina e jogue em um campo online persistente.</p>
+          <a class="play" href="/" data-copy="play">Jogar</a>
+        </div>
+        <div class="intro-art" aria-hidden="true"></div>
+      </div>
+
+      <div class="details">
+        <section aria-labelledby="source-title">
+          <h2 id="source-title" data-copy="source">Código aberto</h2>
+          <p><a href="https://github.com/FredericoAndrade1000/impacto" data-copy="github">Repositório no GitHub</a></p>
+          <ul class="licenses">
+            <li><strong data-copy="code">Código</strong> · <a href="https://github.com/FredericoAndrade1000/impacto/blob/main/LICENSE">AGPL-3.0-only</a></li>
+            <li><strong data-copy="assets">Arte e áudio</strong> · <a href="https://github.com/FredericoAndrade1000/impacto/blob/main/LICENSE-ASSETS.md">CC BY 4.0</a></li>
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/TRADEMARKS.md" data-copy="trademark">Marca</a> · <span data-copy="brandRule">Nome “Impacto” reservado. Forks usam nome próprio.</span></li>
+          </ul>
+          <ul class="links">
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/CONTRIBUTING.md" data-copy="contribute">Como contribuir</a></li>
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/SECURITY.md" data-copy="security">Relatar falha de segurança</a></li>
+          </ul>
+        </section>
+
+        <section class="hosting" aria-labelledby="hosting-title">
+          <h2 id="hosting-title" data-copy="hosting">Baixar e hospedar um servidor</h2>
+          <p data-copy="requirements">Você precisa de Docker com Compose e de um domínio com HTTPS.</p>
+          <p><span data-copy="download">Clone o repositório ou</span> <a href="https://github.com/FredericoAndrade1000/impacto/archive/refs/heads/main.zip" data-copy="zip">baixe o ZIP</a>.</p>
+          <pre><code>git clone https://github.com/<wbr>FredericoAndrade1000/<wbr>impacto</code></pre>
+          <p data-copy="openFolder">Na pasta do projeto, copie o arquivo de exemplo.</p>
+          <pre><code>cp .env.example .env</code></pre>
+          <p><span data-copy="address">Defina seu domínio HTTPS em</span> <code>IMPACTO_ADDRESS</code> <span data-copy="start">e inicie o servidor.</span></p>
+          <pre><code>docker compose up -d</code></pre>
+          <ul class="links">
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/docs/servidores.md" data-copy="hostingGuide">Guia de hospedagem</a></li>
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/docs/field-recovery.md" data-copy="recovery">Backup e recuperação do campo</a></li>
+          </ul>
+        </section>
+
+        <section class="directory" aria-labelledby="directory-title">
+          <h2 id="directory-title" data-copy="directory">Aparecer na lista de servidores</h2>
+          <p><span data-copy="register">Peça o cadastro no</span> <a href="https://discord.gg/Cdn8mUU6T5" data-copy="discord">Discord da comunidade</a> <span data-copy="configure">e configure as variáveis</span> <code>IMPACTO_DIRECTORY_*</code> <span data-copy="key">com a chave recebida.</span></p>
+          <ul class="links">
+            <li><a href="https://github.com/FredericoAndrade1000/impacto/blob/main/docs/servidores.md#anunciar-o-campo" data-copy="directoryGuide">Instruções de cadastro</a></li>
+            <li><a href="/" data-copy="serverList">Ver lista de servidores</a></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

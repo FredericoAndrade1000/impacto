@@ -134,7 +134,7 @@ export default defineConfig({
   // Validation snapshots are archived projects, not additional editor entries.
   optimizeDeps: { entries: ['index.html'] },
   worker: { format: 'es' },
-  build: { target: 'esnext' },
+  build: { target: 'esnext', rolldownOptions: { input: ['index.html', 'sobre.html'] } },
   // The page owns the save/notice/reload sequence, including style updates. Vite must not bypass it.
   // The field keeps its own /world WebSocket; backend source edits still require a server restart.
   server: { host: '127.0.0.1', port: 8131, strictPort: true, hmr: false, ws: false,

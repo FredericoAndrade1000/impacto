@@ -1,0 +1,158 @@
+:root {
+  color-scheme: dark;
+  --bg: #0e1512;
+  --panel: #151e1a;
+  --well: #0f1713;
+  --line: #34463b;
+  --text: #e9eddf;
+  --muted: #b9c5b3;
+  --accent: #f0b874;
+  --accent-strong: #ffcf93;
+  --accent-ink: #2b2112;
+  font: 16px/1.55 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: radial-gradient(950px 540px at 75% 0, #23352a, transparent 76%), var(--bg);
+  color: var(--text);
+}
+h1, h2 {
+  margin: 0;
+  font-family: Bahnschrift, "Segoe UI", system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.1;
+}
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 0.2em; }
+a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
+code { font: 0.9em Consolas, "Liberation Mono", monospace; overflow-wrap: anywhere; }
+
+.page { width: min(100% - 32px, 1120px); margin: 0 auto; padding-bottom: 36px; }
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 18px 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--well);
+}
+.languages a {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  padding: 0 9px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+.languages a:hover { color: var(--text); }
+.languages a[aria-current] { background: #2d4035; color: var(--text); }
+
+.intro {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-height: 288px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+}
+.intro-copy { max-width: 610px; padding: clamp(24px, 4vw, 48px); }
+.intro h1 { font-size: clamp(2.35rem, 5.2vw, 3.5rem); }
+.intro p {
+  max-width: 47ch;
+  margin: 14px 0 22px;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.7vw, 1.125rem);
+}
+.intro-art {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 0 43%;
+  background: linear-gradient(90deg, var(--panel), #151e1a30 75%),
+    url('/sobre-campo.webp') center / cover no-repeat;
+}
+.play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 112px;
+  padding: 8px 20px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+.play:hover { background: var(--accent-strong); color: var(--accent-ink); }
+
+.details { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 16px; margin-top: 16px; }
+.details section {
+  min-width: 0;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel);
+}
+.details h2 { margin-bottom: 12px; font-size: clamp(1.35rem, 2.4vw, 1.65rem); }
+.details p, .licenses { color: var(--muted); }
+.details p + p { margin-top: 10px; }
+.licenses, .links { margin: 0; padding: 0; list-style: none; }
+.licenses { margin: 12px 0; border-block: 1px solid var(--line); padding: 7px 0; }
+.licenses li { padding: 5px 0; }
+.licenses strong { color: var(--text); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 2px 20px; margin-top: 10px; }
+.links a { display: inline-block; padding: 4px 0; }
+pre {
+  margin: 6px 0 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--well);
+  white-space: pre-wrap;
+}
+.hosting { grid-column: 2; grid-row: 1 / span 2; }
+
+@media (max-width: 760px) {
+  .intro-art { inset-inline-start: 20%; opacity: 0.55; }
+  .details { grid-template-columns: 1fr; }
+  .hosting { grid-column: auto; grid-row: auto; }
+}
+@media (max-width: 520px) {
+  .topbar { padding: 12px 0; }
+  .page { width: calc(100% - 24px); padding-bottom: 24px; }
+  .intro-copy { padding-bottom: 12px; }
+  .intro-art {
+    position: static;
+    min-height: 102px;
+    opacity: 1;
+    background: linear-gradient(180deg, var(--panel), #151e1a20 90%),
+      url('/sobre-campo.webp') center 66% / cover no-repeat;
+  }
+  .directory .links { gap: 2px 14px; }
+}

@@ -3,6 +3,7 @@
 export const ENGLISH = Object.freeze({
   "Español": "Español",
   "Servidores": "Servers",
+  "Sobre": "About",
   "Código-fonte": "Source code",
   "Buscar servidores": "Search servers",
   "Ordenar servidores": "Sort servers",

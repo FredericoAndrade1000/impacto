@@ -25,6 +25,8 @@ Frederico Andrade disponibiliza os recursos próprios identificados abaixo sob [
 
 O código dos desenhos procedurais integra a licença do código em [LICENSE](LICENSE).
 
+`public/sobre-campo.webp` é uma adaptação do primeiro panorama de `scenery-ranges-v4.webp`, recortado e composto sobre um céu em degradê para a página Sobre. Impacto, por Frederico Andrade, CC BY 4.0.
+
 ## Imagens de terceiros
 
 - `src/assets/fire-flame.png` — Unity Labs Paris, sequência de VFX preparada em atlas. CC0-1.0. [Fonte, receita e hashes](src/assets/fire-flame.LICENSE.txt)

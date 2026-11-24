@@ -435,7 +435,8 @@ dialog::backdrop { backdrop-filter: blur(3px); background: #060c09c7; }
 .server-incompatible, #entry-dialog .entry-community { color: var(--danger); }
 .server-direct { display: grid; gap: 5px; margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line); }
 .server-menu-actions { flex-wrap: wrap; margin-top: 12px; }
-.server-source { display: inline-block; margin-top: 12px; color: inherit; font-size: .85em; }
+.server-menu-links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; font-size: .85em; }
+.server-menu-links a { display: inline-flex; align-items: center; min-height: 28px; color: inherit; }
 #entry-dialog .entry-server { color: var(--text); font-weight: 650; overflow-wrap: anywhere; }
 .entry-servers { margin-top: 8px; }
 @media (max-width: 520px) {

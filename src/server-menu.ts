@@ -1,5 +1,5 @@
 import { actionButton, node } from './dom-view.ts';
-import { locale, tr } from './i18n.ts';
+import { language, locale, tr } from './i18n.ts';
 import { checkServerEntry, compatible, lastServer, loadServerList, measureServer, pageField, typedServer } from './server-browser.ts';
 import type { ListedServer } from './server-directory-contract.ts';
 import { DEFAULT_SOURCE_URL } from './source-url.ts';
@@ -19,6 +19,8 @@ export function createServerMenu(dialog: HTMLDialogElement, choose: (server: Ser
   const form = dialog.querySelector<HTMLFormElement>('#server-direct')!;
   const error = dialog.querySelector<HTMLElement>('#server-error')!;
   const refresh = dialog.querySelector<HTMLButtonElement>('#server-refresh')!;
+  const about = dialog.querySelector<HTMLAnchorElement>('#server-about')!, lang = language();
+  if (lang !== 'pt-BR') about.href = '/sobre?lang=' + lang;
   const source = dialog.querySelector<HTMLAnchorElement>('#server-source')!;
   source.href = DEFAULT_SOURCE_URL;
   let cycle = new AbortController(), attempt: AbortController | undefined, official: string | undefined;
