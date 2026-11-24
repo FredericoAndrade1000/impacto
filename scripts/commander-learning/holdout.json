@@ -1,0 +1,902 @@
+[
+  {
+    "name": "hold-000",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000001,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": -10000
+  },
+  {
+    "name": "hold-001",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000002,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -10000
+  },
+  {
+    "name": "hold-002",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000003,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": -10000
+  },
+  {
+    "name": "hold-003",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000004,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": -10000
+  },
+  {
+    "name": "hold-004",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000005,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -10000
+  },
+  {
+    "name": "hold-005",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000006,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": -5000
+  },
+  {
+    "name": "hold-006",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000007,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -5000
+  },
+  {
+    "name": "hold-007",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000008,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": -5000
+  },
+  {
+    "name": "hold-008",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000009,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": -5000
+  },
+  {
+    "name": "hold-009",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000010,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -5000
+  },
+  {
+    "name": "hold-010",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000011,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": 1000
+  },
+  {
+    "name": "hold-011",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000012,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 1000
+  },
+  {
+    "name": "hold-012",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000013,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 1000
+  },
+  {
+    "name": "hold-013",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000014,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 1000
+  },
+  {
+    "name": "hold-014",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000015,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 1000
+  },
+  {
+    "name": "hold-015",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000016,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": 5000
+  },
+  {
+    "name": "hold-016",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000017,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 5000
+  },
+  {
+    "name": "hold-017",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000018,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 5000
+  },
+  {
+    "name": "hold-018",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000019,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 5000
+  },
+  {
+    "name": "hold-019",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000020,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 5000
+  },
+  {
+    "name": "hold-020",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000021,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": 10000
+  },
+  {
+    "name": "hold-021",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000022,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 10000
+  },
+  {
+    "name": "hold-022",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000023,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 10000
+  },
+  {
+    "name": "hold-023",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000024,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 10000
+  },
+  {
+    "name": "hold-024",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000025,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 10000
+  },
+  {
+    "name": "hold-025",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000026,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": -10000
+  },
+  {
+    "name": "hold-026",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000027,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -10000
+  },
+  {
+    "name": "hold-027",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000028,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": -10000
+  },
+  {
+    "name": "hold-028",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000029,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": -10000
+  },
+  {
+    "name": "hold-029",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000030,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -10000
+  },
+  {
+    "name": "hold-030",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000031,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": -5000
+  },
+  {
+    "name": "hold-031",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000032,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -5000
+  },
+  {
+    "name": "hold-032",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000033,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": -5000
+  },
+  {
+    "name": "hold-033",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000034,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": -5000
+  },
+  {
+    "name": "hold-034",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000035,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -5000
+  },
+  {
+    "name": "hold-035",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000036,
+    "seconds": 7200,
+    "spacing": 2600,
+    "center": 1000
+  },
+  {
+    "name": "hold-036",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000037,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 1000
+  },
+  {
+    "name": "hold-037",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000038,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 1000
+  },
+  {
+    "name": "hold-038",
+    "factions": 2,
+    "slot": 0,
+    "seed": 3000039,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 1000
+  },
+  {
+    "name": "hold-039",
+    "factions": 2,
+    "slot": 1,
+    "seed": 3000040,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 1000
+  },
+  {
+    "name": "hold-040",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000041,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": 5000
+  },
+  {
+    "name": "hold-041",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000042,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 5000
+  },
+  {
+    "name": "hold-042",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000043,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 5000
+  },
+  {
+    "name": "hold-043",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000044,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": 5000
+  },
+  {
+    "name": "hold-044",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000045,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 5000
+  },
+  {
+    "name": "hold-045",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000046,
+    "seconds": 3600,
+    "spacing": 2600,
+    "center": 10000
+  },
+  {
+    "name": "hold-046",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000047,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 10000
+  },
+  {
+    "name": "hold-047",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000048,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": 10000
+  },
+  {
+    "name": "hold-048",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000049,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 10000
+  },
+  {
+    "name": "hold-049",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000050,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 10000
+  },
+  {
+    "name": "hold-050",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000051,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": -10000
+  },
+  {
+    "name": "hold-051",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000052,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -10000
+  },
+  {
+    "name": "hold-052",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000053,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": -10000
+  },
+  {
+    "name": "hold-053",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000054,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": -10000
+  },
+  {
+    "name": "hold-054",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000055,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -10000
+  },
+  {
+    "name": "hold-055",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000056,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": -5000
+  },
+  {
+    "name": "hold-056",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000057,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": -5000
+  },
+  {
+    "name": "hold-057",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000058,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": -5000
+  },
+  {
+    "name": "hold-058",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000059,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": -5000
+  },
+  {
+    "name": "hold-059",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000060,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": -5000
+  },
+  {
+    "name": "hold-060",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000061,
+    "seconds": 3600,
+    "spacing": 2600,
+    "center": 1000
+  },
+  {
+    "name": "hold-061",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000062,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 1000
+  },
+  {
+    "name": "hold-062",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000063,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": 1000
+  },
+  {
+    "name": "hold-063",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000064,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 1000
+  },
+  {
+    "name": "hold-064",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000065,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 1000
+  },
+  {
+    "name": "hold-065",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000066,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": 5000
+  },
+  {
+    "name": "hold-066",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000067,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 5000
+  },
+  {
+    "name": "hold-067",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000068,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": 5000
+  },
+  {
+    "name": "hold-068",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000069,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": 5000
+  },
+  {
+    "name": "hold-069",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000070,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 5000
+  },
+  {
+    "name": "hold-070",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000071,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": 10000
+  },
+  {
+    "name": "hold-071",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000072,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 10000
+  },
+  {
+    "name": "hold-072",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000073,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 10000
+  },
+  {
+    "name": "hold-073",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000074,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": 10000
+  },
+  {
+    "name": "hold-074",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000075,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 10000
+  },
+  {
+    "name": "hold-075",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000076,
+    "seconds": 3600,
+    "spacing": 2600,
+    "center": -10000
+  },
+  {
+    "name": "hold-076",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000077,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": -10000
+  },
+  {
+    "name": "hold-077",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000078,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": -10000
+  },
+  {
+    "name": "hold-078",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000079,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": -10000
+  },
+  {
+    "name": "hold-079",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000080,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": -10000
+  },
+  {
+    "name": "hold-080",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000081,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": -5000
+  },
+  {
+    "name": "hold-081",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000082,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": -5000
+  },
+  {
+    "name": "hold-082",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000083,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": -5000
+  },
+  {
+    "name": "hold-083",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000084,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": -5000
+  },
+  {
+    "name": "hold-084",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000085,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": -5000
+  },
+  {
+    "name": "hold-085",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000086,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": 1000
+  },
+  {
+    "name": "hold-086",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000087,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 1000
+  },
+  {
+    "name": "hold-087",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000088,
+    "seconds": 3600,
+    "spacing": 4600,
+    "center": 1000
+  },
+  {
+    "name": "hold-088",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000089,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": 1000
+  },
+  {
+    "name": "hold-089",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000090,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 1000
+  },
+  {
+    "name": "hold-090",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000091,
+    "seconds": 3600,
+    "spacing": 2600,
+    "center": 5000
+  },
+  {
+    "name": "hold-091",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000092,
+    "seconds": 1800,
+    "spacing": 3400,
+    "center": 5000
+  },
+  {
+    "name": "hold-092",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000093,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": 5000
+  },
+  {
+    "name": "hold-093",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000094,
+    "seconds": 3600,
+    "spacing": 5000,
+    "center": 5000
+  },
+  {
+    "name": "hold-094",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000095,
+    "seconds": 1800,
+    "spacing": 5800,
+    "center": 5000
+  },
+  {
+    "name": "hold-095",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000096,
+    "seconds": 1800,
+    "spacing": 2600,
+    "center": 10000
+  },
+  {
+    "name": "hold-096",
+    "factions": 4,
+    "slot": 0,
+    "seed": 3000097,
+    "seconds": 3600,
+    "spacing": 3400,
+    "center": 10000
+  },
+  {
+    "name": "hold-097",
+    "factions": 4,
+    "slot": 1,
+    "seed": 3000098,
+    "seconds": 1800,
+    "spacing": 4600,
+    "center": 10000
+  },
+  {
+    "name": "hold-098",
+    "factions": 4,
+    "slot": 2,
+    "seed": 3000099,
+    "seconds": 1800,
+    "spacing": 5000,
+    "center": 10000
+  },
+  {
+    "name": "hold-099",
+    "factions": 4,
+    "slot": 3,
+    "seed": 3000100,
+    "seconds": 3600,
+    "spacing": 5800,
+    "center": 10000
+  }
+]

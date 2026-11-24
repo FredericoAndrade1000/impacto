@@ -1,0 +1,33 @@
+/* What the vehicles picked can do at a vein or a wreck stands over its mark: a small glass button that goes with the
+   mark as the view moves (`--x`, `--y`: the middle of its foot). Its widths are counted in field-sites.js. */
+.field-site-action { position: absolute; left: 0; top: 0; z-index: 1; display: inline-flex; align-items: center; gap: 6px;
+  box-sizing: border-box; height: 28px; padding: 0 10px 0 8px; border: 1px solid var(--accent); border-radius: 8px;
+  background: var(--glass); color: var(--accent-strong); box-shadow: 0 4px 14px #0006; font: 600 12.5px/1 system-ui, sans-serif;
+  white-space: nowrap; pointer-events: auto; transform: translate(var(--x), var(--y)) translate(-50%, -100%);
+  transition: background .12s, border-color .12s, color .12s; }
+.field-site-action:hover:not(:disabled) { background: #2b2417f0; border-color: var(--accent-strong); }
+.field-site-action:active:not(:disabled) { transform: translate(var(--x), calc(var(--y) + 1px)) translate(-50%, -100%); }
+.field-site-action:disabled { opacity: .7; color: var(--muted); border-color: var(--glass-line); }
+.field-site-action .field-button-icon svg { width: 16px; height: 16px; }
+[data-input=touch] .field-site-action { height: 40px; padding: 0 14px 0 12px; }
+/* What there is at a mark, in a small card by it until a press anywhere else: over the panels (the dock is 6), which it
+   covers only where the field leaves it no room. */
+.field-site-card { position: absolute; left: 0; top: 0; z-index: 7; box-sizing: border-box; width: max-content; max-width: min(250px, calc(100% - 16px));
+  padding: 8px 10px; border: 1px solid var(--glass-line); border-radius: 9px; background: var(--glass); box-shadow: 0 6px 22px #0006;
+  color: var(--text); font-size: 12.5px; line-height: 1.4; pointer-events: auto; }
+.field-site-card header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.field-site-icon { display: inline-flex; flex: none; color: var(--muted); }
+.field-site-icon svg { width: 16px; height: 16px; }
+.field-site-card strong { font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.field-site-card p { margin: 0; color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.field-site-card details { margin-top: 4px; }
+.field-site-card summary { padding: 3px 0; color: var(--accent); cursor: pointer; }
+.field-site-card details p + p { margin-top: 4px; }
+[data-input=touch] .field-site-card summary { padding: 9px 0; }
+.field-site-card i { display: block; height: 3px; margin: 3px 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--olive) var(--fill, 0%), var(--well) var(--fill, 0%)); }
+/* The one thing a card offers to do, at its foot: giving a works up. */
+.field-site-card-action { display: block; margin-top: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--glass-line); border-radius: 7px;
+  background: transparent; color: var(--text); font: 600 12px/1 system-ui, sans-serif; cursor: pointer; }
+.field-site-card-action:hover { border-color: var(--accent); color: var(--accent-strong); }
+[data-input=touch] .field-site-card-action { height: 40px; padding: 0 14px; }

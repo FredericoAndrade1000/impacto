@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "training": [
+    [
+      { "name": "duel-opening", "factions": 2, "slot": 0, "seed": 301, "seconds": 900, "spacing": 3000 },
+      { "name": "arena-opening", "factions": 4, "slot": 1, "seed": 401, "seconds": 900, "spacing": 2800 }
+    ],
+    [
+      { "name": "duel-growth", "factions": 2, "slot": 1, "seed": 302, "seconds": 1800, "spacing": 4200 },
+      { "name": "arena-growth", "factions": 4, "slot": 2, "seed": 402, "seconds": 1800, "spacing": 3600 }
+    ]
+  ],
+  "evaluation": [
+    { "name": "duel-left", "factions": 2, "slot": 0, "seed": 9301, "seconds": 7200, "spacing": 3000 },
+    { "name": "duel-right", "factions": 2, "slot": 1, "seed": 9302, "seconds": 7200, "spacing": 4200 },
+    { "name": "arena-left", "factions": 4, "slot": 0, "seed": 9400, "seconds": 1800, "spacing": 2800 },
+    { "name": "arena-center-left", "factions": 4, "slot": 1, "seed": 9401, "seconds": 1800, "spacing": 3600 },
+    { "name": "arena-center-right", "factions": 4, "slot": 2, "seed": 9402, "seconds": 1800, "spacing": 2800 },
+    { "name": "arena-right", "factions": 4, "slot": 3, "seed": 9403, "seconds": 1800, "spacing": 3600 }
+  ]
+}

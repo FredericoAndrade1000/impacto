@@ -1,0 +1,10 @@
+.squad-tag > span[data-service-feedback] {
+  position: absolute; left: 50%; top: calc(100% + 5px); transform: translateX(-50%);
+  width: max-content; max-width: min(280px, 45vw); box-sizing: border-box;
+  padding: 5px 8px; border: 1px solid #f0b87473; border-radius: 7px;
+  color: var(--accent-strong); background: var(--glass);
+  font: 600 11.5px/1.35 'Segoe UI', system-ui, sans-serif;
+  white-space: normal; overflow-wrap: anywhere; text-align: center;
+}
+.squad-tag > span[data-service-feedback="received"] { color: var(--olive); border-color: var(--olive); }
+.squad-tag > span[hidden] { display: none; }

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "training": [
+    [
+      {"name":"train-g1-duel-left","factions":2,"slot":0,"seed":6100001,"seconds":900,"spacing":2800,"center":0},
+      {"name":"train-g1-duel-right","factions":2,"slot":1,"seed":6100002,"seconds":900,"spacing":3600,"center":5000},
+      {"name":"train-g1-arena-center-left","factions":4,"slot":1,"seed":6100003,"seconds":900,"spacing":2800,"center":-5000},
+      {"name":"train-g1-arena-center-right","factions":4,"slot":2,"seed":6100004,"seconds":900,"spacing":3400,"center":2500}
+    ],
+    [
+      {"name":"train-g2-duel-right","factions":2,"slot":1,"seed":6100011,"seconds":900,"spacing":2800,"center":-5000},
+      {"name":"train-g2-duel-left","factions":2,"slot":0,"seed":6100012,"seconds":900,"spacing":3600,"center":2500},
+      {"name":"train-g2-arena-left","factions":4,"slot":0,"seed":6100013,"seconds":900,"spacing":2800,"center":0},
+      {"name":"train-g2-arena-right","factions":4,"slot":3,"seed":6100014,"seconds":900,"spacing":3400,"center":5000}
+    ]
+  ],
+  "evaluation": [
+    {"name":"dev-duel-left","factions":2,"slot":0,"seed":6200001,"seconds":1800,"spacing":3000,"center":-6000},
+    {"name":"dev-duel-right","factions":2,"slot":1,"seed":6200002,"seconds":1800,"spacing":3200,"center":4000},
+    {"name":"dev-arena-left","factions":4,"slot":0,"seed":6200003,"seconds":1800,"spacing":2800,"center":2000},
+    {"name":"dev-arena-center-left","factions":4,"slot":1,"seed":6200004,"seconds":1800,"spacing":3200,"center":-4000},
+    {"name":"dev-arena-center-right","factions":4,"slot":2,"seed":6200005,"seconds":1800,"spacing":3400,"center":3000},
+    {"name":"dev-arena-right","factions":4,"slot":3,"seed":6200006,"seconds":1800,"spacing":4000,"center":-2000}
+  ]
+}

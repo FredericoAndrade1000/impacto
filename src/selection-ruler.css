@@ -1,0 +1,6 @@
+.squad-ruler {
+  position: absolute; z-index: 5; transform: translate(-50%, -100%); width: 176px; max-width: calc(100% - 16px); height: 28px; pointer-events: none;
+  display: grid; place-items: center; color: var(--olive);
+  font: 600 12px/1.2 'Segoe UI', system-ui, sans-serif; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.squad-ruler[hidden] { display: none; }

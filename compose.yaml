@@ -1,0 +1,58 @@
+# A página e o campo num contêiner, e o túnel da Cloudflare até ele.
+# O túnel é criado na conta da Cloudflare, com o endereço público apontado para http://game:8131;
+# o token dele fica em .env (TUNNEL_TOKEN=...), que não vai para o repositório.
+name: impacto
+services:
+  game:
+    build: .
+    init: true
+    restart: unless-stopped
+    environment:
+      IMPACTO_ADDRESS: ${IMPACTO_ADDRESS:-}
+      IMPACTO_SOURCE_URL: ${IMPACTO_SOURCE_URL:-}
+      IMPACTO_SAVE_DIR: /data
+      IMPACTO_AI_MIN_PLAYERS: ${IMPACTO_AI_MIN_PLAYERS:-0}
+      IMPACTO_CLIENT_TELEMETRY: ${IMPACTO_CLIENT_TELEMETRY:-0}
+      IMPACTO_DISCOVER_LAN: ${IMPACTO_DISCOVER_LAN:-0}
+      IMPACTO_TRUSTED_PROXIES: ${IMPACTO_TRUSTED_PROXIES-${IMPACTO_TUNNEL_IP:-172.29.110.2}}
+      IMPACTO_PROXY_IP_HEADER: ${IMPACTO_PROXY_IP_HEADER:-cf-connecting-ip}
+      IMPACTO_LOCAL_HTTP_PEERS: ${IMPACTO_LOCAL_HTTP_PEERS-${IMPACTO_BRIDGE_GATEWAY:-172.29.110.1}}
+      IMPACTO_DIRECTORY_URL: ${IMPACTO_DIRECTORY_URL:-}
+      IMPACTO_DIRECTORY_KEY: ${IMPACTO_DIRECTORY_KEY:-}
+      IMPACTO_DIRECTORY_ADDRESS: ${IMPACTO_DIRECTORY_ADDRESS:-}
+      IMPACTO_DIRECTORY_NAME: ${IMPACTO_DIRECTORY_NAME:-Impacto}
+      IMPACTO_DIRECTORY_DESCRIPTION: ${IMPACTO_DIRECTORY_DESCRIPTION:-Campo persistente}
+      IMPACTO_DIRECTORY_REGION: ${IMPACTO_DIRECTORY_REGION:-Brasil}
+      IMPACTO_DIRECTORY_LANGUAGE: ${IMPACTO_DIRECTORY_LANGUAGE:-pt-BR}
+      IMPACTO_DIRECTORY_FIELD: ${IMPACTO_DIRECTORY_FIELD:-Campo principal}
+      IMPACTO_OFFICIAL_SERVER: ${IMPACTO_OFFICIAL_SERVER:-}
+      IMPACTO_CLIENT_ORIGINS: ${IMPACTO_CLIENT_ORIGINS:-}
+    # Só para conferir daqui, sem passar pelo túnel: http://localhost:8141/
+    ports:
+      - "127.0.0.1:8141:8131"
+    volumes:
+      - field:/data
+    # IP fixo: sem ele o jogo, que sobe antes, pode pegar o IP reservado ao tunnel.
+    networks:
+      default:
+        ipv4_address: ${IMPACTO_GAME_IP:-172.29.110.3}
+  tunnel:
+    profiles: [tunnel]
+    image: cloudflare/cloudflared:2026.11.2
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on:
+      - game
+    networks:
+      default:
+        ipv4_address: ${IMPACTO_TUNNEL_IP:-172.29.110.2}
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${IMPACTO_BRIDGE_SUBNET:-172.29.110.0/29}
+          gateway: ${IMPACTO_BRIDGE_GATEWAY:-172.29.110.1}
+volumes:
+  field:

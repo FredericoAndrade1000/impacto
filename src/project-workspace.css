@@ -1,0 +1,228 @@
+/* The canvas is the workbench. Only its selected object owns an inspector. */
+@media (max-width: 600px) {
+  #workspace-bar #project-tools button { flex: none; width: 44px; padding: 8px; }
+  #workspace-bar #project-tools button > span { display: none; }
+}
+#project-inspector {
+  position: absolute; z-index: 9; top: calc(var(--top) - 2px); right: 12px; bottom: var(--bottom);
+  display: flex; flex-direction: column; width: min(328px, calc(100% - 24px));
+  min-height: 0; max-height: 680px; overflow: hidden;
+  border: 1px solid var(--line-strong); border-radius: 12px;
+  background: var(--panel); box-shadow: 0 8px 24px #08120d38;
+}
+#project-inspector[hidden], #project-inspector [hidden] { display: none !important; }
+/* Placement keeps the drawing reachable below its controls. */
+#project-inspector:has(> #project-placement:not([hidden])) {
+  bottom: auto; max-height: min(680px, calc(100% - var(--top) - var(--bottom) + 2px));
+}
+.project-inspector-heading {
+  display: flex; flex: none; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line);
+}
+.project-inspector-heading h2 {
+  min-width: 0; margin: 0; color: var(--text); font-size: 15px; line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.project-inspector-heading button {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; min-height: 44px;
+}
+.project-inspector-heading button svg { width: 20px; height: 20px; }
+#project-inspector > #workshop-adjust, #project-placement {
+  flex: 1 1 auto; min-height: 0; min-width: 0; padding: 10px;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: #64745c transparent;
+}
+/* The pieces of the project stand in a column at the left, under its figures, the paint of the hull at their head:
+   as tall as the list, and never past the foot of the field. */
+.workshop-parts {
+  position: absolute; z-index: 3; left: var(--left); top: calc(var(--top) + var(--tool-row) + 8px);
+  display: flex; flex-direction: column; width: 172px; max-height: calc(100% - var(--top) - var(--tool-row) - 8px - var(--bottom));
+  min-height: 0; padding: 3px;
+  background: var(--glass); border: 1px solid var(--glass-line); border-radius: 9px; color: var(--text);
+}
+.workshop-paint {
+  display: flex; flex: none; align-items: center; gap: 8px; min-height: 44px; padding: 0 6px;
+  border-bottom: 1px solid var(--glass-line); color: var(--muted); font-size: 12.5px; cursor: pointer;
+}
+#body-paint { flex: none; width: 34px; height: 30px; padding: 2px; cursor: pointer; }
+/* What the construction is, under the paint, and the list of the three it can be. */
+.workshop-kind {
+  display: flex; flex: none; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 0 6px 0 8px;
+  border: 0; border-bottom: 1px solid var(--glass-line); border-radius: 0; background: transparent; color: var(--text); font-size: 12.5px; text-align: left;
+}
+.workshop-kind:hover:not(:disabled) { background: #ffffff1c; }
+.workshop-kind svg { flex: none; width: 20px; height: 20px; color: var(--olive); }
+.workshop-kind svg:last-child { width: 14px; height: 14px; margin-left: auto; color: var(--muted); }
+[data-input=touch] .workshop-kind { min-height: 44px; }
+.kind-menu { left: calc(100% + 6px); top: 0; transform: none; min-width: 300px; }
+.kind-menu button { display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-color: transparent; background: transparent; text-align: left; }
+.kind-menu button:hover:not(:disabled) { background: #ffffff1c; border-color: transparent; }
+.kind-menu button svg { flex: none; width: 24px; height: 24px; color: var(--olive); }
+.workshop-part-list {
+  display: flex; flex-direction: column; gap: 1px; min-height: 0; margin: 0; padding: 3px 0 0; list-style: none;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+}
+.workshop-part-list button {
+  display: flex; align-items: center; gap: 7px; width: 100%; min-width: 0; min-height: 36px; padding: 4px 7px;
+  border-color: transparent; background: transparent; color: var(--text); font-size: 12.5px; text-align: left;
+}
+.workshop-part-list button:hover:not(:disabled) { background: #ffffff1c; border-color: transparent; }
+.workshop-part-list button > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workshop-part-list svg { width: 17px; height: 17px; color: var(--muted); }
+.workshop-part-list button[aria-pressed="true"] { border-color: var(--accent); background: #f0b87424; color: var(--accent-strong); }
+.workshop-part-list button[aria-pressed="true"] svg { color: var(--accent-strong); }
+[data-input=touch] .workshop-part-list button { min-height: 44px; }
+#project-inspector .workshop-empty { color: var(--muted); font-size: 13px; line-height: 1.4; }
+#project-inspector .workshop-empty h3 { margin: 0 0 8px; color: var(--text); }
+#project-inspector .workshop-empty button { width: 100%; min-height: 44px; }
+#workshop-selection-host { min-width: 0; }
+#selection-settings {
+  position: static; inset: auto; transform: none; width: 100%; max-width: 100%;
+  display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+  padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent;
+  min-width: 0; white-space: normal;
+}
+#selection-settings > .bar-fact {
+  min-width: 0; padding: 8px 0 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px;
+  white-space: normal; overflow-wrap: anywhere;
+}
+#selection-settings .selection-guidance {
+  margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4;
+}
+#selection-settings .selection-guidance:empty { display: none; }
+#selection-settings :is(.selection-primary, .selection-secondary) {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0;
+}
+#selection-settings .selection-field-group {
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2);
+}
+#selection-settings .selection-group-heading { color: var(--accent-strong); font-size: 12px; }
+#selection-settings :is(.selection-primary, .selection-secondary, .selection-field-group) > button {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 0; min-height: 44px; width: auto; padding: 7px 6px;
+  color: var(--text); background: var(--surface); border: 1px solid var(--line-strong);
+  line-height: 1.25; text-align: center; white-space: normal; overflow-wrap: anywhere;
+}
+/* A setting a button turns on, as the blow-out panels of a gun's compartment, shows when it is on. */
+#selection-settings .selection-field-group > button[aria-pressed="true"] { border-color: var(--accent); background: #f0b87424; color: var(--accent-strong); }
+#selection-settings :is(.selection-primary, .selection-secondary) > :is(
+  [data-act="ammo"], [data-act="sensor"], [data-act="munition"], [data-act="grow"],
+  [data-act="compartment"], [data-act="material"], [data-act="metal"], [data-act="mount"]
+) { grid-column: 1 / -1; }
+#selection-settings button svg { flex: none; width: 18px; height: 18px; }
+#selection-settings button.danger { color: var(--danger); }
+/* A gun with no round of its calibre aboard, or a box no gun takes: told red on the piece, as it is marked (workshop-ux.js). */
+#selection-settings .selection-guidance[data-marked],
+#selection-settings .selection-primary > button[data-act="ammo"][data-idle] { color: var(--danger); border-color: #f08f7866; }
+#selection-settings .icon-action .action-label { display: inline; }
+#selection-settings .selection-more { border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+#selection-settings .selection-more-heading {
+  padding: 7px 8px; color: var(--accent-strong); font-size: 12px;
+}
+#selection-settings .selection-secondary { padding: 8px; border-top: 1px solid var(--line); }
+#selection-settings .bar-step {
+  display: grid; grid-template-columns: 44px minmax(44px, 1fr) max-content 44px;
+  gap: 3px; align-items: center; width: 100%; min-width: 0; padding: 0;
+}
+#selection-settings .bar-step > label { display: none; }
+#selection-settings .bar-step > button[data-dir="-1"] { grid-column: 1; grid-row: 2; }
+#selection-settings .bar-step > button[data-dir="1"] { grid-column: 4; grid-row: 2; }
+#selection-settings .bar-step > button {
+  display: grid; place-items: center; width: 44px; height: 44px; min-height: 44px;
+  padding: 0; border: 1px solid var(--line-strong); background: var(--surface);
+}
+#selection-settings .bar-step > input {
+  grid-column: 2; grid-row: 2; box-sizing: border-box; width: 100%; min-width: 44px; height: 44px;
+  padding: 4px; border: 1px solid var(--line-strong); background: var(--surface); text-align: center;
+}
+#selection-settings .bar-step > em {
+  grid-column: 3; grid-row: 2; min-width: 0; margin: 0; font-size: 11px;
+  white-space: nowrap; font-style: normal; pointer-events: none;
+}
+#selection-settings :is(.bar-step-scope, .bar-step-range) {
+  grid-column: 1 / -1; white-space: normal; color: var(--muted); font-size: 11.5px; line-height: 1.35;
+}
+#selection-settings .bar-step-scope { grid-row: 1; }
+#selection-settings .bar-step-range { grid-row: 3; color: var(--faint); }
+#selection-settings .ammo-menu {
+  position: static; inset: auto; transform: none; width: 100%; min-width: 0; max-width: 100%;
+  max-height: none; flex: none; margin: 4px 0; overflow: visible;
+}
+#selection-settings .ammo-menu button {
+  min-width: 0; min-height: 44px; padding: 8px; white-space: normal;
+}
+#selection-settings .ammo-menu button :is(div, span) { min-width: 0; overflow-wrap: anywhere; }
+#selection-settings .ammo-menu > small { flex: none; }
+#selection-settings .ammo-other { width: 100%; min-width: 0; border-top: 1px solid var(--line); }
+#selection-settings .ammo-other > summary { display: flex; align-items: center; min-height: 44px; padding: 8px; }
+#project-placement > #workshop-placement { display: flex; flex-direction: column; gap: 9px; }
+#project-placement #workshop-placement-cancel { min-height: 44px; width: 100%; }
+#project-placement .helper { margin: 3px 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+#project-placement #new-module-settings { margin: 12px 0 0; }
+#project-placement :is(input:not([type="checkbox"]), select, button) { min-height: 44px; }
+#project-placement .placement-weapon-preview { width: 100%; }
+#workspace-surface-content > :is(#project-test-panel, #project-panel, #edit-controls, #publish-panel, #workshop-publish-empty) {
+  padding: 0; margin: 0; overflow: visible;
+}
+#workspace-surface-content > :is(#project-test-panel, #project-panel, #publish-panel, #workshop-publish-empty) { padding: 14px; }
+.project-test-panel button { min-height: 44px; }
+#project-publish-actions {
+  display: flex; flex: none; align-items: center; flex-wrap: wrap; gap: 7px;
+  padding: 10px 14px; border-top: 1px solid var(--line-strong); background: var(--panel);
+}
+#project-publish-actions[hidden] { display: none !important; }
+#project-publish-actions > output {
+  flex: 1 1 100%; min-width: 0; margin: 0; white-space: normal; overflow-wrap: anywhere;
+  color: var(--accent-strong); font-size: 12px; line-height: 1.35;
+}
+#project-publish-actions > output:empty { display: none; }
+#project-publish-actions > button { flex: 1 1 130px; min-width: 0; min-height: 44px; margin: 0; }
+#edit-controls .part-categories { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+#edit-controls .part-categories button { min-height: 44px; padding: 7px 4px; }
+#edit-controls .component-palette { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+#edit-controls .component-palette button { min-height: 64px; padding: 8px 4px; white-space: normal; }
+#project-test-panel .trial-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* The garage keeps its existing sticky header and native dialog scrolling. */
+#library-dialog :is(button, input, select) { min-height: 44px; }
+#library-dialog #close-library {
+  flex: none; width: 44px; min-width: 44px; height: 44px; padding: 8px;
+}
+#library-dialog .library-tabs button { min-width: 44px; }
+#library-dialog .card-remove { min-width: 44px; }
+#library-dialog :is(#import, #export) { display: inline-flex; align-items: center; padding-block: 8px; }
+@media (max-width: 900px), (pointer: coarse) {
+  #project-inspector { top: calc(var(--top) - 2px); right: 8px; width: min(254px, calc(100% - 16px)); border-radius: 9px; }
+  .workshop-parts { width: 136px; }
+  .project-inspector-heading { padding: 5px 7px; }
+  .project-inspector-heading h2 { font-size: 13px; }
+  #project-inspector > #workshop-adjust, #project-placement { padding: 8px; }
+  #selection-settings { gap: 7px; }
+  #selection-settings .selection-field-group { padding: 6px; }
+  #selection-settings .bar-step > input { font-size: 16px; }
+}
+/* A phone held upright has no room beside the project: the pieces go in a row across its foot, the paint first. */
+@media (max-width: 600px) and (orientation: portrait) {
+  .workshop-parts { top: auto; right: var(--right); bottom: var(--bottom); width: auto; max-height: none; flex-direction: row; align-items: center; }
+  .workshop-paint { padding: 0 6px 0 3px; border-bottom: 0; border-right: 1px solid var(--glass-line); }
+  .workshop-paint > span { display: none; }
+  .workshop-kind { width: auto; padding: 0 4px 0 6px; gap: 4px; border-bottom: 0; border-right: 1px solid var(--glass-line); }
+  .workshop-kind > span { display: none; }
+  .kind-menu { left: 0; top: auto; bottom: calc(100% + 6px); min-width: 0; width: min(320px, calc(100vw - 2 * var(--right, 8px))); }
+  .workshop-part-list { flex-direction: row; gap: 2px; padding: 0 0 0 3px; overflow-x: auto; overflow-y: hidden; }
+  .workshop-part-list button { width: auto; max-width: 150px; }
+  /* Under the undo, redo and outside view buttons, which stand at the left of the top while it is open. */
+  #project-inspector { top: calc(var(--top) + var(--tool-row) + 4px); bottom: calc(var(--bottom) + 58px); }
+  #project-inspector:has(> #project-placement:not([hidden])) {
+    max-height: calc(100% - var(--top) - var(--tool-row) - var(--bottom) - 62px);
+  }
+}
+/* Eight buttons across the top of a phone 360 px wide: narrower, and closer together. */
+@media (max-width: 400px) and (orientation: portrait) {
+  #app[data-workspace="project"] #workspace-bar {
+    gap: 4px; padding-left: max(4px, env(safe-area-inset-left, 0px)); padding-right: max(4px, env(safe-area-inset-right, 0px));
+  }
+  #app[data-workspace="project"] #workspace-bar > * { padding: 1px; }
+  #app[data-workspace="project"] #workspace-bar > :is(.workspace-nav, #project-tools) { gap: 2px; }
+  #app[data-workspace="project"] #workspace-bar :is(.workspace-nav, #project-tools, .workspace-settings) > button { width: 40px; min-width: 40px; padding-inline: 0; }
+}

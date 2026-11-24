@@ -1,0 +1,19 @@
+name: impacto-directory
+services:
+  directory:
+    build:
+      context: .
+      dockerfile: Dockerfile.directory
+    init: true
+    restart: unless-stopped
+    environment:
+      IMPACTO_OFFICIAL_SERVER: ${IMPACTO_OFFICIAL_SERVER:-}
+      IMPACTO_DIRECTORY_ORIGINS: ${IMPACTO_DIRECTORY_ORIGINS:-}
+      IMPACTO_DIRECTORY_TRUSTED_PROXIES: ${IMPACTO_DIRECTORY_TRUSTED_PROXIES:-}
+      IMPACTO_DIRECTORY_PROXY_IP_HEADER: ${IMPACTO_DIRECTORY_PROXY_IP_HEADER:-x-forwarded-for}
+    ports:
+      - "127.0.0.1:${IMPACTO_DIRECTORY_BIND_PORT:-8195}:8080"
+    volumes:
+      - registry:/data
+volumes:
+  registry:

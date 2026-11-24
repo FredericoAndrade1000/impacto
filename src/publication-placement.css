@@ -1,0 +1,11 @@
+.publication-placement { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+.publication-placement[hidden], .publication-placement [hidden] { display: none !important; }
+.publication-ghost { position: absolute; top: 0; left: 0; opacity: .68; outline: 1px dashed #e4b66c99; }
+.publication-placement[data-point-chosen="false"] .publication-ghost { outline: 2px dashed #edba79; }
+/* A place the field would refuse is told by the outline as well as in words. */
+.publication-placement[data-refused="true"] .publication-ghost { opacity: .5; outline: 2px dashed var(--danger, #ffad9b); filter: grayscale(.6); }
+/* The dock is the vehicle's (field-workspace.css). Beside the name, what the works asks of each stock, by its mark; under
+   the orders, the line of where it stands, in the colour of danger, and whole, when it says what refuses it. */
+.publication-dock > .squad-orders { grid-column: 1 / -1; }
+.publication-costs { display: flex; flex: none; gap: 10px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.publication-dock .field-dock-status[data-problem=true] { color: var(--danger); white-space: normal; }

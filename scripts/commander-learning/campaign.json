@@ -1,0 +1,855 @@
+{
+  "version": 1,
+  "training": [
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110001,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110002,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110003,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": -6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110004,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 0
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110005,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110006,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110007,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": -2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110008,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110101,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110102,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110103,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 0
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110104,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110105,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110106,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110107,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 0
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110108,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": -3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110201,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110202,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110203,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110204,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": -6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110205,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110206,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110207,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110208,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 0
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110301,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110302,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110303,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": -6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110304,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 0
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110305,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110306,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110307,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": -2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110308,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110401,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110402,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110403,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 0
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110404,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110405,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110406,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110407,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 0
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110408,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": -3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110501,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110502,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110503,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110504,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": -6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110505,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110506,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110507,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110508,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 0
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110601,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110602,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110603,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": -6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110604,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 0
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110605,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110606,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110607,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": -2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110608,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110701,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110702,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110703,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 0
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110704,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110705,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110706,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110707,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 0
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110708,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": -3000
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110801,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110802,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110803,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": 6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110804,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": -6000
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110805,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110806,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110807,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110808,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 0
+      }
+    ],
+    [
+      {
+        "name": "duel-west",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110901,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -4000
+      },
+      {
+        "name": "duel-east",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110902,
+        "seconds": 600,
+        "spacing": 5200,
+        "center": 4000
+      },
+      {
+        "name": "duel-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 110903,
+        "seconds": 1200,
+        "spacing": 3000,
+        "center": -6000
+      },
+      {
+        "name": "duel-long",
+        "factions": 2,
+        "slot": 0,
+        "seed": 110904,
+        "seconds": 3600,
+        "spacing": 4200,
+        "center": 0
+      },
+      {
+        "name": "arena-west",
+        "factions": 4,
+        "slot": 0,
+        "seed": 110905,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -6000
+      },
+      {
+        "name": "arena-east",
+        "factions": 4,
+        "slot": 3,
+        "seed": 110906,
+        "seconds": 900,
+        "spacing": 5200,
+        "center": 6000
+      },
+      {
+        "name": "arena-middle-west",
+        "factions": 4,
+        "slot": 1,
+        "seed": 110907,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": -2000
+      },
+      {
+        "name": "arena-middle-east",
+        "factions": 4,
+        "slot": 2,
+        "seed": 110908,
+        "seconds": 1800,
+        "spacing": 4200,
+        "center": 3000
+      }
+    ]
+  ],
+  "evaluation": [
+    {
+      "name": "dev-00",
+      "factions": 2,
+      "slot": 0,
+      "seed": 210000,
+      "seconds": 3600,
+      "spacing": 2800,
+      "center": -8000
+    },
+    {
+      "name": "dev-01",
+      "factions": 2,
+      "slot": 1,
+      "seed": 210001,
+      "seconds": 3600,
+      "spacing": 5600,
+      "center": -2000
+    },
+    {
+      "name": "dev-02",
+      "factions": 2,
+      "slot": 0,
+      "seed": 210002,
+      "seconds": 7200,
+      "spacing": 4400,
+      "center": 2000
+    },
+    {
+      "name": "dev-03",
+      "factions": 2,
+      "slot": 1,
+      "seed": 210003,
+      "seconds": 7200,
+      "spacing": 3200,
+      "center": 8000
+    },
+    {
+      "name": "dev-04",
+      "factions": 4,
+      "slot": 0,
+      "seed": 210004,
+      "seconds": 1800,
+      "spacing": 2800,
+      "center": -8000
+    },
+    {
+      "name": "dev-05",
+      "factions": 4,
+      "slot": 1,
+      "seed": 210005,
+      "seconds": 1800,
+      "spacing": 5600,
+      "center": -2000
+    },
+    {
+      "name": "dev-06",
+      "factions": 4,
+      "slot": 2,
+      "seed": 210006,
+      "seconds": 1800,
+      "spacing": 4400,
+      "center": 2000
+    },
+    {
+      "name": "dev-07",
+      "factions": 4,
+      "slot": 3,
+      "seed": 210007,
+      "seconds": 1800,
+      "spacing": 3200,
+      "center": 8000
+    },
+    {
+      "name": "dev-08",
+      "factions": 4,
+      "slot": 0,
+      "seed": 210008,
+      "seconds": 3600,
+      "spacing": 3800,
+      "center": 2000
+    },
+    {
+      "name": "dev-09",
+      "factions": 4,
+      "slot": 1,
+      "seed": 210009,
+      "seconds": 3600,
+      "spacing": 4800,
+      "center": 8000
+    },
+    {
+      "name": "dev-10",
+      "factions": 4,
+      "slot": 2,
+      "seed": 210010,
+      "seconds": 3600,
+      "spacing": 3000,
+      "center": -8000
+    },
+    {
+      "name": "dev-11",
+      "factions": 4,
+      "slot": 3,
+      "seed": 210011,
+      "seconds": 3600,
+      "spacing": 5400,
+      "center": -2000
+    }
+  ]
+}

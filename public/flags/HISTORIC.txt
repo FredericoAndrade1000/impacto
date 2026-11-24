@@ -1,0 +1,24 @@
+Bandeiras históricas: desenhos em domínio público do Wikimedia Commons, recortados para 4:3 (o desenho inteiro,
+cortado na ponta ou por igual dos dois lados). cs.svg é o cz.svg do flag-icons (a Tchecoslováquia usava a mesma bandeira).
+brazil-empire.svg, portugal-kingdom.svg, romania-1965.svg e qing.svg estão sem os metadados do editor e com as coordenadas
+arredondadas ao que se vê a 600 px de largura (o desenho é o mesmo).
+
+su.svg — Flag of the Soviet Union.svg — https://commons.wikimedia.org/wiki/File:Flag_of_the_Soviet_Union.svg — Public domain
+yu.svg — Flag of Yugoslavia (1946-1992).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Yugoslavia_(1946-1992).svg — Public domain
+yu-kingdom.svg — Flag of Yugoslavia (1918–1941).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Yugoslavia_(1918%E2%80%931941).svg — Public domain
+dd.svg — Flag of East Germany.svg — https://commons.wikimedia.org/wiki/File:Flag_of_East_Germany.svg — Public domain
+ottoman.svg — Flag of the Ottoman Empire (1844–1922).svg — https://commons.wikimedia.org/wiki/File:Flag_of_the_Ottoman_Empire_(1844%E2%80%931922).svg — Public domain
+austria-hungary.svg — Ensign of Austro-Hungarian civil fleet (1869-1918).svg — https://commons.wikimedia.org/wiki/File:Ensign_of_Austro-Hungarian_civil_fleet_(1869-1918).svg — Public domain
+german-empire.svg — Flag of Germany (1867–1918).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Germany_(1867%E2%80%931918).svg — Public domain
+italy-kingdom.svg — Flag of Italy (1861–1946).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Italy_(1861%E2%80%931946).svg — Public domain
+spain-republic.svg — Flag of the Second Spanish Republic.svg — https://commons.wikimedia.org/wiki/File:Flag_of_the_Second_Spanish_Republic.svg — Public domain
+portugal-kingdom.svg — Flag of Portugal (1830–1910).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Portugal_(1830%E2%80%931910).svg — Public domain
+brazil-empire.svg — Flag of Brazil (1870–1889).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Brazil_(1870%E2%80%931889).svg — Public domain
+us-48.svg — Flag of the United States (1912-1959).svg — https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States_(1912-1959).svg — Public domain
+free-france.svg — Flag of Free France (1940-1944).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Free_France_(1940-1944).svg — Public domain
+south-vietnam.svg — Flag of South Vietnam.svg — https://commons.wikimedia.org/wiki/File:Flag_of_South_Vietnam.svg — Public domain
+zr.svg — Flag of Zaire (1971–1997).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Zaire_(1971%E2%80%931997).svg — Public domain
+iran-1964.svg — State flag of Iran (1964–1980).svg — https://commons.wikimedia.org/wiki/File:State_flag_of_Iran_(1964%E2%80%931980).svg — Public domain
+romania-1965.svg — Flag of Romania (1965–1989).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Romania_(1965%E2%80%931989).svg — Public domain
+albania-1946.svg — Flag of Albania (1946–1992).svg — https://commons.wikimedia.org/wiki/File:Flag_of_Albania_(1946%E2%80%931992).svg — Public domain
+qing.svg — Flag of China (1889–1912).svg — https://commons.wikimedia.org/wiki/File:Flag_of_China_(1889%E2%80%931912).svg — Public domain

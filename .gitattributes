@@ -1,0 +1,14 @@
+# Study manifests and media have byte-level SHA256 provenance; preserve them
+# exactly on every platform rather than converting line endings on checkout.
+art/references/sound-study-20261019/** -text
+art/references/cannon-study-20261019/** -text
+art/references/single-effects-20261019/** -text
+art/references/vehicle-sfx-20261022/** -text
+art/references/vehicle-sfx-pilot-20261022/** -text
+art/references/vehicle-sfx-refined-20261022/** -text
+art/references/vehicle-sfx-previews-20261022/** -text
+scripts/sound-study.py -text
+scripts/sound-study-rank.py -text
+scripts/sound-study-site.ts -text
+# The generated Wasm companion is checked against its published byte digest.
+src/native/battle_dynamics.js -text

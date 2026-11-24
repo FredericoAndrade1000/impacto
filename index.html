@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#17221d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Impacto — guerra de blindados</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/ui.css">
+  <link rel="stylesheet" href="/src/encounter-bands.css">
+  <link rel="stylesheet" href="/src/service-feedback.css">
+  <link rel="stylesheet" href="/src/vehicle-labels.css">
+  <link rel="stylesheet" href="/src/selection-ruler.css">
+  <link rel="stylesheet" href="/src/radar-range.css">
+  <link rel="stylesheet" href="/src/field-operations.css">
+  <link rel="stylesheet" href="/src/field-sites.css">
+  <link rel="stylesheet" href="/src/chat.css">
+  <link rel="stylesheet" href="/src/first-objectives.css">
+  <link rel="stylesheet" href="/src/workspace.css">
+  <link rel="stylesheet" href="/src/project-workspace.css">
+  <link rel="stylesheet" href="/src/field-workspace.css">
+  <link rel="stylesheet" href="/src/publication-placement.css">
+</head>
+<body>
+  <svg class="icons" aria-hidden="true" focusable="false"><defs>
+    <symbol id="i-select" viewBox="0 0 24 24"><path d="m5 3 14 10-7 1-3 7z"/></symbol>
+    <symbol id="i-plate" viewBox="0 0 24 24"><path d="m4 17 12-12 4 4L8 21zM4 17v-4L16 1v4M16 1l4 4v4"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 5 3 11l6 6M3 11h11a6 6 0 0 1 6 6v2"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 5 6 6-6 6m6-6H10a6 6 0 0 0-6 6v2"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 3 8M3 4v7h7"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M4 3h13l4 4v14H3V3zM7 3v7h10V3M7 21v-7h10v7"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v6m0 8v6M2 12h6m8 0h6"/><circle cx="12" cy="12" r="1"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M3 9V3h6m6 0h6v6M3 15v6h6m6 0h6v-6M7 7l3 3m4 4 3 3m0-10-3 3m-4 4-3 3"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m6 0h6v-6"/></symbol>
+    
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path style="opacity: var(--sound-on, 1)" d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/><path style="opacity: var(--sound-off, 0)" d="m16 9.5 5 5m0-5-5 5"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-mirror" viewBox="0 0 24 24"><path d="M12 2v20M3 18V6l6 6-6 6Zm18 0V6l-6 6 6 6Z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M3 8h18M3 16h18"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 17.5V5.5l10-2v12"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/><path style="opacity: var(--music-off, 0)" d="M3 3l18 18"/></symbol>
+    <symbol id="i-performance" viewBox="0 0 24 24"><path d="M3 4v16h18M6 15l4-5 4 3 6-7"/></symbol>
+    <symbol id="i-structure" viewBox="0 0 24 24"><path d="M2.5 20h19M4 19.5V11l3-6h10l3 6v8.5M4 11h16M9 14h6"/></symbol>
+    <symbol id="i-relocate" viewBox="0 0 24 24"><path d="M2.5 20h19M3.5 19.5V13l2-4h5l2 4v6.5M3.5 13h9M6.5 16h3M15 12.5h6.5M19 10l2.5 2.5L19 15"/></symbol>
+    <symbol id="i-garage" viewBox="0 0 24 24"><path d="M3 20V9.5L12 4l9 5.5V20M7 20v-8h10v8M7 15h10M7 17.5h10"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24"><path d="M21 3 12.2 11.8M9.6 10.4l4 4"/><path d="M10.6 13.4c-1.6-1.6-4.4-1.3-5.4.8-.8 1.6-.8 3.7-2.7 5.3 3 .9 6.4.4 8-1.4 1.3-1.4 1.4-3.4.1-4.7z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.2"/></symbol>
+    <symbol id="i-wand" viewBox="0 0 24 24"><path d="m3 21 11.5-11.5M12.5 7.5l4 4"/><path d="M18 2.5v4M16 4.5h4M20.5 10v3M19 11.5h3M10 2.5v3M8.5 4h3"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5v4.5h-4.5"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 4m0 3v1"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="M19.0 10.3 L21.5 10.7 L21.5 13.3 L19.0 13.7 L18.2 15.7 L19.7 17.8 L17.8 19.7 L15.7 18.2 L13.7 19.0 L13.3 21.5 L10.7 21.5 L10.3 19.0 L8.3 18.2 L6.2 19.7 L4.3 17.8 L5.8 15.7 L5.0 13.7 L2.5 13.3 L2.5 10.7 L5.0 10.3 L5.8 8.3 L4.3 6.2 L6.2 4.3 L8.3 5.8 L10.3 5.0 L10.7 2.5 L13.3 2.5 L13.7 5.0 L15.7 5.8 L17.8 4.3 L19.7 6.2 L18.2 8.3Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    
+    <symbol id="i-controls" viewBox="0 0 24 24"><path d="M7.5 7.5h9a4.5 4.5 0 0 1 4.5 4.5v2.2a2.8 2.8 0 0 1-5 1.7L14.6 14H9.4L8 15.9a2.8 2.8 0 0 1-5-1.7V12a4.5 4.5 0 0 1 4.5-4.5z"/><path d="M8 9.8v4M6 11.8h4M15.5 10.8h.01M17.5 12.8h.01" stroke-width="2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M16 5.5v13L6.5 12z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M8 5.5v13l9.5-6.5z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="m9 5.5 6.5 6.5L9 18.5" stroke-width="2"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19.5 12h-15m6-6.5L4 12l6.5 6.5" stroke-width="2"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4.5 12h15m-6-6.5L20 12l-6.5 6.5" stroke-width="2"/></symbol>
+    <symbol id="k-armor" viewBox="0 0 24 24"><rect x="2.5" y="14" width="19" height="6" rx="3"/><path d="M6.5 14v-3.5H15V14M15 12h6.5"/></symbol>
+    <symbol id="k-artillery" viewBox="0 0 24 24"><rect x="2.5" y="14" width="19" height="6" rx="3"/><path d="M6 14v-3h8v3M11.5 11l8-6.5"/></symbol>
+    <symbol id="k-hauler" viewBox="0 0 24 24"><path d="M2.5 15.5v-8H13v8M13 10.5h4.2l3.3 3.5v1.5M4.6 15.5H2.5M8.4 15.5h6.2M18.4 15.5h2.1"/><circle cx="6.5" cy="16" r="1.9"/><circle cx="16.5" cy="16" r="1.9"/></symbol>
+    <symbol id="k-supply" viewBox="0 0 24 24"><path d="M2.5 15.5v-8H13v8M13 10.5h4.2l3.3 3.5v1.5M4.6 15.5H2.5M8.4 15.5h6.2M18.4 15.5h2.1M7.75 9.3v4.4M5.55 11.5h4.4"/><circle cx="6.5" cy="16" r="1.9"/><circle cx="16.5" cy="16" r="1.9"/></symbol>
+    <symbol id="k-scout" viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V3.5M6 4h11.5L15 8l2.5 4H6"/></symbol>
+    <symbol id="i-haul" viewBox="0 0 24 24"><path d="M2 6h12l-2 8H4zM14 10h4l3 4v3h-2M4.5 17H3v-3M8.5 17h7"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></symbol>
+    <symbol id="i-extract" viewBox="0 0 24 24"><path d="M3 20h9M7 20v-5l5-8 5 3 3 7M12 7l1-3 6 4 3 9M17 17h6l-2 4h-5z"/></symbol>
+    <symbol id="k-extractor" viewBox="0 0 24 24"><rect x="2" y="17" width="13" height="4" rx="2"/><path d="M4 17v-7h6v7M9 10l5-7 5 3 2 7M18 13h4l-2 4h-4z"/></symbol>
+    <symbol id="k-miner" viewBox="0 0 24 24"><rect x="2" y="17" width="13" height="4" rx="2"/><path d="M2 9h10l-1.5 6h-7zM11 9l3-6 5 3 2 7M18 13h4l-2 4h-4z"/></symbol>
+    <symbol id="i-fleet" viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4"/></symbol>
+    <symbol id="i-turn" viewBox="0 0 24 24"><path d="M7 20V10a5 5 0 0 1 10 0v7"/><path d="m13.5 14 3.5 4 3.5-4"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></symbol>
+    <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.7"/></symbol>
+    <symbol id="i-tow" viewBox="0 0 24 24"><path d="M1.5 15v-5h7v5M15 15v-5h4.5l3 3v2M8.5 12.5H15"/><circle cx="3.8" cy="16.3" r="1.4"/><circle cx="6.8" cy="16.3" r="1.4"/><circle cx="17.3" cy="16.3" r="1.4"/><circle cx="20.6" cy="16.3" r="1.4"/></symbol>
+    <symbol id="i-build" viewBox="0 0 24 24"><path d="m14.5 3.5 6 6-2.5 2.5-6-6z"/><path d="m13.5 8.5-10 10 2 2 10-10"/></symbol>
+    <symbol id="i-road" viewBox="0 0 24 24"><path d="M9 3 4 21M15 3l5 18M12 4v3M12 10.5v3M12 17v3.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15" stroke-width="2"/></symbol>
+    <symbol id="i-repair" viewBox="0 0 24 24"><path d="M16.5 3.5a4.5 4.5 0 0 0-4.3 5.8l-8.4 8.4a1.9 1.9 0 0 0 2.7 2.7l8.4-8.4a4.5 4.5 0 0 0 5.8-4.3l-2.6 2.6-2.9-.8-.8-2.9z"/></symbol>
+    <symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2"/><path d="M3.8 10.5h6.3M13.9 10.5h6.3M12 14v6.5"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4.2M12 16.6v.4"/></symbol>
+    <symbol id="i-ammo" viewBox="0 0 24 24"><path d="M9 20.5v-10c0-2.6 1.2-5 3-7 1.8 2 3 4.4 3 7v10z"/><path d="M9 16.5h6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.3 3 7.6 7.5 9.5 4.5-1.9 7.5-5.2 7.5-9.5V6z"/></symbol>
+    <symbol id="i-abandon" viewBox="0 0 24 24"><path d="M10 4H4.5v16H10"/><path d="m14 8 4 4-4 4M18 12H8.5"/></symbol>
+    <symbol id="i-wreck" viewBox="0 0 24 24"><path d="M2.5 19.5h19"/><path d="M4.5 19.5 7 13l3.5 2 2.5-5.5 2.5 3.5 4-2.5-1 8.5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-arc" viewBox="0 0 24 24"><path d="M2.5 20.5h19"/><path d="M4 17.5C6.5 5.5 15 4.5 18.8 15" stroke-dasharray="2.2 2.4"/><circle cx="19.2" cy="17" r="1.8" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="r-ferro" viewBox="0 0 24 24"><g fill="#aeb8bf" stroke="none"><path d="M7.2 5.5h9.6l2.6 5H4.6z"/><path d="M4.3 12h15.4l1.8 6.5h-19z"/></g></symbol>
+    <symbol id="r-ligas" viewBox="0 0 24 24"><g fill="#d6a764" stroke="none"><path d="M2.6 15h7l1.6 5.5H1z"/><path d="M14.4 15h7l1.6 5.5H12.8z"/><path d="M8.5 8h7l1.6 5.5H6.9z"/></g></symbol>
+    <symbol id="r-silica" viewBox="0 0 24 24"><g fill="#8fd0d6" stroke="none"><path d="M12 1.5l2.8 3.9V21H9.2V5.4z"/><path d="M5.7 7l2.1 3V21H3.6V10z" transform="rotate(-18 5.7 21)"/><path d="M18.3 7l2.1 3V21h-4.2V10z" transform="rotate(18 18.3 21)"/></g></symbol>
+    <symbol id="r-combustivel" viewBox="0 0 24 24"><path fill="#eaa942" stroke="none" fill-rule="evenodd" d="M12 2.5c3.8 4.9 6.5 8.3 6.5 11.6a6.5 6.5 0 0 1-13 0c0-3.3 2.7-6.7 6.5-11.6zM8.6 14.2a3.4 3.4 0 0 0 3.4 3.4V16a1.8 1.8 0 0 1-1.8-1.8z"/></symbol>
+    <symbol id="r-petroleo" viewBox="0 0 24 24"><path fill="#9a8cc0" stroke="none" d="M12 2.5c3.8 4.9 6.5 8.3 6.5 11.6a6.5 6.5 0 0 1-13 0c0-3.3 2.7-6.7 6.5-11.6z"/></symbol>
+    <symbol id="r-frota" viewBox="0 0 24 24"><g fill="#adbd98" stroke="none"><path fill-rule="evenodd" d="M5 15h14a2.75 2.75 0 0 1 0 5.5H5A2.75 2.75 0 0 1 5 15zm1 1.6a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 1 0 0-2.3zm4 0a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 1 0 0-2.3zm4 0a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 1 0 0-2.3zm4 0a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 1 0 0-2.3z"/><path d="M4.2 13.6l1.6-2.8h12.4l1.6 2.8z"/><path d="M8.6 9.6l.9-3h5l.9 3z"/><path d="M14.9 7.4h7.3v1.4h-7.3z"/></g></symbol>
+    <symbol id="r-estruturas" viewBox="0 0 24 24"><g fill="#adbd98" stroke="none"><path fill-rule="evenodd" d="M4 18v-4a8 7 0 0 1 16 0v4zm4-5.2h8v1.8H8z"/><path d="M2 18.8h20v1.8H2z"/></g></symbol>
+  </defs></svg>
+  <main class="app-shell" id="app" data-workspace="project" data-workspace-panel="">
+    <header class="workspace-bar" id="workspace-bar" aria-label="Construir">
+      <nav class="workspace-nav" aria-label="Contextos do jogo" id="workspace-nav"><button class="primary-button" id="go-field" type="button" aria-current="false" aria-label="Campo" title="Ir para o campo"><svg><use href="#i-target"/></svg><span id="go-field-label">Campo</span></button><button class="primary-button" id="go-workshop" type="button" aria-current="page" aria-label="Construir" title="Construir e editar veículos"><svg><use href="#i-plate"/></svg><span id="go-workshop-label">Construir</span></button></nav>
+      <div class="workspace-map">
+        <div id="overview" class="overview" hidden title="Visão geral do campo · clique ou arraste para levar a câmera" aria-label="Visão geral do campo"><canvas></canvas><output></output></div>
+        <div class="frame-meter" id="frame-meter" hidden aria-label="Mostrador de desempenho"><span id="frame-rate"></span><span id="frame-causes" hidden></span><div id="frame-detail" hidden></div></div>
+      </div>
+      <div class="workspace-tools" id="project-tools"><button id="garage" class="icon-tool" type="button" aria-label="Garagem" title="Garagem: seus projetos e os modelos prontos"><svg aria-hidden="true"><use href="#i-garage"/></svg></button><button id="project-add" class="icon-tool" type="button" aria-label="Adicionar" title="Adicionar" aria-expanded="false"><svg aria-hidden="true"><use href="#i-plus"/></svg></button><button id="project-details" type="button" aria-pressed="false" aria-label="Detalhes" title="Detalhes visuais: portas, luzes, números · entrar e sair"><svg aria-hidden="true"><use href="#i-brush"/></svg><span>Detalhes</span></button><button id="project-test" type="button" aria-label="Testar" title="Testar" aria-expanded="false"><svg aria-hidden="true"><use href="#i-target"/></svg><span>Testar</span></button><button class="primary-button" id="project-publish" type="button" aria-label="Fabricar" title="Fabricar" aria-expanded="false"><svg aria-hidden="true"><use href="#i-next"/></svg><span>Fabricar</span></button></div>
+      <div class="workspace-tools" id="field-tools" hidden><button class="field-tool" id="faction-open" type="button" aria-label="Facção" title="Facção" data-field-task="faction" aria-haspopup="dialog" aria-controls="faction-dialog" aria-expanded="false"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-flag"/></svg></span><span class="field-button-label">Facção</span><small class="field-tool-count" id="faction-open-count"></small></button><button class="field-tool" id="infra-open" type="button" aria-label="Infraestrutura" title="Infraestrutura: postos e estradas da facção" data-field-task="infra" aria-controls="field-page-infra" aria-expanded="false"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-structure"/></svg></span><span class="field-button-label">Infraestrutura</span></button></div>
+      <button class="field-tool" id="test-console-toggle" type="button" data-field-task="test"
+        aria-label="Painel de testes" title="Painel de testes · F1"
+        aria-controls="field-page-test" aria-expanded="false" hidden>
+        <span class="field-button-icon"><svg aria-hidden="true"><use href="#i-target"/></svg></span>
+        <span class="field-button-label">Testes</span><kbd>F1</kbd>
+      </button>
+      <div class="workspace-trial" hidden id="workspace-trial">
+        <div class="eyebrow" id="trial-name" hidden>Ensaio privado</div>
+        <button id="reset" title="Recomeça o teste com a construção inteira" hidden><svg><use href="#i-reset"/></svg><span>Restaurar</span></button>
+      </div>
+      <div class="workspace-settings"><button type="button" id="settings-menu" aria-label="Configurações" title="Configurações" aria-expanded="false" aria-controls="settings-panel"><svg aria-hidden="true"><use href="#i-settings"/></svg></button>
+        <div class="settings-panel" id="settings-panel" role="group" aria-label="Configurações" hidden>
+          <div class="settings-row"><label for="language">Idioma</label><select id="language" aria-label="Idioma do jogo" title="O idioma muda após salvar o projeto e recarregar a página."><option value="auto">Automático (navegador)</option><option value="pt-BR">Português</option><option value="en">English</option><option value="es">Español</option></select></div>
+          <div class="settings-actions"><button type="button" id="fullscreen" title="Tela cheia" aria-label="Tela cheia"><svg aria-hidden="true"><use href="#i-expand"/></svg><span>Tela cheia</span></button><button type="button" id="help" title="Como jogar · ?" aria-label="Como jogar"><svg aria-hidden="true"><use href="#i-help"/></svg><span>Como jogar</span></button><button type="button" id="objectives-restore" title="Trazer de volta os primeiros objetivos e os controles" hidden><svg aria-hidden="true"><use href="#i-controls"/></svg><span>Objetivos e controles</span></button></div>
+          <div class="settings-row">
+            <button id="sound-toggle" aria-pressed="true" title="Ativar ou silenciar sons"><svg aria-hidden="true"><use href="#i-sound"/></svg><span id="sound-toggle-text">Som</span></button>
+            <button id="music-toggle" aria-pressed="true" title="Ligar ou desligar só a música"><svg aria-hidden="true"><use href="#i-music"/></svg><span id="music-toggle-text">Música</span></button>
+            <input id="sound-volume" aria-label="Volume dos sons" type="range" min="0" max="100" value="35"><output id="sound-status" aria-live="polite">Clique para ativar</output>
+          </div>
+          <div class="settings-row settings-alerts">
+            <button type="button" id="background-alerts-toggle" aria-pressed="true" aria-describedby="background-alerts-help"><span>Avisos em segundo plano</span><span id="background-alerts-state">Ligados</span></button>
+            <p id="background-alerts-help">Só contato e alerta grave, com a aba aberta e o som ligado. O navegador pode pausar o áudio.</p>
+          </div>
+          <div class="settings-row">
+            <select id="effects-quality" aria-label="Efeitos visuais" title="Efeitos visuais: menos partículas deixam o jogo mais leve"><option value="high">Efeitos detalhados</option><option value="balanced">Efeitos equilibrados</option><option value="low">Efeitos leves</option></select>
+            <select id="frame-limit" aria-label="Limite de FPS" title="Automático acompanha a tela; 60 FPS reduz consumo e aquecimento"><option value="0">FPS: automático</option><option value="60">FPS: até 60</option></select>
+            <select id="screen-shake" aria-label="Tremor da tela" title="Tremor da tela: a vista balança nos tiros grandes do seu veículo, nas explosões perto e quando ele é atingido"><option value="off">Tremor: desligado</option><option value="soft">Tremor: suave</option><option value="normal" selected>Tremor: normal</option></select>
+            <button id="frame-meter-toggle" aria-pressed="false" title="Mostrar FPS e causas de lentidão; de novo, o detalhe · F3"><svg aria-hidden="true"><use href="#i-performance"/></svg><span>Desempenho</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="workspace-backdrop" id="workspace-backdrop" aria-hidden="true" hidden></div>
+    <aside class="sidebar" role="dialog" aria-modal="true" aria-labelledby="workspace-surface-heading" hidden data-workshop-task="closed" data-field-task="closed">
+      <header class="workspace-surface-header"><h2 id="workspace-surface-heading" tabindex="-1">Construir</h2><button class="workspace-surface-close" id="workspace-surface-close" type="button" aria-label="Fechar painel" title="Fechar painel · Esc"><svg aria-hidden="true"><use href="#i-close"/></svg></button></header>
+      <div class="workspace-surface-content" id="workspace-surface-content">
+        <output id="network-connection" class="network-connection" hidden></output>
+        <section class="project-section" id="project-panel" data-workshop-panel="project" aria-label="Revisão do projeto" hidden>
+          <div id="workshop-capacity"></div>
+          <div id="workshop-checklist" class="workshop-checklist" aria-label="Revisão do projeto"></div>
+          <dl id="workshop-figures" class="workshop-figures" aria-label="Desempenho do projeto"></dl>
+        </section>
+        <section id="publish-panel" class="publish-panel" data-workshop-panel="publish" aria-label="Fabricação" hidden>
+          <div class="publish-cost"><span id="cost-ferro" class="cost-chip"><svg class="stock-icon" aria-hidden="true"><use href="#r-ferro"/></svg><span class="sr-only">Ferro</span><b id="cost-ferro-n"></b><small class="cost-available"></small></span><span id="cost-ligas" class="cost-chip"><svg class="stock-icon" aria-hidden="true"><use href="#r-ligas"/></svg><span class="sr-only">Ligas</span><b id="cost-ligas-n"></b><small class="cost-available"></small></span><span id="cost-silica" class="cost-chip"><svg class="stock-icon" aria-hidden="true"><use href="#r-silica"/></svg><span class="sr-only">Sílica</span><b id="cost-silica-n"></b><small class="cost-available"></small></span><span id="cost-combustivel" class="cost-chip"><svg class="stock-icon" aria-hidden="true"><use href="#r-combustivel"/></svg><span class="sr-only">Combustível</span><b id="cost-combustivel-n"></b><small class="cost-available"></small></span><span id="cost-time" class="cost-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span class="sr-only">Tempo de construção</span><b id="cost-time-n"></b></span></div>
+          <button class="replace-button" id="publish-models" hidden>Modelos que a facção paga <svg aria-hidden="true"><use href="#i-next"/></svg></button>
+          <div class="field-label" id="deploy-facing-label">Frente no campo</div>
+          <div class="option-pair" id="deploy-facing" role="group" aria-labelledby="deploy-facing-label" data-facing="1"><button type="button" data-facing="-1" aria-label="Esquerda" title="Frente voltada à esquerda" aria-pressed="false"><svg aria-hidden="true"><use href="#i-arrow-left"/></svg></button><button type="button" data-facing="1" class="active" aria-label="Direita" title="Frente voltada à direita" aria-pressed="true"><svg aria-hidden="true"><use href="#i-arrow-right"/></svg></button></div>
+        </section>
+        <section id="workshop-publish-empty" data-workshop-panel="publish" class="workshop-empty" aria-label="Entrar no campo para fabricar" hidden>
+        <h3>Fabricar é no campo</h3>
+        <button type="button" id="workshop-connect" class="publish-button">Entrar no campo</button>
+      </section>
+        <div id="edit-controls" data-workshop-panel="build" aria-label="Adicionar equipamento" hidden>
+          <section class="tools-section">
+            <div id="workshop-assist" class="workshop-assist" hidden></div>
+            <div class="part-categories" role="group" aria-label="Função das peças" id="part-categories"></div>
+            <div class="component-palette" role="group" aria-label="Instalar componentes"><button data-component="engine" aria-pressed="false">Motor</button><button data-component="fuel" aria-label="Tanque de combustível" aria-pressed="false">Tanque</button><button data-component="ammo" aria-pressed="false" hidden>Munição</button><button data-component="command" aria-pressed="false">Comando</button><button data-component="sensor" aria-pressed="false">Sensores</button><button data-component="thruster" aria-pressed="false" hidden>Propulsor</button><button data-component="excavator" aria-pressed="false" hidden>Escavadeira</button><button data-component="drill" aria-pressed="false" hidden>Perfuratriz</button><button data-component="builder" aria-pressed="false" hidden>Construtor</button><button data-component="blade" aria-label="Lâmina niveladora" aria-pressed="false" hidden>Lâmina</button><button data-component="paver" aria-pressed="false" hidden>Pavimentadora</button><button data-component="hopper" aria-pressed="false" hidden>Caçamba</button><button data-component="cistern" aria-pressed="false" hidden>Cisterna</button><button data-component="supply" aria-pressed="false" hidden>Suprimentos</button></div>
+            <button class="catalog-button" id="add-plate" aria-pressed="false" title="Arraste no desenho para criar uma chapa independente"><svg aria-hidden="true"><use href="#i-plate"/></svg>Chapa</button>
+            <button class="catalog-button" id="catalog-edit" hidden><svg><use href="#i-target"/></svg>Arsenal</button>
+          </section>
+        </div>
+        <section class="project-test-panel" id="project-test-panel" data-workshop-panel="test" hidden>
+          <div class="trial-actions" id="workshop-tests" role="group" aria-label="Testar o projeto"><button id="trial-armour" aria-label="Testar blindagem" title="O projeto parado num chão plano, para você atirar nele com qualquer arma do Arsenal"><svg><use href="#i-target"/></svg><span>Blindagem</span></button><button id="trial-terrain" aria-label="Campo de provas" title="O projeto no terreno do mundo: conduza e atire com as armas instaladas"><svg><use href="#i-fit"/></svg><span>Campo de provas</span></button></div>
+          <p class="helper">Só seu: nada vai ao campo.</p>
+        </section>
+        <div class="field-pages" id="field-pages" hidden>
+          <div class="field-page" id="field-page-test" data-task="test" role="region" aria-label="Painel de testes" hidden>
+            <section>
+              <p class="helper" id="test-console-scope"></p>
+              <section class="test-console-group" aria-labelledby="test-selection-title">
+                <h3 class="eyebrow" id="test-selection-title">Seleção e manutenção</h3>
+                <label class="sr-only" for="test-actor">Construção que receberá a ação</label>
+                <select id="test-actor"><option value="">Escolha uma construção</option></select>
+                <button id="test-refresh-actors" type="button">Atualizar lista</button>
+                <p class="helper" id="test-actor-description"></p>
+                <div class="test-console-actions">
+                  <button id="test-repair" type="button" disabled>Reparar</button>
+                  <button id="test-resupply" type="button" disabled>Reabastecer</button>
+                </div>
+                <p class="helper">Reabastecer completa combustível e munição, sem adicionar carga.</p>
+              </section>
+              <details class="test-console-group">
+                <summary>Posição e criação</summary>
+                <fieldset>
+                  <legend>Local no mapa</legend>
+                  <label for="test-position-x">Posição no mapa (m)</label>
+                  <input id="test-position-x" type="number" step="0.1" inputmode="decimal" required aria-describedby="test-position-help">
+                  <button id="test-use-camera" type="button">Usar centro da câmera</button>
+                  <label for="test-facing">Frente</label>
+                  <select id="test-facing"><option value="-1">Esquerda</option><option value="1">Direita</option></select>
+                  <p class="helper" id="test-position-help"></p>
+                  <button id="test-reposition" type="button" aria-describedby="test-reposition-reason" disabled>Reposicionar selecionado</button>
+                  <p class="helper" id="test-reposition-reason" hidden>Nesta versão, só veículos podem ser reposicionados.</p>
+                </fieldset>
+                <fieldset>
+                  <legend>Veículo do catálogo</legend>
+                  <label class="sr-only" for="test-vehicle-template">Modelo do veículo</label>
+                  <select id="test-vehicle-template"></select>
+                  <button id="test-create-vehicle" type="button">Adicionar veículo</button>
+                  <p class="helper" id="test-vehicle-note"></p>
+                </fieldset>
+                <fieldset>
+                  <legend>Alvo parado</legend>
+                  <label class="sr-only" for="test-target-template">Modelo do alvo</label>
+                  <select id="test-target-template"></select>
+                  <button id="test-create-target" type="button">Adicionar alvo</button>
+                </fieldset>
+              </details>
+              <details class="test-console-group" id="test-server-tools" hidden>
+                <summary>Recursos e fabricação</summary>
+                <fieldset>
+                  <legend>Estoque da sua facção</legend>
+                  <p class="helper" id="test-stock-help">Defina os valores absolutos: materiais em créditos e combustível em litros.</p>
+                  <label for="test-stock-ferro">Ferro (créditos)</label>
+                  <input id="test-stock-ferro" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" required>
+                  <label for="test-stock-ligas">Ligas (créditos)</label>
+                  <input id="test-stock-ligas" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" required>
+                  <label for="test-stock-silica">Sílica (créditos)</label>
+                  <input id="test-stock-silica" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" required>
+                  <label for="test-stock-combustivel">Combustível (L)</label>
+                  <input id="test-stock-combustivel" type="number" min="0" max="9007199254740991" step="1" inputmode="numeric" required>
+                  <button id="test-use-stock" type="button">Usar estoque atual</button>
+                  <button id="test-set-stock" type="button">Definir estoque</button>
+                </fieldset>
+                <fieldset>
+                  <legend>Fabricações normais</legend>
+                  <label class="test-console-check" for="test-instant"><input id="test-instant" type="checkbox"><span>Fabricação instantânea</span></label>
+                  <p class="helper">Vale para as próximas fabricações e substituições normais neste servidor. Cobra o custo completo e mantém os limites e o apoio físico. Obras já abertas continuam normalmente.</p>
+                </fieldset>
+              </details>
+              <details class="test-console-group" id="test-server-speed" hidden>
+                <summary>Velocidade do servidor</summary>
+                <fieldset>
+                  <label for="test-speed">Fator de velocidade</label>
+                  <select id="test-speed" aria-describedby="test-speed-current test-speed-help"><option value="1">1× · normal</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select>
+                  <button id="test-set-speed" type="button">Aplicar velocidade</button>
+                  <p class="helper" id="test-speed-current" role="status"></p>
+                  <p class="helper" id="test-speed-help">Afeta todos neste servidor de testes. Ao reiniciar o servidor, volta a 1×. O ritmo real depende da capacidade do servidor.</p>
+                </fieldset>
+              </details>
+              <p class="helper" id="test-private-fabrication-note" hidden>Este ensaio não tem estoque nem fila. Veículos e alvos do catálogo já são criados imediatamente.</p>
+              <p class="helper" id="test-console-status" role="status"></p>
+            </section>
+          </div>
+          <div class="field-page infra-page" id="field-page-infra" data-task="infra" role="region" aria-label="Infraestrutura" hidden>
+            <section class="infra-section" aria-labelledby="infra-post-title">
+              <h3 class="eyebrow" id="infra-post-title">Posto</h3>
+              <p class="helper">Base avançada da facção: descarrega e refina, remunicia, abastece e repara, e vigia em volta. Alarga o território da facção.</p>
+              <button class="catalog-button" id="infra-post" type="button" title="Escolha o local no campo: um construtor em automático monta a obra."><svg aria-hidden="true"><use href="#i-flag"/></svg>Erguer posto</button>
+              <output class="unit-held" id="infra-post-held"></output>
+            </section>
+            <section class="infra-section" aria-labelledby="infra-road-title">
+              <h3 class="eyebrow" id="infra-road-title">Estradas</h3>
+              <p class="helper">Escolha o trecho no campo: as máquinas de estrada em automático o fazem.</p>
+              <div class="option-pair" role="group" aria-labelledby="infra-road-title"><button type="button" data-road="graded" title="Uma niveladora nivela o chão do trecho."><svg aria-hidden="true"><use href="#i-road"/></svg>Terra batida</button><button type="button" data-road="asphalt" title="Uma niveladora nivela o trecho e uma pavimentadora o asfalta, com Sílica e Combustível da base."><svg aria-hidden="true"><use href="#i-road"/></svg>Asfalto</button></div>
+              <output class="unit-held" id="infra-road-held"></output>
+            </section>
+          </div>
+          <div class="field-page" id="field-page-vehicle" data-task="vehicle" role="region" aria-label="Condição e serviços" hidden>
+            <div class="field-empty-card" id="field-vehicle-empty"><h3>Escolha uma construção</h3><p>Selecione no campo ou na coluna à esquerda para consultar a condição e os serviços.</p></div>
+            <section id="unit-panel" class="unit-panel" hidden>
+              <div id="unit-stats" class="unit-stats">
+          <span id="stat-fuel" class="stat"><svg class="stock-icon" aria-hidden="true"><use href="#r-combustivel"/></svg><span class="stat-label">Tanque do motor</span><b id="stat-fuel-text"></b><i id="stat-fuel-bar"></i></span>
+          <span id="stat-rounds" class="stat"><svg aria-hidden="true"><use href="#i-ammo"/></svg><span class="stat-label">Munição</span><b id="stat-rounds-text"></b></span>
+          <span id="stat-cargo" class="stat"><svg aria-hidden="true"><use href="#i-haul"/></svg><span id="stat-cargo-label" class="stat-label">Carga</span><b id="stat-cargo-text"></b><i id="stat-cargo-bar"></i></span>
+          <span id="stat-whole" class="stat"><svg aria-hidden="true"><use href="#i-shield"/></svg><span class="stat-label">Integridade</span><b id="stat-whole-text"></b><i id="stat-whole-bar"></i></span>
+          <span id="stat-supplies" class="stat"><svg aria-hidden="true"><use href="#i-haul"/></svg><span class="stat-label">Suprimentos transportados</span><b id="stat-supplies-text"></b><i id="stat-supplies-bar"></i></span>
+        </div>
+              <output id="unit-advice" class="unit-advice"></output>
+              <details id="unit-services" class="sidebar-disclosure" data-kept><summary>Serviços <output id="unit-offer"></output></summary>
+          <div class="unit-jobs" role="group" aria-label="Serviços para esta construção"><button id="unit-cancel"></button><button id="unit-repair"></button><button id="unit-dump"></button></div></details>
+              <output id="unit-held" class="unit-held"></output>
+            </section>
+            <div id="test-controls" hidden>
+              <section class="weapon-section">
+                <div class="eyebrow" id="weapon-heading"><span>ARMAMENTO</span><span class="small-tag" id="ammo-tag"></span></div>
+                <div id="current-weapon-preview" class="current-weapon-preview" aria-hidden="true"></div>
+                <p class="weapon-description" id="weapon-description"></p>
+                <button class="catalog-button" id="catalog-test">Trocar arma<span><svg aria-hidden="true"><use href="#i-next"/></svg></span></button>
+                <div class="option-pair" id="ammo-options" role="group" aria-label="Munição"><button data-ammo="ap" class="active" aria-pressed="true">Perfurante</button><button data-ammo="apfsds" aria-pressed="false">Flecha</button><button data-ammo="heat" aria-pressed="false">Carga oca</button><button data-ammo="he" aria-pressed="false">Explosiva</button></div>
+                <div id="propellant-charge-field" hidden>
+                  <div data-field="propellant-charge"></div>
+                </div>
+                <div id="detonation-field">
+                  <div data-field="detonation"></div>
+                </div>
+                <div id="mounted-weapon-field" hidden>
+                  <div data-field="mounted-weapon"></div>
+                  <div id="linked-weapons-field" hidden>
+                    <div id="linked-weapons" class="linked-weapons" role="group" aria-label="Armas que disparam juntas"></div>
+                    <p class="helper">A arma em uso sempre dispara; ligue as outras para dispararem junto. As do mesmo modelo seguem os ajustes de mira dela.</p>
+                  </div>
+                </div>
+                <details id="trial-targets-details" hidden><summary>Alvos de teste</summary><p class="helper" id="trial-targets-info"></p></details>
+                <output id="ballistic-info" class="weapon-runtime">Aponte para o alvo</output>
+                <output id="impact-info" class="weapon-runtime" aria-live="off" title="Primeiro impacto previsto: o que atinge, a inclinação (0° é de frente) e a espessura a atravessar">Sem impacto até a mira</output>
+                <div id="test-distance-field">
+                  <div data-field="test-distance"></div>
+                </div>
+                <output id="weapon-runtime" class="weapon-runtime">Pronta</output>
+                <div class="component-health-legend" id="health-legend" aria-label="Cores dos componentes por vida restante"><span>Estado dos componentes</span><small><i class="healthy"></i>Íntegro <i class="damaged"></i>Avariado <i class="critical"></i>Crítico <i class="disabled"></i>Inutilizado</small></div>
+              </section>
+            </div>
+            <section class="field-controls" id="field-controls"><button class="field-turn" type="button" aria-label="Virar construção" title="Virar construção" id="field-turn"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-turn"/></svg></span><span class="field-button-label">Virar construção</span></button><p class="helper" id="field-turn-reason" hidden></p><p class="helper" id="field-controls-hint"></p></section>
+          </div>
+        </div>
+      </div>
+      <div class="project-publish-actions" id="project-publish-actions" hidden><output id="publish-refused" class="publish-price short"></output><output id="replace-reason" class="publish-price short" hidden></output><button type="button" id="publish-industry" hidden>Ver melhorias da base</button><button class="publish-button" id="publish-new">Fabricar veículo</button><button class="replace-button" id="publish-replace" hidden></button></div>
+    </aside>
+    <section class="field-column" aria-label="Campo">
+      <div class="viewport" id="viewport">
+        <div class="camera-tools" aria-label="Ferramentas da Oficina"><span class="touch-history" id="workshop-history" role="group" aria-label="Desfazer e refazer" hidden><button type="button" id="undo" aria-label="Desfazer" title="Desfazer · Ctrl+Z"><svg aria-hidden="true"><use href="#i-undo"/></svg></button><button type="button" id="redo" aria-label="Refazer" title="Refazer · Ctrl+Y"><svg aria-hidden="true"><use href="#i-redo"/></svg></button></span><button class="icon-button" id="snap-grid" aria-label="Encaixar peças à grade de 5 cm" aria-pressed="true" title="Grade de 5 cm: auxilia o desenho e o movimento; medidas e ângulos digitados preservam a precisão" hidden><svg aria-hidden="true"><use href="#i-grid"/></svg></button><button class="icon-button" id="symmetric" aria-label="Edição simétrica" aria-pressed="false" title="Edição simétrica: o que se faz de um lado do eixo se faz do outro, espelhado" hidden><svg aria-hidden="true"><use href="#i-mirror"/></svg></button><button class="icon-button" id="exterior" aria-label="Ver por fora" aria-pressed="false" title="Ver por fora: a carroceria cobre o que está dentro · F" hidden><svg><use href="#i-eye"/></svg></button></div>
+        <nav id="field-pawns" class="field-pawns" aria-label="Construções da facção" hidden></nav>
+        <section id="field-empty" class="field-empty" hidden><p id="field-empty-text"></p><output id="field-recovery" class="field-recovery"></output><button id="recover-faction"></button></section>
+        <aside id="workshop-parts" class="workshop-parts" aria-label="Peças do projeto" hidden>
+          <label class="workshop-paint" title="Cor da carroceria"><input id="body-paint" type="color" list="body-paints" value="#68765a" aria-label="Cor da carroceria"><datalist id="body-paints"><option value="#68765a" label="Verde oliva"></option><option value="#9b8e68" label="Areia"></option><option value="#62737b" label="Cinza azulado"></option><option value="#715f51" label="Terra"></option></datalist><span>Carroceria</span></label>
+          <ul id="workshop-part-list" class="workshop-part-list" aria-label="Peças"></ul>
+        </aside>
+        <div id="faction-hud" class="faction-hud" hidden aria-label="Bandeira, estoques e construções da sua facção">
+          <button id="faction-identity" class="faction-identity" title="Mudar o nome e a bandeira da facção"><span id="faction-flag"></span><span id="faction-name" class="faction-name"></span></button>
+          <div class="faction-stock" title="Estoques da facção: cada peça é paga com o material de que é feita, e o combustível com Combustível"><span title="Ferro"><svg class="stock-icon" aria-hidden="true"><use href="#r-ferro"/></svg><span class="sr-only">Ferro</span><b id="stock-ferro"></b></span><span title="Ligas"><svg class="stock-icon" aria-hidden="true"><use href="#r-ligas"/></svg><span class="sr-only">Ligas</span><b id="stock-ligas"></b></span><span title="Sílica"><svg class="stock-icon" aria-hidden="true"><use href="#r-silica"/></svg><span class="sr-only">Sílica</span><b id="stock-silica"></b></span><span title="Combustível"><svg class="stock-icon" aria-hidden="true"><use href="#r-combustivel"/></svg><span class="sr-only">Combustível</span><b id="stock-combustivel"></b></span></div>
+          <span id="faction-yard" title="Carga descarregada na base que a refinaria ainda vai passar ao estoque" hidden></span>
+          <span class="faction-count" title="Veículos da facção"><svg class="stock-icon" aria-hidden="true"><use href="#r-frota"/></svg><b id="faction-vehicles"></b></span>
+          <span class="faction-count" title="Estruturas da facção, incluindo obras em andamento"><svg class="stock-icon" aria-hidden="true"><use href="#r-estruturas"/></svg><b id="faction-structures"></b></span>
+          <span id="faction-shots" class="faction-count" role="status" aria-label="Limite de tiros no ar da facção: as armas esperam vaga, sem gastar munição." hidden><svg class="stock-icon" aria-hidden="true"><use href="#i-clock"/></svg><b>Tiros no ar no limite</b></span>
+          <div id="faction-duel" class="faction-duel" role="status" hidden><b id="duel-text"></b><small id="duel-hint"></small></div>
+          <div id="faction-capture" class="faction-capture" hidden><b id="capture-text"></b><small id="capture-hint"></small><i id="capture-bar"></i></div>
+        </div>
+        <div class="touch-pad" id="touch-pad" hidden>
+          <div class="touch-drive" role="group" aria-label="Conduzir"><button type="button" data-drive="a" aria-label="Para a esquerda"><svg aria-hidden="true"><use href="#i-left"/></svg></button><button type="button" data-drive="d" aria-label="Para a direita"><svg aria-hidden="true"><use href="#i-right"/></svg></button></div>
+          <div class="touch-stick" id="touch-stick" role="group" aria-label="Pilotar: arraste para subir, descer e ir para os lados" hidden><span class="touch-stick-knob"></span></div>
+          <button type="button" class="touch-fire" id="touch-fire"><svg><use href="#i-target"/></svg>Fogo</button>
+        </div>
+        <section id="connection-notice" class="connection-notice" role="status" aria-live="polite" aria-labelledby="connection-title" hidden>
+          <h2 id="connection-title"></h2>
+          <p id="connection-detail"></p>
+          <div class="card-actions"><button type="button" id="connection-retry" class="card-primary">Tentar agora</button><button type="button" id="connection-reload" class="card-primary" hidden>Atualizar e voltar</button><button type="button" id="connection-servers" hidden>Voltar aos servidores</button><button type="button" id="connection-workshop" hidden>Montar primeiro</button></div>
+        </section>
+        <div class="loading" id="loading">
+          <div class="loading-plates"><i></i><i></i><i></i></div>
+          <p id="loading-text">Carregando o jogo…</p>
+        </div>
+        <div class="project-inspector" id="project-inspector" hidden aria-labelledby="project-inspector-title">
+          <div class="project-inspector-heading"><h2 id="project-inspector-title" tabindex="-1">Seleção</h2><button class="icon-button" type="button" id="focus-selection" aria-label="Localizar seleção" title="Localizar seleção sem alterar o zoom"><svg aria-hidden="true"><use href="#i-target"/></svg></button><button class="icon-button" type="button" id="project-inspector-close" aria-label="Limpar seleção e fechar ajustes"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+          <div class="project-placement" id="project-placement" hidden>
+            <div id="workshop-placement" class="workshop-placement" hidden><p id="workshop-placement-hint" class="helper"></p><label id="workshop-repeat-field" class="toggle-label"><input id="workshop-repeat" type="checkbox">Repetir instalação</label><button type="button" id="workshop-placement-cancel">Cancelar</button></div>
+            <div id="new-module-settings" class="tool-settings" hidden>
+              <div id="new-weapon-field" hidden>
+                <div data-field="new-weapon-preset"></div>
+                <div class="placement-weapon-preview" id="new-weapon-preview"></div>
+              </div>
+              <div id="new-ammo-assist" hidden><p id="new-ammo-summary" class="helper"></p></div>
+              <div id="new-ammo-field" hidden>
+                <div data-field="new-ammo-preset"></div>
+              </div>
+              <div id="new-sensor-field" hidden>
+                <div data-field="new-sensor-mode"></div>
+                <p class="helper" title="Câmera: por fora do casco ou atrás de vidro blindado. Radar: a blindagem o bloqueia, menos a fibra de vidro. Escuta: ouve motores e disparos.">Câmera e radar precisam de vista livre.</p>
+              </div>
+              <output id="component-placement-cost" class="placement-cost"></output>
+            </div>
+            <output id="construction-feedback" class="construction-feedback" aria-live="polite"></output>
+          </div>
+          <section id="workshop-adjust" aria-label="Ajustes da seleção">
+            <div id="workshop-selection-empty" class="workshop-empty"><p>No desenho ou na lista.</p></div>
+            <div id="workshop-selection-host"></div>
+          </section>
+        </div>
+        <div class="field-dock" id="field-dock" hidden role="region" aria-label="Seleção e ordens no campo">
+          <div class="field-dock-heading" id="field-dock-heading"><span class="field-mode" id="field-mode"></span><span class="field-dock-name"><strong id="field-dock-title"></strong><output id="field-dock-speed" class="field-dock-speed" hidden></output><small id="field-dock-reverse" hidden>Ré</small></span></div>
+          <div class="field-dock-actions" id="field-dock-actions"><button type="button" class="field-camera" id="camera-lock" aria-label="Fixar câmera" aria-pressed="false" title="Fixar câmera" hidden><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-camera"/></svg></span></button><button class="field-inspect" type="button" aria-label="Inspecionar" title="Inspecionar danos" id="inspect" aria-pressed="false" hidden><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-select"/></svg></span><span class="field-button-label">Inspecionar</span></button><button class="field-details" type="button" aria-label="Condição" title="Condição" id="field-details"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><span class="field-button-label">Condição</span></button><button id="unit-control" class="control-button" title="Conduza e atire com este veículo você mesmo · C"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-wheel"/></svg></span><span class="field-button-label" id="unit-control-label">Conduzir</span></button><button class="field-release" type="button" aria-label="Comandar" title="Comandar" id="field-release"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-left"/></svg></span><span class="field-button-label">Comandar</span></button></div>
+          <p class="field-dock-status" id="field-dock-status"></p>
+          <div class="field-order-prompt" role="status" hidden id="field-order-prompt"><span id="field-order-prompt-text"></span><button type="button" aria-label="Cancelar" title="Cancelar o destino pendente. Não interrompe ordens em andamento." id="field-order-cancel"><span class="field-button-icon"><svg aria-hidden="true"><use href="#i-close"/></svg></span><span class="field-button-label">Cancelar</span></button></div>
+        </div>
+        <div class="toast" id="toast" role="status" hidden></div>
+      </div>
+    </section>
+  </main>
+  <div class="screen-advice" id="screen-advice" role="status" hidden><p id="screen-advice-text"></p><div><button class="primary-button" id="screen-advice-fill">Tela cheia</button><button class="quiet-button" id="screen-advice-close">Agora não</button></div></div>
+  <input id="file-input" type="file" accept=".json,application/json" hidden>
+  <dialog id="servers-dialog" aria-labelledby="servers-title">
+    <div class="dialog-header">
+      <div><h2 id="servers-title" tabindex="-1">Servidores</h2></div>
+      <button type="button" id="server-refresh">Atualizar lista</button>
+    </div>
+    <div class="server-filters">
+      <label class="sr-only" for="server-filter">Buscar servidores</label><input type="search" id="server-filter" placeholder="Buscar servidores">
+      <label class="sr-only" for="server-order">Ordenar servidores</label>
+      <select id="server-order"><option value="name">Nome</option><option value="players">Mais jogadores</option><option value="ping">Menor ping</option></select>
+    </div>
+    <p id="server-list-status" role="status"></p>
+    <ul id="server-list" class="server-list"></ul>
+    <form id="server-direct" class="server-direct">
+      <label class="field-label" for="server-address">Entrar por endereço</label>
+      <div>
+        <input type="text" id="server-address" inputmode="url" maxlength="256" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="wss://servidor.example/world">
+        <button type="submit">Entrar</button>
+      </div>
+      <output id="server-error" class="entry-reason" role="status" hidden></output>
+    </form>
+    <div class="server-menu-actions">
+      <button type="button" id="server-local">Entrar neste servidor</button>
+      <button type="button" id="server-workshop">Montar primeiro</button>
+    </div>
+    <a id="server-source" class="server-source" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+  </dialog>
+  <dialog id="entry-dialog" aria-labelledby="entry-title">
+    <div class="dialog-header"><div><div class="eyebrow">IMPACTO · GUERRA DE BLINDADOS</div><h2 id="entry-title">Um campo para todos.</h2></div></div>
+    <p id="entry-reason" class="entry-reason" role="alert" hidden></p>
+    <p id="entry-server" class="entry-server" hidden></p>
+    <p id="entry-community" class="entry-community" hidden>Servidor comunitário. Use apenas a chave de acesso deste servidor.</p>
+    <p>Ao entrar, você funda uma facção, com uma base e material para as primeiras construções. Monte veículos em <b>Construir</b>, fabrique-os na base e comande-os no campo: até 12 veículos e 32 estruturas por facção.</p>
+    <label class="field-label" for="player-name">Seu nome</label><input id="player-name" maxlength="24" placeholder="Jogador" autocomplete="nickname">
+    <button class="publish-button" id="network-join">Entrar no campo</button>
+    <button type="button" class="catalog-button" id="entry-workshop">Montar primeiro <svg aria-hidden="true"><use href="#i-next"/></svg></button>
+    <button type="button" class="link-button entry-servers" id="entry-servers">Voltar aos servidores</button>
+    <details id="entry-key" class="sidebar-disclosure entry-key"><summary>Entrar com uma chave</summary>
+      <label class="field-label" for="entry-key-text">A chave de acesso está em Facção, no aparelho onde você já joga.</label>
+      <input id="entry-key-text" class="access-key-input" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX">
+      <button type="button" class="publish-button" id="entry-key-join">Entrar com a chave</button>
+    </details>
+    <p class="helper">O campo continua quando você sai. Quando o último membro sai, a frota recebe ordem de voltar à base e segue vulnerável até a proteção começar. Ela exige 2 min de ausência e 2 min sem combate, em paralelo. Protege as construções a até 100 m da base, que ficam sem disparar; fora da área, continuam vulneráveis. A proteção termina quando alguém volta ou após 7 dias de simulação desde a última saída.</p>
+  </dialog>
+  <dialog id="report-dialog" class="report-dialog" aria-labelledby="report-title">
+    <h2 id="report-title"></h2><p id="report-text"></p><ul id="report-list" class="report-list"></ul>
+    <div class="card-actions"><button type="button" class="card-primary" value="ok">Entendi</button></div>
+  </dialog>
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title">
+    <h2 id="confirm-title"></h2><p id="confirm-text"></p>
+    <div class="card-actions"><button type="button" value="cancel">Cancelar</button><button type="button" id="confirm-accept" class="card-primary" value="ok"></button></div>
+  </dialog>
+  <dialog id="help-dialog">
+    <div class="dialog-header"><div><div class="eyebrow">COMO JOGAR</div><h2>Monte. Teste. Comande.</h2></div><button class="icon-button" id="close-help" aria-label="Fechar ajuda"><svg><use href="#i-close"/></svg></button></div>
+    <p><b>Construir</b> abre a Oficina, na sua base. Desenhe chapas, forme compartimentos e posicione os componentes livremente. Peças fora do casco ficam expostas. Depois, fabrique o projeto: ele entra no campo pela base.</p>
+    <p><b>Testar blindagem</b> põe o projeto num chão plano para você atirar nele com qualquer arma do Arsenal; com morteiro ou obuseiro, mire no chão ao lado ou use a explosão aérea. O <b>Campo de provas</b> deixa você conduzir e atirar com as armas instaladas num trecho de 32,8 km do terreno do mundo, com seis alvos próximos em alturas naturais diferentes e dois alvos para artilharia; lá o projeto aparece por fora, como no campo, e <b>Inspecionar</b> mostra o interior e os danos. Os testes são só seus: nada vai ao campo.</p>
+    <p>No campo, selecione seus veículos e dê ordens pelo painel de comando; cada ordem tem sua tecla. Fabricar, reparar e remuniciar gastam os estoques da facção. Uma escavadeira extrai minério e uma perfuratriz extrai petróleo, deixando o material pronto na jazida. Caçambas e cisternas levam esse material à base. A ordem na jazida se adapta ao equipamento: <b>Extrair</b>, <b>Transportar</b> ou <b>Extrair e transportar</b>. Um veículo parado na base, ou junto de um veículo de suprimentos, que não atira nem é atingido há alguns segundos é reabastecido, remuniciado e reparado sozinho. Os controles do campo e da Oficina estão nos primeiros objetivos, na linha <b>Controles</b>.</p>
+    <h3>Convidar</h3><p>Envie este endereço para quem você quer chamar ao campo:</p>
+    <div id="network-addresses" class="network-addresses"></div>
+  </dialog>
+  <dialog id="library-dialog" class="workshop-dialog" aria-labelledby="library-title">
+    <div class="dialog-header"><div><div class="eyebrow">GARAGEM</div><h2 id="library-title">Sua garagem</h2></div><button id="close-library" class="icon-button" aria-label="Fechar garagem">×</button></div>
+    <div class="catalog-toolbar"><div class="library-tabs" role="tablist" aria-label="Biblioteca"><button data-library-tab="saved" role="tab" aria-selected="true">Minhas construções</button><button data-library-tab="templates" role="tab" aria-selected="false">Modelos prontos</button><button data-library-tab="faction" role="tab" aria-selected="false" hidden>Da facção</button></div></div>
+    <div class="catalog-filters"><label class="sr-only" for="library-search">Buscar construções</label><input id="library-search" type="search" placeholder="Buscar pelo nome…"></div>
+    <p id="library-summary" class="catalog-summary"></p><div id="library-grid" class="design-grid"></div>
+    <p class="catalog-footnote">Salvas neste navegador · <button class="link-button" id="export">exportar o projeto atual</button> · <button class="link-button" id="import">importar um arquivo</button></p>
+    <output id="library-import-error" class="catalog-summary entry-reason" role="alert" hidden></output>
+    <button id="library-recover" type="button">Baixar originais deste navegador</button>
+  </dialog>
+  <dialog id="arsenal-dialog" class="workshop-dialog" aria-labelledby="arsenal-title" aria-describedby="arsenal-purpose">
+    <div class="dialog-header"><div><div class="eyebrow">ARSENAL</div><h2 id="arsenal-title">Escolha sua arma</h2></div><button id="close-arsenal" class="icon-button" aria-label="Fechar o Arsenal">×</button></div>
+    <p id="arsenal-purpose" class="arsenal-purpose"></p>
+    <div id="arsenal-families" class="library-tabs arsenal-families" role="tablist" aria-label="Famílias de armas"></div>
+    <div id="arsenal-grid" class="arsenal-grid"></div>
+  </dialog>
+  <dialog id="faction-dialog" class="faction-dialog" aria-label="Facção">
+    <div class="faction-dialog-bar">
+      <div class="faction-tabs" id="faction-tabs" role="tablist" aria-label="Facção">
+        <button type="button" role="tab" id="faction-tab-faction" aria-controls="faction-panel-faction" aria-selected="true">Facção<small class="faction-news" id="faction-news-faction" hidden></small></button>
+        <button type="button" role="tab" id="faction-tab-industry" aria-controls="faction-panel-industry" aria-selected="false">Melhorias<small class="faction-news" id="faction-news-industry" hidden></small></button>
+        <button type="button" role="tab" id="faction-tab-trade" aria-controls="faction-panel-trade" aria-selected="false">Comércio<small class="faction-news" id="faction-news-trade" hidden></small></button>
+        <button type="button" role="tab" id="faction-tab-diplomacy" aria-controls="faction-panel-diplomacy" aria-selected="false">Diplomacia<small class="faction-news" id="faction-news-diplomacy" hidden></small></button>
+      </div>
+      <button type="button" class="icon-button" id="faction-dialog-close" aria-label="Fechar" title="Fechar · Esc"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <section class="faction-panel" id="faction-panel-faction" role="tabpanel" aria-labelledby="faction-tab-faction">
+      <div class="faction-head">
+        <span class="faction-head-flag" id="faction-head-flag"></span>
+        <h2 id="faction-head-name"></h2>
+        <button type="button" class="faction-head-edit" id="faction-head-identity" title="Mudar o nome e a bandeira da facção"><svg aria-hidden="true"><use href="#i-edit"/></svg><span>Nome e bandeira</span></button>
+      </div>
+      <details class="faction-ranking" id="faction-ranking">
+        <summary class="faction-standing" title="Riqueza das nações: toque para ver todas"><b id="faction-place"></b><span><strong id="faction-wealth"></strong><small id="faction-of"></small></span><span class="faction-ranking-more">Nações</span></summary>
+        <ol id="ranking-list" class="ranking-list" aria-label="Riqueza das nações"></ol>
+      </details>
+      <section id="invite-panel" class="faction-block invite-panel" aria-labelledby="invite-title" hidden><h3 id="invite-title">Convites para você</h3><div id="invite-list" class="faction-roster"></div></section>
+      <section id="request-section" class="faction-block" aria-labelledby="request-title" hidden><h3 id="request-title">Pedidos para entrar <output id="request-count"></output></h3><div id="request-list" class="faction-roster"></div></section>
+      <section id="member-section" class="faction-block" aria-labelledby="member-title"><h3 id="member-title">Membros <output id="member-count"></output></h3><div id="member-list" class="faction-roster"></div></section>
+      <details id="invitable-section" class="sidebar-disclosure faction-more"><summary>Convidar jogadores <output id="invitable-count"></output></summary><div id="invitable-list" class="faction-roster"></div></details>
+      <details id="key-section" class="sidebar-disclosure faction-more"><summary>Chave de acesso</summary>
+        <p class="helper">Para jogar com esta conta em outro aparelho. Não a mostre a ninguém.</p>
+        <output id="access-key" class="access-key"></output>
+        <div class="access-key-actions"><button type="button" id="access-key-copy">Copiar</button><button type="button" id="access-key-change">Trocar a chave</button></div>
+      </details>
+      <button type="button" id="leave-faction" class="faction-leave" hidden>Sair da facção</button>
+    </section>
+    <section class="faction-panel" id="faction-panel-trade" role="tabpanel" aria-labelledby="faction-tab-trade" hidden></section>
+    <section class="faction-panel" id="faction-panel-industry" role="tabpanel" aria-labelledby="faction-tab-industry" hidden></section>
+    <section class="faction-panel" id="faction-panel-diplomacy" role="tabpanel" aria-labelledby="faction-tab-diplomacy" hidden></section>
+    <output id="faction-said" class="faction-said" role="status" hidden></output>
+  </dialog>
+  <dialog id="identity-dialog" class="identity-dialog" aria-labelledby="identity-title">
+    <div class="dialog-header"><div><div class="eyebrow">FACÇÃO</div><h2 id="identity-title">Nome e bandeira</h2></div><button id="close-identity" class="icon-button" aria-label="Fechar">×</button></div>
+    <label class="identity-name identity-player" for="identity-player">Seu nome<input id="identity-player" type="text" maxlength="24" autocomplete="nickname" spellcheck="false"></label>
+    <div class="identity-top"><div id="identity-preview" class="identity-preview"></div>
+      <label class="identity-name" for="identity-name">Nome da facção<input id="identity-name" type="text" autocomplete="off" spellcheck="false"><small>Em branco, a facção leva o nome de quem a fundou. O nome e a bandeira valem para todos os membros.</small></label></div>
+    <div class="identity-kinds" role="tablist" aria-label="Bandeira"><button type="button" id="identity-made" role="tab">Montar bandeira</button><button type="button" id="identity-country" role="tab">Bandeira de país</button><button type="button" id="identity-historic" role="tab">Bandeira histórica</button></div>
+    <div id="identity-maker">
+      <div class="eyebrow">DESENHO</div><div id="identity-fields" class="identity-choices"></div>
+      <div class="eyebrow">CORES</div><div id="identity-colours" class="identity-colours"></div>
+      <div class="eyebrow">EMBLEMA</div><div id="identity-emblems" class="identity-choices"></div>
+    </div>
+    <div id="identity-atlas" hidden>
+      <div class="identity-find"><label class="sr-only" for="identity-search">Buscar país</label><input id="identity-search" type="search" placeholder="Buscar país…"><output id="identity-picked"></output></div>
+      <div id="identity-countries" class="identity-choices identity-countries"></div>
+    </div>
+    <p id="identity-error" class="identity-error" role="alert" hidden></p>
+    <div class="card-actions"><button type="button" id="identity-cancel">Cancelar</button><button type="button" id="identity-save" class="card-primary">Salvar</button></div>
+  </dialog>
+  <script type="module" src="/src/bootstrap.ts"></script>
+</body>
+</html>
+
+

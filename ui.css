@@ -1,0 +1,1171 @@
+/* Shared controls, component skins and canvas overlays. Workspace, project and field styles own their current layout. */
+:root {
+  color-scheme: dark;
+  --bg: #0e1512; --panel: #151e1a; --panel-2: #1a2520; --surface: #223028; --surface-hi: #2d4035;
+  --line: #2c3b32; --line-strong: #43574a; --well: #0f1713;
+  --text: #e9eddf; --muted: #a9b8a0; --faint: #7f8f7b;
+  --accent: #f0b874; --accent-strong: #ffcf93; --accent-ink: #2b2112; --olive: #b9cc8b; --danger: #f08f78;
+  --glass: #111916e6; --glass-line: #ffffff1f;
+  font: 14.5px/1.45 "Segoe UI Variable Text", "Segoe UI", system-ui, Arial, sans-serif;
+}
+* { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: #4a5f4f transparent; }
+body { margin: 0; color: var(--text); background: radial-gradient(1100px 520px at 72% -12%, #1b2b23 0%, var(--bg) 62%) fixed var(--bg); }
+::selection { background: #f0b87455; }
+[hidden] { display: none !important; }
+a { color: var(--accent); text-underline-offset: 3px; }
+
+/* Controls */
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 11px; background: var(--surface);
+  transition: background .12s, border-color .12s, color .12s, transform .06s; }
+button:hover:not(:disabled) { background: var(--surface-hi); border-color: #5c7462; }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { cursor: default; opacity: .38; }
+input, select, textarea { width: 100%; min-width: 0; padding: 7px 10px; background: var(--well); border: 1px solid var(--line-strong); border-radius: 7px;
+  transition: border-color .12s, box-shadow .12s; }
+input:hover:not(:disabled), select:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: #5c7462; }
+input:not([type=checkbox]):not([type=range]):focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px #f0b87433; }
+input:disabled, select:disabled, textarea:disabled { opacity: .55; }
+input[type=number], output { font-variant-numeric: tabular-nums; }
+input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--accent); }
+input[type=range] { accent-color: var(--accent); padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.icons { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+kbd { font: 600 11.5px/1.3 Consolas, monospace; border: 1px solid #ffffff26; border-radius: 4px; padding: 1px 5px;
+  background: #ffffff0d; color: var(--muted); white-space: nowrap; }
+h1, h2, h3, p { margin-top: 0; }
+h1, h2 { font-family: Bahnschrift, "Segoe UI", sans-serif; font-weight: 500; }
+h1 { margin: 0; font-size: 21px; letter-spacing: 2.5px; line-height: 1; }
+h2 { margin: 0; font-size: 22px; font-weight: 600; }
+h3 { font-size: 16px; font-weight: 600; }
+.app-shell { position: relative; height: 100dvh; overflow: hidden; }
+.quiet-button, .primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.icon-button { width: 44px; height: 44px; display: grid; place-items: center; padding: 8px; }
+.loose { color: var(--accent); }
+.workshop-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.option-pair { display: flex; gap: 5px; margin: 12px 0; }
+.current-weapon-preview svg, .placement-weapon-preview svg { width: 100%; height: 60px; }
+.component-health-legend { margin: 12px 0; color: var(--muted); font-size: 11.5px; }
+.component-health-legend small { display: block; margin-top: 5px; }
+.component-health-legend i { display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin: 0 3px; background: #e4e8ce; }
+.component-health-legend .damaged { background: #d5b579; }
+.component-health-legend .critical { background: #b77b60; }
+.component-health-legend .disabled { background: #5d6159; }
+
+/* The field fills the page; its panels keep --edge from the free part of it: --left, --top, --right and --bottom
+   are where they stand, --wide how wide that part is and --middle its middle. What is drawn past the field — the
+   limits of a design — is clipped, and never scrolls it. */
+.field-column { position: absolute; inset: 0; }
+/* The panels of the field stand in one row at the top of that part — the stocks or the figures of the design, the
+   camera —, and a framing of the camera keeps clear of them too. The overview is not one of them: it stands in the row
+   of the buttons (workspace.css). */
+.viewport { --edge: 14px; --left: max(var(--edge), env(safe-area-inset-left, 0px)); --top: var(--edge); --right: max(var(--edge), env(safe-area-inset-right, 0px));
+  --bottom: max(var(--edge), env(safe-area-inset-bottom, 0px)); --wide: 100%; --middle: 50%;
+  --touch-pedal-size: 58px; --touch-pedal-gap: 8px; --touch-trigger-size: 76px;
+  /* The height of the row of tools over the field: a button and the frame of its group. */
+  --tool-row: 54px;
+  position: absolute; inset: 0; overflow: clip; background: #aab4a7; display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-auto-rows: max-content; align-content: start; align-items: start; gap: 8px; padding: var(--top) var(--right) var(--bottom) var(--left); }
+.viewport > canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+.viewport[data-tool=plate] > canvas, .viewport[data-tool=module] > canvas, .viewport[data-tool=anchor] > canvas, .viewport[data-tool=fire] > canvas { cursor: crosshair; }
+.camera-tools { grid-column: 3; grid-row: 1; justify-self: end; position: relative; display: flex; align-items: center; gap: 3px; min-height: var(--tool-row); padding: 4px; z-index: 3; }
+.camera-tools button { flex-shrink: 0; width: 44px; height: 44px; min-width: 44px; min-height: 44px; display: grid; place-items: center; padding: 8px; border: 0; border-radius: 6px; color: inherit; background: transparent; font-size: 18px; }
+.loading-plates { display: flex; flex-direction: column; gap: 5px; transform: rotate(-13deg); }
+.loading-plates i { width: 38px; height: 5px; background: var(--accent); border-radius: 2px; animation: plates .85s infinite alternate; }
+.loading-plates i:nth-child(2) { opacity: .7; animation-delay: .17s; }
+.loading-plates i:nth-child(3) { opacity: .4; animation-delay: .34s; }
+@keyframes plates { to { transform: translateX(6px); } }
+
+/* Shared modal, list and card primitives replace feature-specific copies. */
+.catalog-footnote { border-top: 1px solid var(--line); padding-top: 12px; }
+.catalog-toolbar, .catalog-filters, .library-tabs { display: flex; align-items: center; gap: 8px; }
+.catalog-toolbar { justify-content: space-between; flex-wrap: wrap; margin-bottom: 12px; }
+.library-tabs button { padding: 7px 13px; border: 0; background: transparent; font-size: 13px; color: var(--muted); font-weight: 600; }
+.catalog-filters select { width: 220px; }
+.design-preview, .weapon-card-visual { display: grid; place-items: center; min-height: 150px; padding: 15px; }
+.design-preview svg { width: 100%; height: 155px; }
+.design-info, .weapon-card { padding: 16px; }
+.design-card .design-preview { padding: 0 14px; }
+.design-info p, .weapon-card p { margin: 10px 0; font-size: 13px; }
+.card-category, .card-meta { display: block; color: var(--muted); font-size: 11.5px; }
+.cost-note { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; }
+.weapon-card-visual svg { width: 100%; height: 70px; }
+.network-addresses { display: grid; gap: 8px; }
+.network-addresses a { overflow-wrap: anywhere; }
+@media (max-width: 740px) {
+  .catalog-toolbar, .catalog-filters { flex-wrap: wrap; }
+  .catalog-filters select { width: 100%; }
+  .library-tabs { width: 100%; }
+  .library-tabs button { flex: 1; font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-plates i { animation: none; }
+}
+
+/* Buttons without a frame */
+.quiet-button, .icon-button { background: transparent; border-color: transparent; color: var(--muted); }
+.quiet-button:hover:not(:disabled), .icon-button:hover:not(:disabled) { color: var(--text); }
+
+/* Sidebar */
+.sidebar section { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.eyebrow { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--faint); margin-bottom: 10px; }
+.helper, .weapon-description, .catalog-footnote, .catalog-summary { font-size: 13px; line-height: 1.55; color: #93a38c; margin: 8px 0 0; }
+.field-label { display: block; color: var(--muted); font-size: 13px; margin: 10px 0 5px; }
+.field-label select { margin-top: 5px; }
+.toggle-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text); margin-top: 10px; cursor: pointer; }
+.weapon-runtime, .placement-cost, .construction-feedback { display: block; line-height: 1.5; white-space: pre-line; color: var(--muted);
+  font-size: 13px; margin: 6px 0; }
+.placement-cost, .construction-feedback { color: var(--accent); }
+.sidebar-disclosure { margin: 6px 0; }
+.sidebar-disclosure summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 0 -8px;
+  border-radius: 6px; font-size: 13.5px; font-weight: 600; color: var(--text); }
+.sidebar-disclosure summary::-webkit-details-marker { display: none; }
+.sidebar-disclosure summary::before { content: ""; width: 6px; height: 6px; margin-left: 2px; flex-shrink: 0;
+  border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .12s; }
+.sidebar-disclosure[open] > summary::before { transform: rotate(45deg); }
+.sidebar-disclosure summary:hover { background: var(--surface); }
+.sidebar-disclosure summary output { min-width: 0; margin-left: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--faint); font-weight: 500; }
+.workshop-actions button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-weight: 600; }
+/* Saved, the button says so quietly; with something to save it stands out. */
+#save:not(.dirty) { color: var(--muted); }
+#save.dirty { color: var(--accent-strong); border-color: #f0b87473; }
+
+/* Building tools */
+.component-palette { gap: 7px; }
+.component-palette button { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; min-height: 58px; padding: 10px 4px 8px; font-size: 13px; border-radius: 9px; color: var(--muted); }
+.component-palette button svg { width: 20px; height: 20px; }
+.component-palette button kbd { position: absolute; right: 4px; top: 4px; font-size: 11px; padding: 0 4px; color: var(--faint); }
+.component-palette button:hover:not(:disabled) { color: var(--text); }
+.component-palette button.active, .option-pair button.active,
+.linked-weapons button.active, .linked-weapons button.lead {
+  background: #f0b8741f; border-color: var(--accent); color: var(--accent-strong); }
+.component-palette { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 8px 0 4px; }
+.component-palette #catalog-edit { width: auto; margin: 0; }
+.catalog-button, .publish-button, .replace-button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 9px; padding: 9px 12px; font-weight: 600; }
+.publish-button { justify-content: center; }
+.catalog-button span { display: inline-flex; align-items: center; gap: 2px; font-size: 12.5px; font-weight: 500; color: var(--faint); }
+.catalog-button span svg { width: 14px; height: 14px; }
+.tool-settings { margin-top: 10px; padding: 10px 12px 4px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); }
+
+/* Primary actions */
+.primary-button, .card-primary, .publish-button {
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 650; }
+.primary-button:hover:not(:disabled), .card-primary:hover:not(:disabled), .publish-button:hover:not(:disabled) {
+  background: var(--accent-strong); border-color: var(--accent-strong); }
+#reset { flex: 0 1 auto; }
+/* The tests of the design, under its name. */
+.trial-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 8px; }
+.trial-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 6px; font-weight: 600; }
+.trial-actions svg { width: 16px; height: 16px; }
+.trial-actions button span { min-width: 0; overflow-wrap: normal; word-break: normal; }
+/* Undo and redo stand at the head of the tools. */
+.history { display: flex; gap: 2px; margin: -8px -8px -8px 0; }
+.history .icon-button { width: 30px; height: 30px; padding: 6px; }
+.entry-reason { color: var(--danger); }
+.link-button { display: inline; padding: 0; border: 0; background: none; color: var(--accent); text-decoration: underline; }
+.link-button:hover:not(:disabled) { background: none; color: var(--accent-strong); }
+.option-pair button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; }
+.option-pair button[hidden] { display: none; }
+.option-pair svg { width: 15px; height: 15px; }
+.linked-weapons { display: grid; gap: 5px; margin: 10px 0 4px; }
+.linked-weapons button { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; text-align: left; }
+.linked-weapons button small { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.linked-weapons button.lead { cursor: default; }
+.linked-weapons button.lead small, .linked-weapons button.active small { color: inherit; }
+.weapon-runtime[data-state=blocked] { color: var(--danger); }
+.weapon-runtime[data-state=aligning] { color: var(--accent); }
+.small-tag { border-radius: 4px; padding: 2px 5px; font: 11.5px Consolas, monospace; letter-spacing: 0; background: #f0b87426; color: var(--accent-strong); font-weight: 700; }
+
+/* Weapon and component previews. Content drawings never inherit the icon stroke. */
+.design-preview svg, .industry-example-preview svg, .current-weapon-preview svg, .placement-weapon-preview svg, .weapon-card-visual svg {
+  stroke: none; stroke-width: 0; }
+.current-weapon-preview, .placement-weapon-preview, .design-preview, .weapon-card-visual {
+  background: linear-gradient(180deg, #bcc6b0, #9ca991); }
+.current-weapon-preview, .placement-weapon-preview { display: grid; place-items: center; overflow: hidden; border-radius: 9px; padding: 12px; margin: 8px 0; min-height: 64px; }
+.current-weapon-preview canvas, .placement-weapon-preview canvas, .weapon-card-visual canvas {
+  display: block; width: auto; height: auto; max-width: 100%; filter: drop-shadow(0 3px 2px #0000003d); }
+.current-weapon-preview canvas, .placement-weapon-preview canvas { max-height: 70px; }
+/* In the arsenal each gun takes its share of its picture's width, the longest of its tab the whole of it. */
+.weapon-card-visual canvas { max-width: none; }
+/* In the player's hands the gun is a small figure: the field is what is looked at. */
+
+/* Field */
+.camera-tools { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 9px; color: var(--text); }
+.camera-tools button:hover:not(:disabled) { background: #ffffff1c; }
+/* Only the workshop has tools of its own here; elsewhere the group takes no room. */
+.camera-tools:not(:has(> :not([hidden]))) { display: none; }
+.overview { position: relative; box-sizing: border-box; width: 100%; max-width: 640px; height: var(--overview-height); overflow: hidden;
+  border: 1px solid var(--glass-line); border-radius: 9px; background: var(--glass); cursor: pointer; touch-action: none; }
+.overview canvas { display: block; width: 100%; height: 100%; }
+.overview output { position: absolute; right: 7px; top: 4px; color: var(--muted); font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; pointer-events: none; }
+/* The settings open under the gear at the end of the top row: the full screen and the help, then the sound and the
+   look of the field. */
+.settings-panel { position: absolute; top: calc(100% + 4px); right: 0; z-index: 4; display: grid; gap: 6px;
+  width: min(340px, calc(100vw - 16px)); max-height: calc(100dvh - var(--workspace-bar-height, 52px) - 12px); overflow-y: auto;
+  padding: 6px; font-size: 12.5px; color: var(--text); background: var(--panel); border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: 0 8px 24px #0000004d; }
+.settings-actions { display: grid; }
+.settings-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding-top: 6px; border-top: 1px solid var(--line); }
+#workspace-bar .settings-panel button { display: inline-flex; align-items: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 5px 10px;
+  border: 0; background: transparent; color: inherit; font-weight: 500; }
+#workspace-bar .settings-actions button { justify-content: flex-start; width: 100%; font-size: 13.5px; }
+#workspace-bar .settings-panel button:hover:not(:disabled) { background: #ffffff1c; }
+.settings-panel button svg { width: 16px; height: 16px; }
+#sound-toggle[aria-pressed=false] { --sound-on: 0; --sound-off: 1; }
+#music-toggle[aria-pressed=false] { --music-off: 1; color: var(--muted); }
+#frame-meter-toggle[aria-pressed=true] { color: var(--accent); }
+.settings-panel input { width: 80px; height: 44px; padding: 0; }
+.settings-panel output { color: var(--muted); }
+.settings-alerts { display: grid; gap: 0; }
+.settings-alerts button { justify-content: space-between; width: 100%; }
+.settings-alerts p { margin: 0 10px 5px; color: var(--faint); font-size: 11.5px; line-height: 1.4; }
+#background-alerts-state { color: var(--muted); font-size: 12px; }
+[aria-pressed=true] > #background-alerts-state { color: var(--accent); }
+.settings-panel select { width: auto; min-width: 44px; min-height: 44px; padding: 5px 6px; font-size: 12.5px; color: var(--muted); background: transparent; border-color: transparent; }
+.settings-panel select option { color: var(--text); background: var(--panel); }
+/* The meter of the frames (F3): its figures, and under them what weighs on the frames; what was wrong a moment ago
+   stays, paler. */
+.frame-meter { display: grid; justify-items: center; gap: 1px; box-sizing: border-box; max-width: 560px;
+  color: var(--muted); font-size: 12.5px; line-height: 1.25; font-variant-numeric: tabular-nums; text-align: center; }
+.frame-meter > #frame-rate { font-weight: 600; white-space: nowrap; }
+.frame-meter > #frame-causes { color: var(--faint); }
+.frame-meter[data-state=poor] > #frame-rate { color: var(--accent-strong); }
+.frame-meter[data-state=poor] > #frame-causes { color: var(--text); }
+/* Its detail (F3 again): the parts of the frames and what they sent to the video card, side by side where the screen
+   has room for both, and under them what was drawn and on what. */
+#frame-detail { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 3px 16px; margin-top: 3px;
+  color: var(--text); font-size: 11.5px; line-height: 1.22; text-align: left; }
+#frame-detail table { border-collapse: collapse; }
+#frame-detail :is(th, td) { padding: 0 0 0 10px; text-align: right; white-space: nowrap; }
+#frame-detail :is(th, td):first-child { padding-left: 0; text-align: left; }
+#frame-detail th { padding-bottom: 1px; color: var(--faint); font-weight: 500; }
+#frame-detail td:first-child { color: var(--muted); }
+/* The lines take the width of the tables, and wrap in it rather than widen the meter. */
+#frame-detail > div { flex: 1 0 100%; contain: inline-size; display: grid; gap: 1px; color: var(--muted); text-align: center; }
+#frame-detail p { margin: 0; }
+.loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 5; background: #0f1713f2; }
+.loading p { margin-top: 22px; max-width: 80%; text-align: center; color: var(--muted); font-size: 14px; }
+
+/* Indicators and floating actions added by workshop-ux.js. The figures of the design stand in the row of the tools at
+   the right, as tall as they are. */
+.build-stats { grid-column: 1; grid-row: 1; position: relative; z-index: 2; display: flex;
+  justify-self: start; align-items: center; flex-wrap: wrap; gap: 8px; min-height: var(--tool-row); max-width: 100%; padding: 5px 9px;
+  background: var(--glass); border: 1px solid var(--glass-line); border-radius: 8px; }
+.build-stats svg { width: 14px; height: 14px; }
+.build-stats span { display: inline-flex; align-items: baseline; gap: 6px; padding: 0; border: 0;
+  background: transparent; font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.build-stats small { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; color: var(--faint); }
+.build-stats span[data-over] { color: var(--danger); }
+.selection-bar { position: absolute; z-index: 4; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3px; padding: 4px; white-space: nowrap;
+  width: max-content; max-width: calc(100% - 16px);
+  background: #101814f2; border: 1px solid #ffffff2b; border-radius: 10px; box-shadow: 0 8px 24px #00000080; transform: translate(-50%, -100%); }
+.selection-bar button { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; font-size: 13px; border-color: transparent; background: transparent; color: var(--muted); }
+.selection-bar button:hover:not(:disabled) { background: #ffffff1c; color: var(--text); border-color: transparent; }
+.selection-bar button.danger:hover:not(:disabled) { background: #f08f7826; color: var(--danger); }
+.selection-bar button svg { width: 15px; height: 15px; }
+.selection-bar i { width: 1px; height: 16px; background: #ffffff26; }
+/* A setting of the selected piece: its name, − and + about the value, which is also typed in its place. */
+.selection-bar .bar-step { display: inline-flex; align-items: center; gap: 1px; padding-left: 7px; }
+.selection-bar .bar-step label { margin-right: 3px; font-size: 12.5px; color: var(--faint); }
+.selection-bar .bar-step button { padding: 4px 9px; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.selection-bar .bar-step input { width: 4ch; box-sizing: content-box; padding: 3px 2px; text-align: right; font-size: 13px; font-weight: 650;
+  color: var(--text); background: transparent; border-color: transparent; border-radius: 5px; appearance: textfield; -moz-appearance: textfield; }
+.selection-bar .bar-step input::-webkit-inner-spin-button, .selection-bar .bar-step input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.selection-bar .bar-step input:hover, .selection-bar .bar-step input:focus-visible { border-color: #ffffff3d; background: #ffffff12; }
+.selection-bar .bar-step em { min-width: 1ch; font-size: 12.5px; font-style: normal; color: var(--muted); }
+.selection-bar [hidden] { display: none; }
+/* The reach allowed to the outline, and the two ends of the hull, drawn on the field while building. */
+.build-limits, .build-end { position: absolute; pointer-events: none; white-space: nowrap; }
+/* Light dashes over dark gaps read against the sky and against the ground alike. */
+.build-limits i { position: absolute; background: repeating-linear-gradient(var(--run), #e9eddf9e 0 9px, #0d151247 9px 15px); transition: box-shadow .15s; }
+.build-limits i[data-side=top], .build-limits i[data-side=base] { left: 0; right: 0; height: 2px; --run: 90deg; }
+.build-limits i[data-side=top] { top: 0; }
+.build-limits i[data-side=base] { bottom: 0; opacity: .6; }
+.build-limits i[data-side=left], .build-limits i[data-side=right] { top: 0; bottom: 0; width: 2px; --run: 180deg; }
+.build-limits i[data-side=left] { left: 0; }
+.build-limits i[data-side=right] { right: 0; }
+.build-limits i[data-side=left]::before, .build-limits i[data-side=left]::after,
+.build-limits i[data-side=right]::before, .build-limits i[data-side=right]::after { content: ''; position: absolute; width: 16px; height: 16px; border: 0 solid #e9eddfd9; }
+.build-limits i[data-side=left]::before { left: 0; top: 0; border-width: 2px 0 0 2px; }
+.build-limits i[data-side=left]::after { left: 0; bottom: 0; border-width: 0 0 2px 2px; }
+.build-limits i[data-side=right]::before { right: 0; top: 0; border-width: 2px 2px 0 0; }
+.build-limits i[data-side=right]::after { right: 0; bottom: 0; border-width: 0 2px 2px 0; }
+.build-limits[data-held] i { background: repeating-linear-gradient(var(--run), #ffffffd9 0 9px, #0d151259 9px 15px); }
+/* A side the outline has reached: nothing can be dragged past it. */
+.build-limits i[data-at] { background: var(--accent); box-shadow: 0 0 10px #f0b87499; }
+.build-limits i[data-at][data-side=top], .build-limits i[data-at][data-side=base] { height: 3px; opacity: 1; }
+.build-limits i[data-at][data-side=left], .build-limits i[data-at][data-side=right] { width: 3px; }
+.build-limits b { position: absolute; left: 0; top: 0; font-size: 11.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: #ffffffd1; text-shadow: 0 1px 2px #0d1512cc; }
+.build-limits[data-held] b { color: var(--text); }
+.build-end { display: flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 6px; background: #101814d9; border: 1px solid #ffffff26; color: var(--muted);
+  font-size: 11.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.build-end svg { width: 13px; height: 13px; }
+.build-end[data-side=left] { transform: translateX(-100%); }
+/* Ammunition of the selected reserve, chosen on the box. */
+.selection-bar [data-act=ammo] { color: var(--text); font-weight: 600; padding-right: 5px; }
+.selection-bar [data-act=ammo][data-idle] { color: var(--danger); }
+.selection-bar .selection-guidance[data-marked] { color: var(--danger); }
+.ammo-menu { position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%); z-index: 6; display: flex; flex-direction: column; gap: 1px;
+  min-width: 280px; max-height: 300px; overflow-y: auto; padding: 5px; background: #101814fa; border: 1px solid #ffffff2b; border-radius: 10px; box-shadow: 0 10px 28px #00000099; }
+.ammo-menu[data-up] { top: auto; bottom: calc(100% + 6px); }
+.ammo-menu small { padding: 7px 9px 3px; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+.selection-bar .ammo-menu button { display: flex; align-items: center; gap: 10px; padding: 6px 9px; text-align: left; }
+.selection-bar .ammo-menu button svg { flex: none; width: 24px; height: 24px; color: var(--olive); }
+.ammo-menu button div { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ammo-menu button:disabled svg { color: var(--faint); }
+.ammo-menu button b { font-size: 13.5px; font-weight: 650; color: var(--text); }
+.ammo-menu button span { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ammo-menu button[aria-current] { background: #f0b8741f; box-shadow: inset 2px 0 var(--accent); }
+.ammo-menu button:disabled b, .ammo-menu button:disabled span { color: var(--faint); }
+.ammo-menu .ammo-other {
+  flex: none; width: 100%; min-width: 0; max-width: 100%; border-top: 1px solid var(--line);
+}
+.ammo-menu .ammo-other > summary {
+  display: flex; align-items: center; min-height: 44px; padding: 7px 9px;
+  min-width: 0; max-width: 100%; list-style: none; white-space: normal; overflow-wrap: anywhere;
+  color: var(--accent-strong); font-size: 12.5px;
+  font-weight: 650; cursor: pointer;
+}
+.ammo-menu .ammo-other > summary::-webkit-details-marker { display: none; }
+.ammo-menu .ammo-other > summary::after { content: '▾'; margin-left: auto; }
+.ammo-menu .ammo-other[open] > summary::after { transform: rotate(180deg); }
+.ammo-menu .ammo-other button { width: 100%; }
+/* The compartment a face offers while Shift is held, before any pull. */
+.build-ghost { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.build-ghost svg { width: 100%; height: 100%; overflow: visible; }
+.build-ghost polygon { fill: #f0b8742e; stroke: var(--accent-strong); stroke-width: 1.6; stroke-dasharray: 7 5; stroke-linejoin: round; }
+/* A finger held still: the ring fills until the hold takes, then pulses (touch.js). */
+.hold-ring { position: fixed; z-index: 40; width: 68px; height: 68px; margin: -34px 0 0 -34px; pointer-events: none; }
+.hold-ring[hidden] { display: none; }
+.hold-ring svg { width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); filter: drop-shadow(0 1px 3px #000000b3); }
+.hold-ring circle { fill: none; stroke-width: 3.2; }
+.hold-ring circle:first-child { stroke: #10181499; stroke-width: 5; }
+.hold-ring circle:last-child { stroke: var(--accent-strong); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100;
+  animation: hold-fill var(--fill, 300ms) linear forwards; }
+.hold-ring[data-armed] { animation: hold-pulse 260ms ease-out forwards; }
+.hold-ring[data-armed] circle:last-child { stroke-dashoffset: 0; animation: none; }
+@keyframes hold-fill { to { stroke-dashoffset: 0; } }
+@keyframes hold-pulse { to { transform: scale(1.5); opacity: 0; } }
+/* A figure about the selection, and the armour of a plate chosen on the plate. */
+.selection-bar .bar-fact { padding: 0 9px 0 0; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* A gun tells what it is and does in lines of their own (piece-settings.ts `gunFigures`). */
+.selection-bar .bar-fact > span { display: block; }
+.selection-bar .bar-fact > span + span { margin-top: 2px; }
+/* The box a gun with no round of its calibre aboard is offered, under the words that say so (workshop-ux.ts `feedGun`). */
+.selection-bar > [data-act=feed] { justify-content: center; color: var(--text); border: 1px solid var(--line-strong); background: var(--surface); white-space: normal; }
+#selection-settings > [data-act=feed] { min-height: 44px; padding: 7px 6px; line-height: 1.25; }
+.selection-bar [data-act=material] { color: var(--text); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; padding-right: 5px; }
+.swatch { flex: none; width: 12px; height: 12px; border-radius: 3px; background: var(--tone, #888); box-shadow: inset 0 0 0 1px #ffffff47, inset 0 -5px 6px #00000038; }
+.material-menu { min-width: 340px; }
+.material-menu button .swatch { width: 22px; height: 22px; border-radius: 5px; }
+.material-menu button b em { margin-left: 8px; font-size: 12.5px; font-style: normal; font-weight: 500; color: var(--faint); }
+/* Handles of the selected weapon: sector limits and the mechanism's direction. Pressed, a handle stays where it stands. */
+.aim-handle { position: absolute; z-index: 3; width: 16px; height: 16px; padding: 0; border-radius: 50%; transform: translate(-50%, -50%);
+  background: #101814; border: 2px solid var(--accent); box-shadow: 0 2px 8px #000000a6; cursor: grab; touch-action: none; }
+.aim-handle:hover:not(:disabled), .aim-handle:active { background: var(--accent); border-color: var(--accent-strong); }
+.aim-handle:active { cursor: grabbing; }
+.aim-handle[data-role=box] { border-radius: 4px; border-color: #e8eede; }
+.aim-handle[data-role=box]:hover:not(:disabled), .aim-handle[data-role=box]:active { background: #e8eede; border-color: #fff; }
+/* The round handle that turns what is selected alone — any piece of the workshop, a gun among them, or a detail —, the
+   same wherever it stands; a finger has it larger. */
+.turn-handle { position: absolute; z-index: 4; display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border-radius: 50%;
+  transform: translate(-50%, -50%); background: #101814; border: 2px solid var(--accent); box-shadow: 0 2px 8px #000000a6; color: var(--accent);
+  cursor: grab; touch-action: none; }
+.turn-handle svg { width: 16px; height: 16px; stroke-width: 2.4; }
+.turn-handle:hover:not(:disabled), .turn-handle:active { background: var(--accent); border-color: var(--accent-strong); }
+.turn-handle:hover:not(:disabled) svg, .turn-handle:active svg { color: #101814; }
+.turn-handle:active { cursor: grabbing; }
+.aim-handle:active:not(:disabled), .turn-handle:active:not(:disabled) { transform: translate(-50%, -50%); }
+.aim-handle[hidden], .turn-handle[hidden], .aim-readout[hidden] { display: none; }
+.aim-readout { position: absolute; z-index: 5; transform: translate(-50%, -100%); padding: 3px 8px; border-radius: 6px; background: #101814f2;
+  border: 1px solid #ffffff2b; font-size: 13px; font-weight: 650; pointer-events: none;
+  width: max-content; max-width: min(340px, calc(100% - 16px)); text-align: center; }
+.aim-readout[data-refused] { color: var(--danger); border-color: #f08f7866; }
+[data-input=touch] .aim-readout { font-size: 14px; padding: 5px 10px; }
+/* The grips of the running gear of the chassis selected, on the hub of an axle or of the wheel at an end of the track,
+   which go along it; and the authored gaps. */
+.chassis-grip { position: absolute; z-index: 3; width: 18px; height: 18px; padding: 0; border-radius: 50%; transform: translate(-50%, -50%);
+  background: #101814; border: 3px solid var(--accent); box-shadow: 0 2px 8px #000000a6; cursor: ew-resize; touch-action: none; }
+.chassis-grip:hover, .chassis-grip:active { background: var(--accent); border-color: var(--accent-strong); }
+.chassis-grip[hidden], .chassis-gaps[hidden] { display: none; }
+[data-input=touch] .chassis-grip { width: 30px; height: 30px; }
+.chassis-gaps { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.chassis-gaps i { position: absolute; height: 0; border-top: 2px dashed var(--accent); transform-origin: 0 0; }
+.symmetry-axis { position: absolute; z-index: 1; width: 0; border-left: 1px dashed #e9eddfb3; transform: translateX(-.5px); pointer-events: none; }
+.symmetry-axis[hidden] { display: none; }
+#arsenal-dialog[data-swap] #arsenal-title::after { content: ' · substituindo a arma selecionada'; font-size: .62em; font-weight: 500; color: var(--accent); }
+#arsenal-dialog[data-mount] #arsenal-title::after { content: ' · instalando na chapa selecionada'; font-size: .62em; font-weight: 500; color: var(--accent); }
+.field-status { grid-column: 1 / -1; min-width: 0; display: grid; grid-template-columns: 8px minmax(0, 1fr); align-items: center; gap: 1px 8px;
+  padding: 0 3px; font-size: 12.5px; line-height: 1.35; pointer-events: none; }
+.field-status b { min-width: 0; font-weight: 650; overflow-wrap: anywhere; }
+.field-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--olive); flex-shrink: 0; }
+.field-status[data-state=aligning] i { background: var(--accent); }
+.field-status[data-state=blocked] i { background: var(--danger); }
+.field-status span { grid-column: 2; min-width: 0; color: var(--muted); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+
+/* Dialogs and catalogues */
+dialog { width: 580px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 36px); overflow: auto; color: var(--text); border: 1px solid var(--line-strong); background: var(--panel); border-radius: 16px; padding: 22px 24px 24px; box-shadow: 0 30px 90px #000000b3; }
+dialog::backdrop { backdrop-filter: blur(3px); background: #060c09c7; }
+.dialog-header { display: flex; justify-content: space-between; gap: 12px; position: sticky; top: -22px; z-index: 2; margin: -22px -24px 16px; padding: 18px 24px 14px;
+  background: var(--panel); border-bottom: 1px solid var(--line); align-items: center; }
+#entry-dialog .dialog-header { position: static; }
+#servers-dialog { width: 720px; }
+#servers-dialog .dialog-header { position: static; }
+#servers-title:focus { outline: none; }
+.server-filters, .server-direct > div, .server-menu-actions { display: flex; gap: 8px; }
+.server-filters input, .server-direct input { flex: 1; min-width: 0; }
+.server-filters select { width: auto; max-width: 50%; }
+.server-list { display: grid; gap: 8px; margin: 12px 0; padding: 0; list-style: none; }
+.server-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 16px;
+  padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--well); }
+.server-row.server-official { border-color: #f0b87480; background: #f0b8740f; }
+.server-row-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
+.server-copy { min-width: 0; overflow-wrap: anywhere; display: grid; gap: 3px; }
+.server-description, .server-meta, .server-metrics, .server-last, .server-badge { color: var(--muted); font-size: 12px; }
+.server-badge { padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line-strong); }
+.server-official .server-badge { color: var(--accent-strong); border-color: #f0b87480; }
+.server-last { color: var(--accent-strong); }
+.server-metrics { display: grid; text-align: right; font-variant-numeric: tabular-nums; }
+.server-compatible { color: var(--olive); }
+.server-incompatible, #entry-dialog .entry-community { color: var(--danger); }
+.server-direct { display: grid; gap: 5px; margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line); }
+.server-menu-actions { flex-wrap: wrap; margin-top: 12px; }
+.server-source { display: inline-block; margin-top: 12px; color: inherit; font-size: .85em; }
+#entry-dialog .entry-server { color: var(--text); font-weight: 650; overflow-wrap: anywhere; }
+.entry-servers { margin-top: 8px; }
+@media (max-width: 520px) {
+  .server-row { grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; }
+  .server-copy { grid-column: 1 / -1; }
+  .server-metrics { display: flex; flex-wrap: wrap; gap: 3px 8px; text-align: left; }
+  #servers-dialog input, #servers-dialog select { font-size: 16px; }
+}
+dialog p { line-height: 1.65; margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+dialog h3 { margin-top: 18px; }
+.workshop-dialog { width: 1120px; }
+.library-tabs { border: 1px solid var(--line-strong); padding: 3px; background: var(--well); border-radius: 9px; }
+.library-tabs button.active { background: var(--surface-hi); color: var(--text); }
+.catalog-filters input[type=search] { flex: 1; }
+.catalog-summary { margin-bottom: 12px; }
+.design-grid, .arsenal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.design-card, .weapon-card { overflow: hidden; border: 1px solid var(--line-strong); background: var(--panel-2); border-radius: 12px;
+  transition: transform .12s, border-color .12s, box-shadow .12s; }
+.design-card:hover, .weapon-card:hover { border-color: #6d8468; transform: translateY(-2px); box-shadow: 0 10px 24px #00000066; }
+.weapon-card { padding: 14px; }
+.weapon-card-visual { min-height: 104px; padding: 12px 14px; border-radius: 9px; margin-bottom: 12px; }
+.design-info h3, .weapon-card h3 { margin: 6px 0; font-size: 15.5px; }
+.design-title { display: flex; align-items: center; gap: 4px; margin: 2px -6px; cursor: text; }
+.design-title i { display: flex; flex: none; margin-right: 6px; }
+.design-title svg { width: 14px; height: 14px; color: var(--faint); }
+.design-title:hover svg, .design-title:focus-within svg { color: var(--text); }
+.design-name { flex: 1; min-width: 0; margin: 0; padding: 4px 6px; border: 0; border-radius: 6px; background: transparent; font-size: 15.5px; font-weight: 650; text-overflow: ellipsis; }
+.design-name:hover, .design-name:focus-visible { background: var(--well); }
+.card-category { color: var(--accent); font-weight: 700; letter-spacing: .1em; }
+.weapon-card-specs { display: flex; flex-wrap: wrap; color: #c2d1ae; font-size: 12.5px; gap: 6px; }
+.weapon-card-specs span { padding: 2px 9px; border-radius: 99px; background: #ffffff10; font-variant-numeric: tabular-nums; }
+.weapon-price, .design-cost { font-weight: 650; color: var(--text); }
+.design-info .design-short { margin-top: -6px; color: var(--danger); }
+/* A project of the garage the game no longer opens is faded, and says why in a few lines (all of it under the pointer). */
+.design-card[data-refused] .design-preview { opacity: .25; filter: grayscale(1); }
+.design-card[data-refused] h3 { color: var(--muted); }
+.design-info .card-refused { color: var(--danger); }
+.design-info .design-refusal { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow-wrap: anywhere; }
+.card-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.card-actions button { padding: 7px 13px; font-size: 13px; font-weight: 600; }
+/* What takes a construction out of the garage stands apart at the end of its card, and turns red under the pointer. */
+.card-actions .card-remove { display: grid; place-items: center; margin-left: auto; padding: 6px 8px; background: transparent; border-color: transparent; color: var(--muted); }
+.card-actions .card-remove svg { width: 15px; height: 15px; }
+.card-actions .card-remove:hover:not(:disabled) { color: #f08a7a; border-color: #f08a7a55; background: #f08a7a14; }
+/* The arsenal: a tab for each family, and its few models side by side, each its picture beside what it is, with its
+   price and its buttons under that. */
+.arsenal-families { flex-wrap: wrap; align-self: flex-start; width: fit-content; max-width: 100%; margin-bottom: 14px; }
+.arsenal-grid { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 10px; }
+.weapon-card { display: grid; grid-template-columns: minmax(160px, 38%) minmax(0, 1fr); gap: 6px 14px; align-items: center; padding: 12px; }
+.weapon-card-visual { display: grid; place-items: center; align-self: center; min-height: 0; height: 80px; margin: 0; padding: 8px; }
+.weapon-card-visual canvas { max-height: 64px; object-fit: contain; }
+.weapon-card-text h3 { margin: 0 0 2px; font-size: 15px; }
+.weapon-card-text p { margin: 0 0 6px; font-size: 12.5px; line-height: 1.4; }
+.weapon-card-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.weapon-card-foot .weapon-price { flex: none; margin: 0; font-size: 13.5px; white-space: nowrap; }
+.weapon-card-foot .card-actions { flex-wrap: nowrap; margin: 0; }
+#arsenal-dialog[open] { display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+#arsenal-dialog .dialog-header { position: static; flex: none; margin-bottom: 0; }
+#arsenal-dialog .dialog-header .icon-button { flex: none; width: 44px; height: 44px; }
+#arsenal-dialog .arsenal-purpose { flex: none; margin: 0; font-size: 12px; line-height: 1.4; }
+#arsenal-dialog .arsenal-families { flex: none; width: 100%; align-self: stretch; margin: 0; }
+#arsenal-dialog .arsenal-families button, #arsenal-dialog .card-actions button { min-height: 44px; }
+#arsenal-dialog .arsenal-grid { min-height: 0; grid-auto-rows: max-content; overflow-y: auto; overscroll-behavior: contain; align-content: start; scrollbar-gutter: stable; }
+.catalog-empty { grid-column: 1 / -1; padding: 35px; text-align: center; border: 1px dashed var(--line-strong); border-radius: 12px; }
+
+/* Messages. A notice is small and short, and a press puts it away. It stands low, over the cut of the earth under the
+   ground the camera keeps a quarter of the way up the field: not over what goes on there, and over the panels at the foot
+   of the field (`--toast-clear`, main.js `placeToast`), not on their buttons. */
+.toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 20; bottom: max(92px, var(--toast-clear, 0px)); padding: 7px 12px 7px 11px; width: max-content; max-width: min(460px, calc(100vw - 32px)); font-size: 13px; line-height: 1.4; color: var(--text);
+  background: #1b2721f7; border: 1px solid var(--line-strong); border-left: 3px solid var(--olive); border-radius: 10px; box-shadow: 0 14px 40px #000000a6; }
+.toast[role=alert] { border-left-color: var(--danger); background: #2d1f1cf7; color: #ffe2d9; }
+.toast-place { cursor: pointer; }
+.toast-place b { display: inline-flex; align-items: center; margin-left: 6px; color: var(--accent); white-space: nowrap; }
+.toast-place b svg { width: 14px; height: 14px; }
+.toast-place:hover b { text-decoration: underline; }
+
+@media (max-width: 1050px) {
+  .build-stats span { font-size: 13px; padding: 4px 8px; }
+}
+@media (max-width: 740px) {
+  dialog { padding: 18px; }
+  .dialog-header { top: -18px; margin: -18px -18px 14px; padding: 14px 18px 12px; }
+}
+@media (prefers-reduced-motion: reduce) { button, .design-card, .weapon-card { transition: none; } }
+
+/* Squad command */
+.squad-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.squad-marks { position: absolute; inset: 0; width: 100%; height: 100%; }
+.squad-marks path, .squad-marks circle { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.squad-marks .move { stroke: var(--olive); stroke-dasharray: 6 6; }
+.squad-marks .flag { stroke: var(--olive); fill: #b9cc8b66; }
+.squad-marks .flag-label { fill: #e6ead9; font: 600 11.5px system-ui, sans-serif; paint-order: stroke; stroke: #101814; stroke-width: 3px; }
+.squad-marks .attack { stroke: var(--danger); stroke-dasharray: 2 7; }
+.squad-marks .target { stroke: var(--danger); }
+.squad-tag { position: absolute; left: 0; top: 0; box-sizing: border-box; }
+.squad-tag b { position: absolute; box-sizing: border-box; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-line); }
+/* A vehicle picked is edged on the field itself (silhouette.js), and the one in hand in a dashed amber: the tag only
+   bears the mark of an alert. */
+.squad-tag[data-selected=true] b { background: var(--olive); border-color: var(--olive); color: #1b2413; }
+.squad-tag[data-manual=true] b { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+/* A fresh contact of the vehicle's senses, and a hit: one ring each, the hit inside. */
+.squad-marks .heard path, .squad-marks .heard circle { stroke: #8fd6e0; }
+.squad-marks .heard circle { fill: #101814b3; }
+.squad-marks .heard path:first-child { stroke-dasharray: 3 4; }
+/* A deposit on the field: a mark in the colour of its material over the ground it is dug from, and the way of a hauler. */
+.squad-marks .deposit path { stroke: #101814; stroke-width: 1.2; }
+.squad-marks .deposit[data-material=ferro] path { fill: #b98a6a; }
+.squad-marks .deposit[data-material=ligas] path { fill: #9fb4c4; }
+.squad-marks .deposit[data-material=silica] path { fill: #dccf9a; }
+.squad-marks .deposit[data-supplied=true] path { fill: #cbbd8a; }
+.squad-marks .deposit[data-active=false] path { fill: #5a655f; }
+.squad-marks .deposit text { fill: #e6ead9; font: 600 12.5px system-ui, sans-serif; text-anchor: middle; paint-order: stroke; stroke: #101814; stroke-width: 3px; }
+.squad-marks .deposit line { stroke: #b8c4b2; stroke-width: 1; opacity: .55; }
+.squad-marks .haul { stroke: #dccf9a; stroke-dasharray: 2 5; }
+.squad-tag[data-heard=true] b { box-shadow: 0 0 0 2px #8fd6e0; }
+.squad-tag[data-alert=true] b { box-shadow: 0 0 0 2px var(--danger); }
+.squad-tag[data-alert=true][data-heard=true] b { box-shadow: 0 0 0 2px var(--danger), 0 0 0 4px #8fd6e0; }
+.squad-box { position: absolute; z-index: 5; border: 1px solid var(--olive); border-radius: 2px; background: #b9cc8b24; pointer-events: none; }
+.viewport[data-tool=command] > canvas { cursor: default; }
+/* The orders: one row of marks, as many as the vehicles picked can take, each with its key in a corner. */
+.squad-orders { display: grid; grid-template-columns: repeat(var(--orders), minmax(0, 1fr)); gap: 4px; margin: 8px 0; }
+.squad-orders button { position: relative; display: grid; place-items: center; height: 38px; padding: 0; }
+.squad-orders svg { width: 19px; height: 19px; }
+.squad-orders kbd { position: absolute; right: 2px; bottom: 1px; padding: 0 2px; border: 0; background: transparent; font-size: 9.5px; line-height: 1.2; color: var(--faint); }
+/* While a squad is commanded the side panel inspects no piece; of the vehicle in hand, only while inspecting. */
+
+/* The faction on the shared field, at the right of the field under the controls over it — the left of the field is the
+   view's — and without a box, one thing under the other: its flag and its name, which open what it is called and
+   flies; a line for each stock — a small picture of what it is, in its colour, and what it holds —; what waits in the
+   yard; how many constructions it has; a base being taken, while one is. A shadow keeps the words on sky and on
+   ground. It is not counted over the field: a column at its edge, and only its flag takes a click or a touch; the
+   rest lets them through to the field. */
+.faction-hud { grid-column: -2; grid-row: 2; justify-self: end; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+  max-width: 240px; font-size: 12px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #000000c0, 0 0 8px #00000070; pointer-events: none; }
+.faction-stock { display: contents; }
+.faction-stock > span, .faction-count { display: flex; align-items: center; gap: 7px; padding-right: 4px; white-space: nowrap; }
+.stock-icon { width: 17px; height: 17px; filter: drop-shadow(0 1px 1px #000000b0); }
+.faction-hud b { font-size: 14px; font-weight: 700; color: var(--text); }
+.faction-hud span { color: var(--muted); }
+/* A stock that something stands still for has its figure in the colour of danger, and one that does not cover all that is
+   asked of it in that of a notice: either takes the pointer and the finger, to say what that is (field-screen.js), and the
+   others still let them through. */
+.faction-stock > span[data-want=waiting], .faction-stock > span[data-want=short] { pointer-events: auto; cursor: help; }
+.faction-hud .faction-stock > span[data-want=waiting] b { color: var(--danger); }
+.faction-hud .faction-stock > span[data-want=short] b { color: var(--accent); }
+#faction-yard { padding-right: 4px; white-space: normal; text-align: right; }
+/* Its guns waiting for its rounds in the air to come down, in the colour of a notice. */
+.faction-hud #faction-shots, .faction-hud #faction-shots b { color: var(--accent); }
+/* A base being taken, under the rest: what goes on with the time left, what to do about it when the base is the
+   faction's own, and a bar of how far the capture has gone — in the colour of danger for the faction's own base. */
+.faction-capture { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; width: 100%; margin-top: 3px; padding-right: 4px; text-align: right; }
+.faction-hud .faction-capture b { font-size: 12.5px; }
+.faction-capture small { font-size: 11px; color: var(--muted); }
+.faction-capture i { display: block; width: 100%; max-width: 180px; height: 3px; border-radius: 99px; background: linear-gradient(90deg, var(--olive) var(--fill, 0%), var(--well) var(--fill, 0%)); }
+.faction-hud .faction-capture[data-own=true] b { color: var(--danger); }
+.faction-capture[data-own=true] i { background: linear-gradient(90deg, var(--danger) var(--fill, 0%), var(--well) var(--fill, 0%)); }
+.faction-hud .faction-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; font-weight: 700; color: var(--text); }
+/* A flag, wherever the page shows one: three wide for two tall, with a hairline about it. Its parts are filled, and
+   only its ring is a line: the stroke the icons of the page are drawn with is not its own. */
+.banner { display: block; width: 27px; height: 18px; flex: none; border-radius: 2px; box-shadow: 0 0 0 1px #0a120e99; stroke: none; }
+/* That of a country is its picture, four wide for three tall, at the width its place gives a flag. */
+.banner.country, .faction-identity .banner.country, .identity-preview .banner.country, .identity-choice .banner.country { height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+/* The flag of the faction heads its stocks, says its name to the pointer and opens the dialog name and flag are made in. */
+.faction-identity { display: flex; align-items: center; gap: 8px; max-width: 100%; margin-bottom: 2px; padding: 2px 8px 2px 2px; border-color: transparent; background: transparent; pointer-events: auto; }
+.faction-identity:hover:not(:disabled) { background: #ffffff14; border-color: var(--glass-line); }
+.faction-identity .banner { width: 30px; height: 20px; }
+
+/* In the side panel, what the situation has of the field, block by block. */
+.network-connection { display: block; padding: 9px 16px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--accent); }
+.connection-notice { position: absolute; z-index: 30; top: clamp(76px, 16vh, 130px); left: 50%; transform: translateX(-50%); width: min(440px, calc(100% - 24px)); max-height: calc(100% - 96px); overflow: auto; padding: 20px; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--panel); box-shadow: 0 12px 40px #0008; }
+.connection-notice h2 { margin: 0 0 8px; color: var(--accent); font-size: 20px; }
+.connection-notice p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.connection-notice .card-actions { margin-top: 16px; }
+/* A connected field stays usable during a disk failure. Reserve a shared band
+   below navigation so the warning also clears an inspector opened afterwards. */
+#app[data-workspace] .viewport:has(> .connection-notice[data-compact=true]:not([hidden])) {
+  --save-warning-height: 56px;
+  --top: calc(var(--workspace-bar-height) + var(--save-warning-height) + 10px);
+}
+.connection-notice[data-compact=true] { top: calc(var(--workspace-bar-height) + 2px); left: var(--left); right: var(--right); transform: none; width: auto; height: var(--save-warning-height); max-height: none; padding: 8px 12px; border-radius: 8px; pointer-events: none; box-shadow: 0 4px 16px #0005; font-size: 12px; line-height: 1.35; }
+.connection-notice[data-compact=true] h2 { display: inline; margin: 0 8px 0 0; font-size: 13px; line-height: inherit; }
+.connection-notice[data-compact=true] p { display: inline; font-size: inherit; line-height: inherit; }
+.connection-notice[data-compact=true] .card-actions { display: none; }
+@media (max-width: 600px) {
+  #app[data-workspace] .viewport:has(> .connection-notice[data-compact=true]:not([hidden])) { --save-warning-height: 88px; }
+}
+@media (max-height: 500px) { .connection-notice { padding: 14px; } .connection-notice h2 { font-size: 18px; } }
+.field-empty p { margin: 0 0 10px; font-size: 14px; }
+.field-empty button { width: 100%; padding: 10px 12px; }
+/* What the aid would give a faction with no base or nothing left, over the button that asks for it. */
+.field-recovery { display: block; margin: 14px 0 8px; font-size: 13px; line-height: 1.35; color: var(--accent); font-variant-numeric: tabular-nums; }
+/* A block of lines and buttons, of which any may be away: what is there stands evenly apart. */
+.sidebar .publish-panel, .sidebar .unit-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.sidebar .publish-panel > *, .sidebar .unit-panel > * { margin: 0; }
+.publish-price, .unit-held { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.unit-advice { display: block; font-size: 13px; line-height: 1.35; color: var(--accent); }
+.unit-advice[hidden] { display: none; }
+.publish-price.short { color: var(--danger); }
+/* What publishing costs: a small picture of each stock it is paid from and what it asks, red where the faction has
+   less, and a clock with how long building takes. */
+.publish-cost { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.cost-chip { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; color: var(--text); }
+.cost-chip[hidden] { display: none; }
+.cost-chip b { font-weight: 650; }
+.cost-chip.short b { color: var(--danger); }
+.cost-chip .stock-icon { width: 16px; height: 16px; }
+#cost-time svg { width: 15px; height: 15px; color: var(--muted); }
+#cost-time b { font-weight: 500; color: var(--muted); }
+/* What is done to a construction where it is served is told from an order by its look: a list opened from its own line. */
+.unit-jobs { display: grid; gap: 6px; margin: 4px 0 2px; }
+.unit-jobs button { padding: 7px 10px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: left; background: var(--panel-2); }
+/* The vehicle picked, at a glance: a gauge for each of its fuel, its rounds, its load and how whole it is — a small
+   picture, a few words and, under them, how full —, two to a row. One that runs short is in the colour of danger. */
+.unit-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+.unit-stats[hidden], .stat[hidden] { display: none; }
+.stat { display: grid; grid-template-columns: 16px minmax(0, 1fr); grid-template-rows: auto auto auto; align-items: center; column-gap: 6px; min-width: 0; }
+.stat svg { grid-row: 1 / span 3; width: 16px; height: 16px; color: var(--muted); }
+.stat-label { grid-column: 2; font-size: 11px; color: var(--muted); }
+.stat b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+#stat-supplies { grid-column: 1 / -1; }
+#stat-supplies b { white-space: normal; overflow-wrap: anywhere; }
+.stat i { grid-column: 2; height: 3px; margin-top: 2px; border-radius: 99px; background: linear-gradient(90deg, var(--olive) var(--fill, 0%), var(--well) var(--fill, 0%)); }
+.stat.low b { color: var(--danger); }
+.stat.low i { background: linear-gradient(90deg, var(--danger) var(--fill, 0%), var(--well) var(--fill, 0%)); }
+.faction-roster { display: grid; gap: 6px; margin: 6px 0 4px; }
+.faction-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; }
+.faction-row span { display: grid; min-width: 0; text-align: left; }
+.faction-row strong { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.faction-row small { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.faction-row button { padding: 6px 9px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.faction-row small:empty { display: none; }
+/* What the player may do of a member, each a small mark with its words in its label and title. */
+.faction-row .row-act { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; }
+.row-act svg { width: 17px; height: 17px; }
+/* A faction is told by its flag, at the head of its row. */
+.faction-row.flown { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+.row-flag { display: grid; align-items: center; }
+/* An invitation, or a request to join, says the whole name of who sent it, on as many lines as it takes. */
+.faction-dialog .faction-row :is(strong, small) { white-space: normal; overflow-wrap: anywhere; }
+.faction-row:has([data-act=join]), .faction-row:has([data-act=accept]) { border-color: var(--accent); background: #f0b8741a; }
+/* Where the faction stands among the nations by its wealth, large; pressed, it opens the roll of them all, the richest
+   first and the player's own marked; a nation met and out of sight is a row that takes the camera there. */
+.faction-ranking { margin: 0 0 16px; }
+.faction-standing { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--accent); border-radius: 10px; background: #f0b8741a;
+  cursor: pointer; list-style: none; }
+.faction-standing::-webkit-details-marker { display: none; }
+.faction-standing:hover { background: #f0b87429; }
+.faction-standing > b { font-size: 30px; font-weight: 750; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.faction-standing > span { display: grid; min-width: 0; }
+.faction-standing strong { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.faction-standing small { font-size: 12.5px; color: var(--muted); }
+.faction-standing > .faction-ranking-more { display: inline-flex; flex: none; align-items: center; gap: 8px; margin-left: auto; font-size: 12.5px; color: var(--muted); }
+.faction-ranking-more::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translate(-2px, -2px); transition: transform .12s; }
+.faction-ranking[open] .faction-ranking-more::after { transform: rotate(-135deg); }
+.faction-ranking > .ranking-list { margin-top: 6px; }
+.ranking-list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.ranking-see { display: grid; grid-template-columns: 24px auto minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 5px 8px;
+  border: 1px solid var(--line); border-radius: 8px; text-align: left; }
+.ranking-row.own .ranking-see { border-color: var(--accent); background: #f0b8741a; }
+/* A nation the player may ask to join has the request beside its row, as a small mark. */
+.ranking-row:has(> .row-act) { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px; }
+.ranking-row > .row-act { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; }
+.ranking-place { font-size: 13px; font-weight: 650; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.ranking-row:nth-child(-n+3) .ranking-place { color: var(--accent); }
+.ranking-see > span:not(.row-flag) { display: grid; min-width: 0; }
+.ranking-see strong { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ranking-see small { font-size: 12px; color: var(--muted); }
+.ranking-see small:empty { display: none; }
+.ranking-wealth { font-size: 14px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* A member has beside the name what the player may do of them: removing in the colour of danger. */
+#member-list .faction-row { grid-template-columns: minmax(0, 1fr) repeat(3, auto); }
+#member-list [data-act=remove] { color: var(--danger); }
+/* Leaving is at the end of the tab, quiet until pointed at. */
+.faction-leave { display: block; min-height: 40px; margin: 18px auto 0; padding: 6px 14px; border-color: transparent; background: transparent; color: var(--faint); font-size: 12.5px; }
+.faction-leave:hover:not(:disabled) { border-color: #f08f7866; background: #f08f7814; color: var(--danger); }
+/* The key of the player's seat, to be read and typed on another device: in letters that are not taken for one another. */
+.access-key { display: block; margin: 8px 0 6px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2);
+  font: 600 14px/1.4 ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .04em; overflow-wrap: anywhere; user-select: all; }
+.access-key-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.access-key-actions button { font-weight: 600; }
+.access-key-input { width: 100%; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .04em; text-transform: uppercase; }
+
+/* The window of the faction: its tabs and its X on a bar at the top, and under them the tab in sight, which scrolls by
+   itself; what was just done in it is said at its foot. It keeps one height from tab to tab. */
+.faction-dialog { width: 660px; height: min(680px, calc(100dvh - 36px)); padding: 0; overflow: hidden; }
+.faction-dialog[open] { display: flex; flex-direction: column; }
+.faction-dialog-bar { display: flex; flex: none; align-items: center; gap: 8px; padding: 10px 10px 10px 14px; border-bottom: 1px solid var(--line); }
+.faction-tabs { display: flex; flex: 1; min-width: 0; gap: 3px; padding: 3px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--well); }
+.faction-tabs [role=tab] { display: inline-flex; flex: 1 1 0; align-items: center; justify-content: center; gap: 6px; min-width: 0; min-height: 40px; padding: 6px 10px;
+  border: 0; background: transparent; color: var(--muted); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.faction-tabs [role=tab]:not([aria-selected=true]):hover { background: var(--surface); color: var(--text); }
+.faction-tabs [role=tab][aria-selected=true] { background: var(--surface-hi); color: var(--text); }
+.faction-news { min-width: 18px; padding: 1px 5px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-size: 11px; font-weight: 750; line-height: 1.35;
+  text-align: center; font-variant-numeric: tabular-nums; }
+.faction-dialog-bar > .icon-button { flex: none; }
+.faction-panel { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 18px 22px; }
+.faction-panel[hidden] { display: none; }
+/* Base facilities: compare benefits and real stock before spending. */
+.industry-intro { margin-bottom: 18px; }
+.industry-intro h2 { margin: 0 0 8px; }
+.industry-summary { color: var(--accent); }
+.faction-dialog:has(#faction-panel-industry:not([hidden])) { width: 1000px; max-width: calc(100vw - 32px); }
+.industry-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.industry-card { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 16px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--well); }
+.industry-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.industry-heading h3, .industry-card h4, .industry-card p { margin: 0; }
+.industry-level { font-size: 12px; color: var(--accent); }
+.industry-capacity { font-size: 13px; }
+.industry-card h4 { padding-top: 8px; font-size: 16px; }
+.industry-card .helper { line-height: 1.5; }
+.industry-cost { margin: 0; padding-top: 10px; border-top: 1px solid var(--line-strong); font-variant-numeric: tabular-nums; }
+.industry-resource { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: baseline; font-size: 13px; padding: 4px 0; }
+.industry-resource > small { color: var(--muted); text-align: right; min-width: 52px; }
+.industry-resource > strong { grid-column: span 2; }
+.industry-resource.short > small { color: var(--danger, #f5aa8e); font-weight: bold; }
+.industry-status { font-size: 13px; line-height: 1.4; }
+.industry-time { font-size: 13px; color: var(--accent); }
+.industry-card progress { width: 100%; accent-color: var(--accent); }
+.industry-card.building { border-color: var(--accent); }
+.industry-example { border-top: 1px solid var(--line-strong); padding-top: 10px; font-size: 13px; }
+.industry-example > summary { min-height: 40px; line-height: 1.5; cursor: pointer; }
+.industry-example-preview { display: grid; place-items: center; height: 108px; margin: 8px 0; padding: 8px; background: var(--panel-2); border-radius: 8px; }
+.industry-example-preview svg { width: 100%; height: 100%; }
+.industry-example-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.industry-example-actions button { flex: 1 1 95px; min-height: 44px; padding: 8px; }
+.industry-future { font-size: 13px; border-top: 1px solid var(--line-strong); padding-top: 10px; }
+.industry-future strong { display: block; margin-top: 14px; }
+.industry-notes { margin-top: 20px; font-size: 14px; }
+.industry-notes p { line-height: 1.5; }
+@media (max-width: 860px) { .faction-dialog:has(#faction-panel-industry:not([hidden])) { max-width: 100vw; } .industry-grid { grid-template-columns: 1fr; } .industry-status { min-height: 0; } }
+
+.faction-dialog .faction-panel p { margin: 0; }
+.faction-dialog .faction-panel .helper { margin: 6px 0 0; font-size: 13px; line-height: 1.5; }
+.faction-said { display: block; flex: none; padding: 10px 18px; border-top: 1px solid var(--line); background: var(--panel-2); color: var(--accent-strong); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.faction-said[data-error=true] { color: var(--danger); }
+/* The faction itself at the head of its tab: its flag, its name and the button that changes them. */
+.faction-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; margin-bottom: 14px; }
+.faction-head-flag .banner { width: 48px; height: 32px; border-radius: 3px; }
+.faction-head h2 { font-size: 20px; line-height: 1.25; overflow-wrap: anywhere; }
+.faction-head-edit { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; font-size: 13px; font-weight: 600; }
+.faction-head-edit svg { width: 16px; height: 16px; }
+/* Its blocks, one under the other, and what is seldom needed folded away under a line. */
+.faction-block { margin: 0 0 16px; }
+:is(.faction-block > h3, .social-heading) { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 14px; font-weight: 650; }
+:is(.faction-block > h3, .social-heading) output { color: var(--faint); font-weight: 500; }
+.faction-block .faction-roster { margin: 0; }
+.faction-more { margin: 0; padding: 2px 0; border-top: 1px solid var(--line); }
+.faction-more > summary { min-height: 44px; }
+.faction-more > .faction-roster { margin-bottom: 10px; }
+.faction-more .access-key-actions { margin-bottom: 10px; }
+.faction-dialog .faction-row button { min-height: 36px; }
+
+/* Trade and diplomacy: each offer and each accord in a line, with what the player may do of it; one that waits for the
+   player's answer stands out. Under them, the form that proposes another. */
+.social-records { display: grid; gap: 6px; }
+.social-record { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 6px 12px; min-width: 0; padding: 9px 10px;
+  border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); }
+.social-record:has(> .row-flag:empty) { grid-template-columns: minmax(0, 1fr) auto; }
+.social-record > .row-flag:empty { display: none; }
+.social-record.asked { border-color: var(--accent); background: #f0b8741a; }
+.social-body { display: grid; gap: 3px; min-width: 0; }
+.faction-dialog .social-line { font-size: 13.5px; line-height: 1.5; color: var(--text); overflow-wrap: anywhere; }
+.social-line strong { font-weight: 650; }
+.trade-amount { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; font-weight: 650; font-variant-numeric: tabular-nums; }
+.trade-mark { display: inline-flex; }
+.trade-mark .stock-icon { width: 16px; height: 16px; }
+.social-body small { font-size: 12px; color: var(--muted); }
+.social-body small[hidden], .social-terms[hidden], .social-actions[hidden] { display: none; }
+.faction-dialog .social-terms { padding-left: 9px; border-left: 2px solid var(--line-strong); font-size: 12.5px; line-height: 1.45; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+.social-actions { display: flex; gap: 6px; }
+.social-actions button { min-height: 38px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
+.social-form { display: grid; gap: 12px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); min-width: 0; }
+.social-form[hidden] { display: none; }
+.social-form > .social-heading { margin: 0; }
+.social-target { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.social-target select { min-height: 40px; }
+.trade-side { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: start; gap: 10px; }
+.trade-side-name { padding-top: 9px; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--muted); }
+.trade-cells { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.trade-cell { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 3px 6px; min-width: 0; }
+.trade-cell input { min-height: 40px; padding: 7px 8px; }
+.trade-cell input[aria-invalid=true] { border-color: var(--danger); color: var(--danger); }
+.trade-has { grid-column: 2; overflow: hidden; font-size: 11.5px; color: var(--faint); white-space: nowrap; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.social-form > .card-primary { justify-self: start; min-height: 44px; padding: 8px 20px; }
+/* A commitment or an alliance: one of two, as the flag of the faction is made or a country's. */
+.accord-kinds { display: inline-flex; justify-self: start; gap: 3px; padding: 3px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--well); }
+.accord-kinds button:not([aria-pressed=true]):hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.accord-kinds button { min-height: 38px; padding: 6px 16px; border: 0; background: transparent; font-size: 13px; font-weight: 600; color: var(--muted); }
+.accord-kinds button[aria-pressed=true], .accord-kinds button[aria-pressed=true]:hover:not(:disabled) { background: var(--surface-hi); color: var(--text); }
+.faction-dialog .social-form .accord-line { margin: -4px 0 0; }
+.alliance-more { margin-top: -6px; font-size: 12.5px; }
+.alliance-more[hidden] { display: none; }
+.alliance-more > summary { width: max-content; cursor: pointer; color: var(--accent); }
+.faction-dialog .alliance-more > p { margin-top: 6px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.accord-terms { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.accord-terms[hidden] { display: none; }
+.accord-terms textarea { min-height: 72px; resize: vertical; font-weight: 400; line-height: 1.4; }
+.faction-dialog .social-only { margin-top: 18px; }
+/* On a phone lying down — or standing — the window is the whole screen, its tabs at the top. */
+@media (max-height: 520px), (max-width: 600px) {
+  .faction-dialog { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border: 0; border-radius: 0; }
+  .faction-dialog-bar { padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); }
+  .faction-panel { padding: 12px max(14px, env(safe-area-inset-right)) 18px max(14px, env(safe-area-inset-left)); }
+  .faction-said { padding: 8px 14px; }
+  .faction-head h2 { font-size: 18px; }
+}
+@media (max-width: 600px) {
+  .faction-head { grid-template-columns: auto minmax(0, 1fr); }
+  .faction-head-edit { grid-column: 1 / -1; justify-self: start; }
+  .trade-side { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .trade-side-name { padding-top: 0; }
+  .trade-cells { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .social-record { grid-template-columns: auto minmax(0, 1fr); }
+  .social-record:has(> .row-flag:empty) { grid-template-columns: minmax(0, 1fr); }
+  .social-actions { grid-column: 1 / -1; }
+  .social-actions button { flex: 1; }
+}
+.entry-key { margin-top: 12px; }
+.confirm-dialog { width: 460px; }
+.report-dialog { width: 520px; }
+.report-dialog h2 { font-size: 18px; }
+.report-list { display: grid; gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; }
+.report-list > li { padding: 10px 12px; border: 1px solid var(--line); border-left: 3px solid var(--danger); border-radius: 10px; background: var(--well); }
+.report-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.report-head button { display: inline-flex; align-items: center; gap: 2px; padding: 4px 6px; }
+.report-head button svg { width: 14px; height: 14px; }
+.report-list ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; line-height: 1.45; color: var(--text); }
+.report-dialog .card-actions { justify-content: flex-end; margin-top: 18px; }
+.confirm-dialog h2 { font-size: 18px; }
+.confirm-dialog .card-actions { justify-content: flex-end; }
+/* The name and the flag of the faction: the flag as it stands beside its name, then each choice as the flag it would make. */
+.identity-dialog { width: 560px; }
+.identity-dialog .eyebrow { margin: 16px 0 8px; }
+.identity-dialog .card-actions { justify-content: flex-end; margin-top: 20px; }
+.identity-dialog .identity-error { margin: 16px 0 0; color: var(--danger); }
+.identity-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center; }
+.identity-preview .banner { width: 150px; height: 100px; border-radius: 4px; }
+.identity-name { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.identity-name input { padding: 8px 10px; font-size: 15px; }
+.identity-name small { font-size: 12.5px; font-weight: 400; line-height: 1.4; }
+/* The player's own name, a line above what the faction goes by. */
+.identity-player { margin-bottom: 18px; }
+/* A flag is made, or it is a country's: one or the other is at hand. */
+.identity-kinds { display: inline-flex; gap: 3px; margin-top: 16px; padding: 3px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--well); }
+.identity-kinds button { padding: 6px 13px; border: 0; background: transparent; font-size: 13px; font-weight: 600; color: var(--muted); }
+.identity-kinds button[aria-selected=true] { background: var(--surface-hi); color: var(--text); }
+.identity-find { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 14px 0 10px; }
+.identity-find output { font-size: 13px; color: var(--muted); }
+/* The countries of the world are many: they are looked through in a window of their own. */
+.identity-countries { max-height: 262px; overflow-y: auto; padding: 3px; gap: 6px; }
+.identity-countries .identity-choice { padding: 4px; }
+.identity-countries .banner.country { width: 40px; }
+.identity-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.identity-choice { padding: 5px; border-radius: 6px; }
+.identity-choice .banner { width: 51px; height: 34px; }
+.identity-choice[aria-pressed=true], .identity-swatch[aria-pressed=true] { outline: 2px solid var(--accent); outline-offset: 1px; }
+.identity-colours { display: grid; gap: 8px; }
+.identity-colour { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 10px; align-items: center; }
+.identity-role { font-size: 13px; color: var(--muted); }
+.identity-swatches { display: grid; grid-template-columns: repeat(8, 22px); gap: 6px; }
+.identity-swatch { width: 22px; height: 22px; padding: 0; border-radius: 50%; border-color: #0a120e99; }
+@media (max-width: 620px) { .identity-top, .identity-colour { grid-template-columns: minmax(0, 1fr); } }
+@media (max-height: 520px) and (min-width: 741px) {
+  .sidebar section { padding: 10px 12px; }
+}
+/* On a field this small the row over it is smaller, the figures of a design are told closer together, and a phone has
+   its own volume. Upright, the camera is at the right of the first row and the stocks under it. */
+@media (max-width: 740px), (max-height: 520px) {
+  .viewport { --edge: 8px; gap: 6px; }
+  .build-limits b { display: none; }
+  .build-stats { gap: 4px; }
+  .build-stats span { gap: 4px; padding: 3px 7px; font-size: 12px; }
+  .build-stats small { font-size: 10px; letter-spacing: .04em; }
+  .faction-hud { gap: 2px; max-width: 170px; }
+  .faction-hud b { font-size: 13px; }
+  .stock-icon { width: 15px; height: 15px; }
+  /* On a phone a notice stands at the foot, between the pedals and the trigger. */
+  .toast { bottom: max(8px, var(--toast-clear, 0px)); padding: 5px 10px; font-size: 12px; max-width: min(380px, calc(100vw - 24px)); }
+  .settings-panel input, .settings-panel output { display: none; }
+  /* The garage and the arsenal take nearly the whole screen, with a slimmer head. */
+  .workshop-dialog { max-width: calc(100vw - 12px); max-height: calc(100dvh - 12px); padding: 12px 14px 14px; }
+  .workshop-dialog .dialog-header { top: -12px; margin: -12px -14px 10px; padding: 10px 14px 8px; }
+  .workshop-dialog .eyebrow { display: none; }
+  .workshop-dialog h2 { font-size: 17px; }
+  .arsenal-families { flex-wrap: nowrap; overflow-x: auto; width: auto; margin-bottom: 10px; scrollbar-width: thin; }
+  .arsenal-families button { flex: none; padding: 6px 10px; font-size: 12.5px; }
+  .arsenal-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .weapon-card { gap: 4px 10px; padding: 8px 10px; }
+  .weapon-card-visual { padding: 4px; }
+  .weapon-card-text p { margin-bottom: 4px; font-size: 12px; }
+  .weapon-card-foot .card-actions button { padding: 6px 10px; }
+}
+@media (max-width: 740px) {
+  .viewport { grid-template-columns: minmax(0, 1fr) auto; }
+  .camera-tools { grid-column: 2; grid-row: 1; }
+}
+/* A finger. It has no keys to be told of and no zoom buttons to press — two fingers zoom —, what it presses is large
+   enough for it, a tap twice is not the browser's zoom, and a finger held on the field selects no text. */
+button, a, summary, select, label { touch-action: manipulation; }
+.viewport { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.viewport input { -webkit-user-select: text; user-select: text; }
+[data-input=touch] .component-palette kbd, [data-input=touch] .squad-orders kbd { display: none; }
+[data-input=touch] .selection-bar button { min-height: 44px; }
+[data-input=touch] .aim-handle { width: 28px; height: 28px; }
+[data-input=touch] .turn-handle { width: 44px; height: 44px; }
+[data-input=touch] .turn-handle svg { width: 26px; height: 26px; }
+/* How a phone is best held: a notice in the middle of the page until it is so, or put away (main.js). */
+.screen-advice { position: fixed; z-index: 30; left: 50%; top: 50%; transform: translate(-50%, -50%); box-sizing: border-box; width: min(420px, calc(100vw - 32px));
+  padding: 16px; border-radius: 12px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: 0 16px 48px #00000080;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); text-align: center; }
+.screen-advice p { margin: 0 0 12px; font-size: 15px; line-height: 1.45; }
+.screen-advice div { display: flex; justify-content: center; gap: 8px; }
+.screen-advice button { min-width: 44px; min-height: 44px; padding: 8px 16px; }
+/* What a finger drives and fires the vehicle in hand with, at the foot of the field: the pedals at the left, the
+   trigger at the right. What else stands there goes up over them. */
+.touch-pad { position: absolute; left: var(--left); right: var(--right); bottom: var(--bottom); z-index: 4; display: flex; align-items: flex-end; justify-content: space-between;
+  pointer-events: none; }
+.touch-pad button { pointer-events: auto; touch-action: none; display: grid; place-items: center; padding: 0; background: var(--glass); border: 1px solid var(--glass-line); color: var(--text); }
+.touch-drive { display: flex; gap: var(--touch-pedal-gap); }
+.touch-drive button { width: var(--touch-pedal-size); height: var(--touch-pedal-size); border-radius: 14px; }
+.touch-drive svg { width: 26px; height: 26px; }
+/* The stick a vehicle that flies is flown with in place of the pedals: pushed from its middle, it asks as far as it goes. */
+.touch-stick { position: relative; width: calc(var(--touch-pedal-size) * 2 + var(--touch-pedal-gap)); aspect-ratio: 1; border-radius: 50%;
+  pointer-events: auto; touch-action: none; background: var(--glass); border: 1px solid var(--glass-line); }
+.touch-stick[hidden] { display: none; }
+.touch-stick-knob { position: absolute; left: 27%; top: 27%; width: 46%; height: 46%; border-radius: 50%; pointer-events: none;
+  background: var(--surface-hi); border: 1px solid var(--glass-line); }
+.touch-pad .touch-fire { width: var(--touch-trigger-size); height: var(--touch-trigger-size); border-radius: 50%; gap: 0; align-content: center; font-weight: 700; background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+/* A finger leaves the hover on what it touched: here the buttons keep their look until pressed again. */
+.touch-pad button:hover:not(:disabled) { background: var(--glass); border-color: var(--glass-line); }
+.touch-pad .touch-fire:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+/* The trigger of a gun that reloads is dim, and fills back up clockwise as the round goes in. */
+.touch-pad .touch-fire[data-state="reloading"]:not(:disabled) { background: conic-gradient(var(--accent) calc((1 - var(--reload, 0)) * 360deg), var(--glass) 0);
+  color: var(--text); }
+.touch-pad button:active:not(:disabled) { background: var(--surface-hi); transform: none; }
+.touch-pad .touch-fire:active:not(:disabled) { background: var(--accent-strong); }
+/* Undo and redo stay over the drawing while any workshop task is open. */
+.touch-history { display: flex; gap: 3px; padding-right: 3px; margin-right: 1px; border-right: 1px solid var(--glass-line); }
+.touch-history[hidden] { display: none; }
+.touch-history button:disabled { opacity: .4; }
+
+.workshop-checklist { display: grid; gap: 6px; min-width: 0; margin: 14px 0; }
+.workshop-checklist .workshop-check {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start;
+  gap: 8px; width: 100%; min-width: 0; min-height: 52px; padding: 9px 10px;
+  text-align: left; background: var(--panel-2); border-color: var(--line);
+}
+.workshop-checklist .workshop-check:hover:not(:disabled) { background: var(--surface); }
+.workshop-checklist .workshop-check.is-compact { min-height: 44px; align-items: center; padding-block: 8px; }
+.workshop-checklist .workshop-check[data-state="attention"] { border-color: #f0b87473; }
+.workshop-checklist .workshop-check-mark {
+  display: grid; place-items: center; width: 20px; height: 20px; margin-top: 1px;
+  border: 1px solid currentColor; border-radius: 50%; font-size: 12px; font-weight: 750;
+}
+.workshop-checklist .workshop-check > span:last-child { display: grid; min-width: 0; gap: 2px; }
+.workshop-checklist .workshop-check b { font-size: 13px; font-weight: 650; line-height: 1.25; }
+.workshop-checklist .workshop-check small { color: var(--muted); font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.workshop-checklist .workshop-check[data-state="ready"] .workshop-check-mark { color: var(--olive); background: #b4c7861c; }
+.workshop-checklist .workshop-check[data-state="attention"] .workshop-check-mark { color: var(--accent); background: #eab8821c; }
+.workshop-checklist .workshop-check[data-state="info"] .workshop-check-mark { color: var(--muted); background: #9db18f14; }
+/* What the workshop marks red on its pieces is told red in the review too. */
+.workshop-checklist .workshop-check[data-marked] { border-color: #f08f7873; }
+.workshop-checklist .workshop-check[data-marked] .workshop-check-mark { color: var(--danger); background: #f08f781c; }
+.publish-cost {
+  gap: 7px 12px; min-width: 0; padding: 10px;
+  border: 1px solid var(--line-strong); border-radius: 9px;
+  background: var(--panel-2);
+}
+#workshop-placement {
+  display: grid; gap: 6px; min-width: 0; margin: 10px 0 0; padding: 11px 12px;
+  border: 1px solid #f0b87466; border-radius: 10px;
+  background: #f0b87412;
+}
+#workshop-placement p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--muted); }
+#workshop-placement button { min-height: 44px; }
+#workshop-placement label { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+#workshop-placement input[type=checkbox] { width: 18px; height: 18px; flex: none; }
+#new-ammo-assist { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+#new-ammo-assist .helper { margin: 0; font-size: 12px; line-height: 1.4; }
+#new-ammo-assist .toggle-label { align-items: center; min-height: 44px; margin-top: 4px; overflow-wrap: anywhere; }
+#new-ammo-assist input[type=checkbox] { width: 18px; height: 18px; flex: none; }
+
+/* Garage and arsenal: a single readable column on a phone, with controls that
+   fit the card and category tabs that remain reachable during scrolling. */
+@media (max-width: 600px) {
+  .workshop-dialog { width: calc(100vw - 12px); max-width: calc(100vw - 12px);
+    max-height: calc(100dvh - 12px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  .workshop-dialog .dialog-header { z-index: 4; }
+  .workshop-dialog .dialog-header .icon-button { width: 44px; height: 44px; flex: none; font-size: 23px; }
+  #library-dialog .catalog-toolbar { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  #library-dialog .library-tabs {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; min-width: 0; }
+  #library-dialog .library-tabs button {
+    min-width: 0; min-height: 44px; padding: 6px 4px; font-size: 11.5px;
+    line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+  #arsenal-dialog .arsenal-families {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%; min-width: 0; max-width: 100%; overflow: visible; }
+  #arsenal-dialog .arsenal-families button {
+    min-width: 0; min-height: 44px; padding: 6px 4px; font-size: 11.5px;
+    line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+  #library-save-copy, #library-search { min-height: 44px; }
+  #library-save-copy { width: 100%; }
+  #arsenal-dialog .arsenal-families {
+    position: sticky; top: 37px; z-index: 3; padding: 5px 0; margin: 0 0 8px;
+    background: var(--panel); }
+  .design-grid, .arsenal-grid { grid-template-columns: minmax(0, 1fr); }
+  .design-card, .weapon-card { min-width: 0; }
+  .design-info { padding: 12px; }
+  .design-preview { min-height: 118px; }
+  .design-preview svg { height: 120px; }
+  .workshop-dialog .card-actions button { min-height: 44px; }
+  .workshop-dialog .card-actions .card-remove { min-width: 44px; }
+  .weapon-card { grid-template-columns: minmax(120px, 38%) minmax(0, 1fr); align-items: start; }
+  .weapon-card-foot { grid-column: 1 / -1; flex-wrap: wrap; }
+  .weapon-card-foot .card-actions { width: 100%; flex-wrap: wrap; }
+  .weapon-card-foot .card-actions button { flex: 1 1 42%; }
+}
+
+/* Keep readings beside the decision they support. */
+.part-categories { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 12px 0 6px; }
+.part-categories button { padding: 5px 2px; min-width: 0; font-size: 12px; font-weight: 600; }
+.part-categories [aria-pressed="true"] { color: var(--accent-strong); border-color: var(--accent); background: #f0b8741a; }
+.workshop-assist { margin-bottom: 12px; }
+.workshop-assist > button:first-child { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 7px; width: 100%; padding: 9px; text-align: left; border-color: #d7ac7066; background: #d7ac7010; }
+.workshop-assist > button:first-child > span:last-child { display: grid; gap: 3px; }
+.workshop-assist b { font-size: 12px; color: var(--accent-strong); }
+.workshop-assist small { font-size: 12px; line-height: 1.35; color: var(--muted); }
+.workshop-assist .workshop-check-mark { color: var(--accent); font-weight: 700; }
+.workshop-assist > button[data-marked]:first-child { border-color: #f08f7866; background: #f08f7810; }
+.workshop-assist > button[data-marked] .workshop-check-mark { color: var(--danger); }
+.workshop-assist .assist-review { width: 100%; margin-top: 4px; padding: 5px; background: transparent; border-color: transparent; font-size: 12px; }
+.workshop-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 14px 0; }
+.workshop-figures > div { min-width: 0; padding: 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+.workshop-figures dt { font-size: 10px; letter-spacing: .05em; color: var(--muted); }
+.workshop-figures dd { margin: 4px 0 0; font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.workshop-figures [data-figure="CARGA"] { grid-column: 1 / -1; }
+.capacity-card { --capacity-tone: #b4c786; margin: 12px 0; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); }
+.capacity-card[data-state="over"] { --capacity-tone: var(--danger); border-color: #f08f7873; }
+.capacity-card dt { font-size: 12px; color: var(--muted); }
+.capacity-card dd { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 7px 0; font-variant-numeric: tabular-nums; }
+.capacity-card dd strong { font-size: 17px; color: var(--text); }
+.capacity-card dd span { font-size: 13px; color: var(--capacity-tone); }
+.capacity-card meter { display: block; width: 100%; height: 10px; accent-color: var(--capacity-tone); }
+.capacity-card meter::-webkit-meter-bar { background: #0f1915; border: 0; border-radius: 5px; }
+.capacity-card meter::-webkit-meter-optimum-value, .capacity-card meter::-webkit-meter-suboptimum-value { background: var(--capacity-tone); border-radius: 5px; }
+.capacity-card meter::-moz-meter-bar { background: var(--capacity-tone); }
+.capacity-card .capacity-detail { display: block; margin-top: 7px; font-size: 11px; line-height: 1.45; color: var(--muted); }
+.capacity-card .capacity-margin { margin: 10px 0 0; font-size: 12px; color: var(--capacity-tone); }
+.publish-cost .cost-chip:has(.cost-available) { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 3px 6px; }
+.cost-available { grid-column: 2; white-space: normal; color: var(--muted); font-size: 11px; }
+.app-shell:has(#edit-controls[data-installing="true"]) .build-stats { display: none; }
+
+/* Visual details (detail-editor.js). The catalogue is a column at the right, as the inspector it stands for; the detail
+   picked is worked on the drawing, with its handles and its bar. */
+#vehicle-details { position: absolute; z-index: 9; top: calc(var(--top) - 2px); right: 12px; display: flex; flex-direction: column;
+  width: 252px; max-height: calc(100% - var(--top) - var(--bottom) - 6px); min-height: 0;
+  border: 1px solid var(--line-strong); border-radius: 12px; background: var(--panel); box-shadow: 0 8px 24px #08120d38; }
+#vehicle-details[hidden] { display: none; }
+#vehicle-details header { display: flex; flex: none; align-items: center; gap: 2px; padding: 3px 3px 3px 12px; border-bottom: 1px solid var(--line); }
+#vehicle-details h2 { margin: 0; font-size: 15px; line-height: 1.3; }
+#vehicle-details output { margin: 0 auto 0 8px; color: var(--faint); font-size: 12px; font-variant-numeric: tabular-nums; }
+#vehicle-details output[data-full] { color: var(--accent); }
+#vehicle-details header .icon-button { width: 38px; height: 38px; }
+#vehicle-details header [aria-expanded="true"] { color: var(--accent-strong); background: #ffffff14; }
+#project-details[aria-pressed="true"] { border-color: var(--accent); background: #50452d; color: #ffe0b1; }
+/* Mais ações: the rare actions of the details, under their button. */
+.detail-menu { position: absolute; z-index: 2; top: 44px; right: 4px; display: flex; flex-direction: column; gap: 1px; width: max-content; min-width: 230px;
+  padding: 4px; background: #101814f7; border: 1px solid #ffffff2b; border-radius: 9px; box-shadow: 0 8px 24px #00000080; }
+.detail-menu[hidden], .detail-menu [hidden] { display: none; }
+.detail-menu button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-color: transparent; background: transparent;
+  color: var(--text); font-size: 13px; text-align: left; }
+.detail-menu button:hover:not(:disabled) { background: #ffffff1c; border-color: transparent; }
+.detail-menu button svg { width: 17px; height: 17px; color: var(--muted); }
+.detail-menu button.danger, .detail-menu button.danger svg { color: var(--danger); }
+.detail-switch { position: relative; flex: none; width: 30px; height: 17px; margin-left: auto; border-radius: 9px; background: #ffffff26; }
+.detail-switch::after { content: ''; position: absolute; top: 2.5px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: transform .12s; }
+.detail-menu [aria-checked="true"] .detail-switch { background: #f0b87480; }
+.detail-menu [aria-checked="true"] .detail-switch::after { transform: translateX(12px); background: var(--accent-strong); }
+[data-input=touch] .detail-menu button { min-height: 44px; }
+/* The catalogue: pictures in the paint of the project, by kind. */
+.detail-catalogue { flex: 1 1 auto; min-height: 0; padding: 2px 8px 8px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: #64745c transparent; touch-action: pan-y; }
+.detail-catalogue h3 { margin: 9px 2px 4px; color: var(--faint); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.detail-kinds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.detail-kinds button { display: grid; place-items: center; height: 44px; padding: 3px; background: #ffffff0a; border-color: #ffffff17; cursor: grab; touch-action: pan-y; }
+.detail-kinds button:hover:not(:disabled) { background: #ffffff1a; border-color: #5c7462; }
+.detail-kinds canvas { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+#vehicle-details[data-adding] .detail-kinds button { cursor: grabbing; }
+#viewport[data-detail-editing] #workshop-parts, #viewport[data-detail-editing] #project-inspector { display: none; }
+/* The handles of the detail picked: its corners size it, the round one above turns it (.turn-handle). A finger has a
+   wider target. */
+.detail-grip { position: absolute; z-index: 4; display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 0; border-radius: 0;
+  background: transparent; transform: translate(-50%, -50%); touch-action: none; }
+.detail-grip:hover:not(:disabled), .detail-grip:active:not(:disabled) { background: transparent; transform: translate(-50%, -50%); }
+.detail-grip[hidden] { display: none; }
+.detail-grip[data-role=corner]::before { content: ''; width: 9px; height: 9px; border: 2px solid var(--accent-strong); border-radius: 2px;
+  background: #101814; box-shadow: 0 1px 4px #000000b3; }
+.detail-grip[data-role=corner]:hover::before, .detail-grip[data-role=corner]:active::before { background: var(--accent-strong); }
+[data-input=touch] .detail-grip { width: 44px; height: 44px; }
+[data-input=touch] .detail-grip[data-role=corner]::before { width: 13px; height: 13px; }
+/* The bar of the detail picked, over it: its name, its number, and what is done to it. */
+.detail-bar { z-index: 5; }
+.detail-bar[hidden], .detail-bar [hidden] { display: none; }
+.detail-bar .detail-name { padding: 0 6px 0 8px; color: var(--text); font-size: 12.5px; font-weight: 650; }
+.detail-bar .detail-text input { width: 5ch; box-sizing: content-box; padding: 4px 6px; text-align: center; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.detail-bar .detail-text input:invalid { border-color: var(--danger); }
+.detail-bar button { padding: 6px 8px; }
+.detail-bar button svg { width: 17px; height: 17px; }
+[data-input=touch] .detail-bar button { min-width: 44px; justify-content: center; }
+[data-input=touch] .detail-bar .detail-text input { min-height: 40px; box-sizing: border-box; width: 64px; }
+/* A phone lying down: the catalogue is a narrow column of two pictures across, by the edge of the screen. */
+@media (max-height: 520px), (max-width: 740px) {
+  #vehicle-details { right: 8px; width: 118px; border-radius: 10px; }
+  #vehicle-details header { justify-content: flex-end; padding: 2px; }
+  #vehicle-details h2 { display: none; }
+  #vehicle-details output { margin: 0 auto 0 6px; font-size: 11.5px; }
+  #vehicle-details header .icon-button { width: 40px; height: 40px; }
+  .detail-menu { top: 46px; right: 2px; }
+  .detail-catalogue { padding: 0 5px 6px; }
+  .detail-catalogue h3 { height: 1px; margin: 6px 2px; overflow: hidden; background: var(--line); font-size: 0; }
+  .detail-catalogue section:first-child h3 { display: none; }
+  .detail-kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-kinds button { height: 42px; }
+  /* The bar keeps to its buttons, to cover as little of the vehicle as it can. */
+  .detail-bar .detail-name { display: none; }
+}
+
+
+.faction-duel { display: flex; flex-direction: column; gap: 3px; max-width: 280px; margin-top: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); text-align: right; }
+.faction-duel small { color: var(--muted); font-size: 11px; }
+.faction-hud .faction-duel b { font-size: 13px; }
+.faction-duel[data-ended=true] { border-color: var(--accent); }

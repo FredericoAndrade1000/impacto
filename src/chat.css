@@ -1,0 +1,97 @@
+/* The conversation of the field (chat-ux.js): one history of every channel, each line led by the tag of its channel in
+   that channel's colour — green the faction, lilac the faction with its allies, blue everyone, whose faction's name on
+   Aliados and Global is in that channel's colour too — and the line to write in after the channel the player speaks on,
+   in the same colour. Its lines have no glass of their own: hour, channel, name and words. */
+.field-chat { --chat-faction: #8fe388; --chat-allies: #c9a6ff; --chat-global: #7cc6ff; }
+.chat-panel { display: flex; flex-direction: column; gap: 3px; min-width: 0; color: var(--text); }
+.chat-unread { min-width: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent); color: var(--accent-ink);
+  font-size: 10px; font-weight: 750; line-height: 16px; text-align: center; text-shadow: none; }
+.chat-unread:empty { display: none; }
+.chat-log { display: flex; flex-direction: column; min-width: 0; margin: 0; padding: 0; list-style: none; overflow-y: auto; overscroll-behavior: contain;
+  overflow-anchor: none; }
+/* The last lines stand at the foot of the history, the oldest above them. The history keeps to its foot, or to where the
+   player scrolled it, as its lines grow (chat-ux.js): the browser does not hold it on a line of its own choosing. */
+.chat-log > :first-child { margin-top: auto; }
+/* A message that takes more than one row hangs its other rows under its first. */
+.chat-line { padding: 1px 4px 1px 12px; text-indent: -8px; border-radius: 4px; overflow-wrap: anywhere; }
+.chat-time { margin-right: 6px; color: var(--faint); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.chat-time:empty { display: none; }
+.chat-scope { margin-right: 5px; font-weight: 700; }
+.chat-scope::before { content: '['; }
+.chat-scope::after { content: ']'; }
+.chat-line[data-scope=faction] .chat-scope, .chat-channel[data-scope=faction] { color: var(--chat-faction); }
+.chat-line[data-scope=global] .chat-scope, .chat-channel[data-scope=global], .chat-nation { color: var(--chat-global); }
+.chat-line[data-scope=allies] :is(.chat-scope, .chat-nation), .chat-channel[data-scope=allies] { color: var(--chat-allies); }
+.chat-flag { display: inline-block; margin-right: 4px; vertical-align: -1px; text-indent: 0; }
+.chat-flag .banner { display: inline-block; width: 15px; height: 10px; vertical-align: baseline; }
+.chat-nation { font-weight: 700; }
+.chat-nation::after { content: '\a0· '; color: var(--muted); font-weight: 400; }
+.chat-by { color: var(--accent-strong); font-weight: 650; }
+.chat-line[data-scope=faction] .chat-by { color: var(--olive); }
+.chat-by::after { content: ': '; color: var(--muted); font-weight: 400; }
+.chat-log:empty::before { content: attr(data-empty); margin-top: auto; padding: 0 4px; color: var(--muted); }
+.chat-status { margin: 0; padding: 0 4px; color: var(--accent-strong); font-size: 11.5px; line-height: 1.35; overflow-wrap: anywhere; }
+.chat-status:empty { display: none; }
+.chat-form { display: flex; align-items: center; gap: 4px; margin: 0; }
+.field-chat .chat-channel { flex: none; min-height: 26px; padding: 2px 8px; border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+  border-radius: 6px; background: #0a110e8c; box-shadow: none; font-size: 11.5px; font-weight: 700; text-shadow: inherit; }
+.field-chat .chat-channel:hover:not(:disabled) { border-color: currentColor; background: #0a110ecc; }
+.chat-input { min-height: 30px; padding: 4px 8px; font-size: 12.5px; text-shadow: none; }
+.field-chat .chat-close, .chat-toggle { display: none; }
+
+/* On a computer: always there, in the lower left corner of the field, beside the column of the constructions, short of
+   the orders at the foot — at most 740 px wide, in the middle (field-workspace.css) — or over them, and over a finger's
+   pedals, where it is too narrow for both (`--chat-clear`). Some eight lines of history tall, or as tall as the card at
+   the top of the corner leaves room for (`--chat-room`). At rest it has no glass: a light veil behind the lines, and
+   words wearing the shadow that keeps them on sky, on sand and in fog; the line to write in is only its hint. Under the
+   pointer a light glass comes, a darker one while writing. Only the channel, the lines, the line to write in and, when
+   the history is longer than the box, the history itself take a click; elsewhere the field takes it, and the wheel
+   zooms it. Writing, the whole box takes the clicks on it. */
+@media (width > 900px) and (height > 520px) {
+  .field-chat { --chat-line: 18px; position: absolute; z-index: 5; left: var(--left); bottom: max(var(--bottom), var(--chat-clear, 0px));
+    width: clamp(240px, calc(50% - 370px - 8px - var(--left)), 380px); max-width: calc(100% - var(--left) - var(--right));
+    font-size: 12.5px; line-height: var(--chat-line); pointer-events: none; }
+  .viewport:has(> .field-pawns:not([hidden])) > .field-chat { left: calc(var(--left) + var(--pawn-width) + 8px);
+    width: clamp(240px, calc(50% - 370px - 16px - var(--left) - var(--pawn-width)), 380px); }
+  .field-chat .chat-panel { max-height: var(--chat-room, none); padding: 4px; border: 1px solid transparent; border-radius: 9px;
+    text-shadow: 0 1px 2px #000, 0 0 3px #000000d9, 0 0 7px #00000080; transition: background-color .15s, border-color .15s; }
+  .field-chat .chat-line { border-radius: 0; background: #0a110e40; transition: background-color .15s; }
+  .field-chat .chat-line:first-child { border-top-left-radius: 6px; border-top-right-radius: 6px; }
+  .field-chat .chat-line:last-child { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+  .field-chat .chat-panel:hover { border-color: #ffffff12; background: #0a110e66; }
+  .field-chat[data-open=true] .chat-panel { border-color: #ffffff17; background: #0a110e99; pointer-events: auto; }
+  .field-chat .chat-panel:hover .chat-line, .field-chat[data-open=true] .chat-line { background: transparent; }
+  .field-chat :is(.chat-channel, .chat-line, .chat-log[data-full=true], .chat-input) { pointer-events: auto; }
+  .field-chat .chat-log { flex: 0 1 auto; height: calc(8 * (var(--chat-line) + 2px)); min-height: calc(3 * (var(--chat-line) + 2px));
+    scrollbar-width: thin; scrollbar-color: transparent transparent; }
+  .field-chat .chat-panel:hover .chat-log, .field-chat[data-open=true] .chat-log { scrollbar-color: #ffffff4d transparent; }
+  /* A history longer than the box fades out at its top, where a line is cut. */
+  .field-chat .chat-log[data-full=true] { mask-image: linear-gradient(transparent, #000 14px); }
+  .field-chat .chat-time { color: var(--muted); }
+  .field-chat:not([data-open=true]) .chat-input { border-color: transparent; background: transparent; text-shadow: inherit; }
+  .field-chat:not([data-open=true]) .chat-input:hover { border-color: #ffffff2e; }
+  .field-chat:not([data-open=true]) .chat-input::placeholder { color: #d3dbcc; }
+  .field-chat[data-open=true] .chat-input { background: #0a110eb3; }
+  :root[data-input=touch] .field-chat .chat-channel { min-height: 34px; padding-inline: 11px; font-size: 12px; }
+}
+
+/* On a phone: a button in the lower right corner with what came while it was shut — the orders at the foot and the
+   pedals keep clear of it (field-workspace.css) —, and the conversation over the field at the left once it is pressed
+   (no stacking of its own holds it under them), as tall as the keyboard leaves of the screen (`--chat-top`,
+   `--chat-height`), its button to close at the end of the line to write in. */
+@media (max-width: 900px), (max-height: 520px) {
+  .field-chat { position: absolute; right: var(--right); bottom: var(--bottom); font-size: 12.5px; line-height: 1.4; }
+  .field-chat .chat-toggle { position: relative; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border-color: var(--glass-line);
+    border-radius: 9px; background: var(--glass); box-shadow: 0 4px 14px #0005; }
+  .field-chat .chat-toggle[aria-expanded=true] { color: var(--accent-strong); border-color: var(--accent); }
+  .chat-toggle svg { width: 20px; height: 20px; }
+  .chat-toggle .chat-unread { position: absolute; top: -5px; right: -5px; }
+  .field-chat:not([data-open=true]) .chat-panel { display: none; }
+  .field-chat[data-open=true] .chat-panel { position: fixed; z-index: 13; top: var(--chat-top, 8px); left: max(8px, env(safe-area-inset-left, 0px));
+    height: var(--chat-height, calc(100dvh - 16px)); width: min(460px, calc(100vw - 16px)); box-sizing: border-box; padding: 6px;
+    border: 1px solid var(--glass-line); border-radius: 10px; background: #111916f2; box-shadow: 0 6px 22px #0006; }
+  .field-chat[data-open=true] .chat-log { flex: 1 1 auto; min-height: 0; padding: 2px; }
+  .field-chat .chat-channel { min-height: 44px; padding-inline: 12px; font-size: 12.5px; }
+  .field-chat .chat-close { display: grid; flex: none; place-items: center; width: 44px; height: 44px; padding: 0; border-color: transparent; background: transparent; }
+  .chat-input { min-height: 44px; font-size: 16px; }
+}

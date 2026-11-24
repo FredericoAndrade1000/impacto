@@ -1,0 +1,142 @@
+{
+  "about": "The atmosphere of the world as the core (game_flight.rs) and the page (atmosphere.js) both have it: the density of the air in kg/m3 and the share of its thrust a jet gives at each height (all of it up to 1 km), and the share of its density the air keeps over short climbs and falls.",
+  "heights": [
+    {
+      "altitude": -1000000000,
+      "density": 7.638057623994231e+27,
+      "thrustShare": 1
+    },
+    {
+      "altitude": -4096,
+      "density": 1.9834211296059185,
+      "thrustShare": 1
+    },
+    {
+      "altitude": -500,
+      "density": 1.2992203754915195,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 0,
+      "density": 1.225,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 1,
+      "density": 1.2248558908301175,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 20,
+      "density": 1.222121035404237,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 128.5,
+      "density": 1.2066201623498942,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 999.5,
+      "density": 1.0891010255003852,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 1000,
+      "density": 1.0890369626184002,
+      "thrustShare": 1
+    },
+    {
+      "altitude": 1000.5,
+      "density": 1.088972903504709,
+      "thrustShare": 0.999958824377151
+    },
+    {
+      "altitude": 1100,
+      "density": 1.0762998342527108,
+      "thrustShare": 0.9917985230219188
+    },
+    {
+      "altitude": 3000,
+      "density": 0.8607076902621695,
+      "thrustShare": 0.8481431212663171
+    },
+    {
+      "altitude": 5000,
+      "density": 0.6802503069273894,
+      "thrustShare": 0.7193467541513705
+    },
+    {
+      "altitude": 8500,
+      "density": 0.4506523154350169,
+      "thrustShare": 0.539211679500719
+    },
+    {
+      "altitude": 10000,
+      "density": 0.3777473306733123,
+      "thrustShare": 0.4765529350853813
+    },
+    {
+      "altitude": 11000,
+      "density": 0.33582106582340604,
+      "thrustShare": 0.4388799297915548
+    },
+    {
+      "altitude": 15000,
+      "density": 0.20976550010736553,
+      "thrustShare": 0.3157068529577364
+    },
+    {
+      "altitude": 20000,
+      "density": 0.1164841190455614,
+      "thrustShare": 0.20914951869223153
+    },
+    {
+      "altitude": 30000,
+      "density": 0.03591964492676993,
+      "thrustShare": 0.09179152607958409
+    },
+    {
+      "altitude": 47000,
+      "density": 0.004861195319922967,
+      "thrustShare": 0.02263551164679223
+    },
+    {
+      "altitude": 100000,
+      "density": 0.000009523338971466896,
+      "thrustShare": 0.00028788738561413125
+    }
+  ],
+  "thinning": [
+    {
+      "from": 0,
+      "to": 150,
+      "share": 0.9825077386226219
+    },
+    {
+      "from": 1000,
+      "to": 980,
+      "share": 1.0023557115149484
+    },
+    {
+      "from": 10000,
+      "to": 10437.5,
+      "share": 0.9498315887591846
+    },
+    {
+      "from": -200,
+      "to": 300,
+      "share": 0.94287314966695
+    },
+    {
+      "from": 5000,
+      "to": 5850,
+      "share": 0.9048375
+    },
+    {
+      "from": 20000,
+      "to": 19150,
+      "share": 1.1051708333333332
+    }
+  ]
+}

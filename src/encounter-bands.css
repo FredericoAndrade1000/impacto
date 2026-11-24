@@ -1,0 +1,5 @@
+.squad-marks .encounter-band { pointer-events: none; }
+.squad-marks .encounter-band rect { fill: var(--danger); fill-opacity: .065; stroke: var(--danger); stroke-opacity: .4; stroke-width: 1; }
+.squad-marks .encounter-band[data-approximate="true"] rect { stroke-dasharray: 5 5; }
+.squad-marks .encounter-band text { fill: var(--danger); font: 600 11px system-ui, sans-serif;
+  paint-order: stroke; stroke: #101814; stroke-width: 3px; text-anchor: start; }

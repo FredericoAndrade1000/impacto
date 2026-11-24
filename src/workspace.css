@@ -1,0 +1,142 @@
+/* Shared shell only. Project and field controllers own their tools and contents. */
+/* Entry and connection recovery have no workshop behind them until a context is chosen. */
+#app:not([data-session-ready]) > :is(#workspace-bar, .sidebar, #workspace-backdrop),
+#app:not([data-session-ready]) #viewport > :not(#loading, #connection-notice) { visibility: hidden; }
+#app[data-workspace] {
+  --workspace-bar-height: calc(52px + env(safe-area-inset-top, 0px));
+  --workspace-surface-width: 420px;
+  /* As tall as a group of buttons of the row: a button and the frame of its group. */
+  --overview-height: 50px;
+}
+/* No bar: the buttons stand over the game, which runs under them to the top of the screen. What the field shows over
+   itself starts below their row. */
+#app[data-workspace] .viewport { --top: calc(var(--workspace-bar-height) + 2px); }
+#workspace-bar {
+  position: absolute; inset: 0 0 auto; z-index: 12; display: flex; align-items: center; gap: 8px;
+  height: var(--workspace-bar-height); min-width: 0; pointer-events: none;
+  padding: calc(4px + env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-right, 0px)) 4px max(8px, env(safe-area-inset-left, 0px));
+}
+.workspace-nav, .workspace-tools, .workspace-trial, .workspace-settings { display: flex; align-items: center; gap: 4px; min-width: 0; }
+#workspace-bar > * { pointer-events: auto; padding: 2px; border: 1px solid var(--glass-line); border-radius: 9px; background: var(--glass); box-shadow: 0 6px 22px #0005; }
+#workspace-bar > [hidden] { display: none; }
+/* The overview of the field stands in the row, in the middle of what the groups leave free, and the meter of the frames
+   (F3) under it. With no overview — the workshop, a test of armour — the meter has that place in the row. */
+#workspace-bar > .workspace-map { display: contents; }
+#workspace-bar > .workspace-map:has(> .overview:not([hidden])) { position: relative; flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;
+  align-items: center; padding: 0; border: 0; background: none; box-shadow: none; pointer-events: none; }
+.workspace-map > .overview { box-shadow: 0 6px 22px #0005; pointer-events: auto; }
+/* An open panel blocks the field, and its overview with it: darkened as the field is under the panel, it takes no click. */
+#app:not([data-workspace-panel=""]) .workspace-map > .overview { pointer-events: none; filter: brightness(.85); }
+.workspace-map > .frame-meter { flex: 0 1 auto; min-width: 0; margin-left: auto; padding: 4px 11px; border: 1px solid var(--glass-line); border-radius: 9px;
+  background: var(--glass); box-shadow: 0 6px 22px #0005; pointer-events: none; }
+.workspace-map:has(> .overview:not([hidden])) > .frame-meter {
+  position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); width: max-content; max-width: min(560px, 100%); margin: 0;
+}
+.workspace-map > .frame-meter > span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Its detail is wider than the overview and taller than the row: where the meter stands in the row, it stands under it. */
+.workspace-map > .frame-meter:has(> #frame-detail:not([hidden])) { width: max-content; max-width: min(620px, calc(100vw - 16px)); }
+@media (min-width: 901px) and (min-height: 521px) {
+  .workspace-map:has(> .overview[hidden]) > .frame-meter:has(> #frame-detail:not([hidden])) { position: absolute; top: calc(100% + 6px); right: 8px; }
+}
+.workspace-settings { position: relative; flex: none; }
+#settings-menu { display: grid; place-items: center; width: 44px; padding: 8px; }
+#settings-menu[aria-expanded="true"] { color: var(--accent-strong); border-color: var(--accent); }
+.workspace-nav { flex: 0 0 auto; }
+#workspace-bar button { min-height: 44px; min-width: 44px; padding: 7px 10px; white-space: nowrap; }
+#workspace-bar .workspace-nav button { border-color: transparent; background: transparent; color: var(--text); font-weight: 650; }
+#workspace-bar .workspace-nav button:hover:not(:disabled):not([aria-current="page"]) { background: var(--surface-hi); color: var(--text); border-color: var(--line-strong); }
+#workspace-bar .workspace-nav button[aria-current="page"] { background: var(--accent-ink); color: var(--accent-strong); border-color: var(--accent); }
+.workspace-nav button svg { width: 18px; height: 18px; }
+.workspace-tools { flex: 0 1 auto; margin-left: auto; }
+.workspace-tools button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+/* The garage, saving and adding are known by their icons alone. */
+#workspace-bar .workspace-tools .icon-tool { position: relative; width: 44px; padding: 8px; }
+.workspace-tools .icon-tool svg { width: 20px; height: 20px; }
+/* A project with changes the garage does not have yet: a dot on Salvar. */
+#save[data-changed="true"]::after { content: ''; position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+#workspace-bar .workspace-tools button[aria-expanded="true"] { background: var(--accent-ink); color: var(--accent-strong); border-color: var(--accent); }
+.workspace-trial { flex: 0 1 auto; margin-left: auto; }
+/* The name of the test is inset from the edge of its group as the label of a button is. */
+#workspace-bar #trial-name { margin: 0; padding: 0 6px 0 10px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--accent); font-size: 12px; letter-spacing: 0; }
+#workspace-bar #reset { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+
+/* An open panel darkens the whole screen, the row of the buttons over the game included: the buttons stand over it. */
+#workspace-backdrop { position: absolute; inset: 0; z-index: 10; background: #00000026; touch-action: none; }
+#app[data-workspace] > .sidebar {
+  position: absolute; z-index: 11; inset: calc(var(--workspace-bar-height) + 8px) 8px 8px auto;
+  width: min(var(--workspace-surface-width), calc(100% - 16px)); height: auto; max-height: none;
+  display: flex; flex-direction: column; padding: 0; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: 0 8px 24px #00000045; -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.workspace-surface-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: 0 0 auto; min-height: 60px; padding: 8px 12px; border-bottom: 1px solid var(--line-strong); }
+#workspace-surface-heading { min-width: 0; margin: 0; font-size: 18px; line-height: 1.25; overflow-wrap: anywhere; }
+#workspace-surface-heading:focus { outline-offset: 1px; }
+#workspace-surface-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; padding: 8px; }
+#workspace-surface-content { flex: 1 1 auto; min-height: 0; min-width: 0; overflow: auto; overflow-anchor: none; overscroll-behavior: contain; scrollbar-gutter: stable; }
+#workspace-surface-content > * { min-width: 0; max-width: 100%; }
+#workspace-surface-content :is(button, input, select, summary) { min-height: 44px; }
+#project-inspector, #field-dock { min-width: 0; z-index: 6; }
+#app[data-workspace="project"] #viewport:has(> #project-inspector:not([hidden])) > .camera-tools { right: calc(328px + 12px); }
+/* The field has no tools of its own under the row of the buttons: the stocks stand at the top of its right edge. */
+#app[data-workspace="field"] .faction-hud { grid-row: 1; }
+
+@media (max-width: 1100px) {
+  #workspace-bar { gap: 6px; }
+  #workspace-bar button { padding-inline: 8px; }
+}
+@media (max-width: 900px) {
+  #app[data-workspace] { --workspace-bar-height: calc(48px + env(safe-area-inset-top, 0px)); }
+  #workspace-bar { gap: 6px; padding-top: calc(2px + env(safe-area-inset-top, 0px)); padding-bottom: 2px; }
+  #workspace-bar button { padding: 6px 8px; font-size: 12px; }
+  .workspace-nav button { gap: 5px; }
+  #workspace-bar #trial-name { max-width: 140px; }
+  #workspace-bar #reset span { display: none; }
+  #app[data-workspace] > .sidebar { inset: var(--workspace-bar-height) 0 0; width: 100%; padding-bottom: env(safe-area-inset-bottom, 0px); border-width: 0; border-radius: 0; box-shadow: none; }
+  .workspace-surface-header { min-height: 52px; padding: 4px max(8px, env(safe-area-inset-right, 0px)) 4px max(8px, env(safe-area-inset-left, 0px)); }
+  #workspace-surface-heading { font-size: 16px; }
+  #workspace-surface-content { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); scrollbar-gutter: auto; }
+  #app[data-workspace="project"] #viewport:has(> #project-inspector:not([hidden])) > .camera-tools {
+    position: absolute; grid-area: auto; left: var(--left); right: auto; top: var(--top);
+    display: flex; flex-wrap: nowrap;
+  }
+  #app[data-workspace="project"] #viewport:has(> #project-inspector:not([hidden])) > .camera-tools .touch-history {
+    margin: 0; padding: 0; border: 0;
+  }
+  #app[data-workspace="project"] #viewport:has(> #project-inspector:not([hidden])) > .build-stats { display: none; }
+
+}
+@media (max-width: 900px), (max-height: 520px) {
+  /* On a phone the pages are known by their icons, as the tools of the field are: the overview has the rest of the row. */
+  #workspace-bar .workspace-nav button > span:not(.field-button-icon) { display: none; }
+  /* With no overview and no room in the row, the meter of the frames stands under the row of the tools of a design. */
+  .workspace-map:has(> .overview[hidden]) > .frame-meter { position: absolute; top: calc(100% + 56px); left: 50%; transform: translateX(-50%); margin: 0; max-width: calc(100% - 28px); }
+  /* An open panel covers the screen of a phone, its head under the meter: the meter gives way to it. */
+  #app:not([data-workspace-panel=""]) .workspace-map > .frame-meter { display: none; }
+}
+/* Lying down, the first objectives stand at the top beside the column, their head and its close button under the meter. */
+@media (max-height: 520px) {
+  #app:has(#first-objectives:not([hidden])) .workspace-map > .frame-meter { display: none; }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  #app[data-workspace="project"] #viewport > .camera-tools {
+    grid-column: 1 / -1; grid-row: 1; min-width: 0; max-width: 100%; flex-wrap: wrap; justify-content: flex-end;
+  }
+  #app[data-workspace="project"] #viewport > .build-stats { grid-row: 2; }
+  /* Upright, the row has no room for the overview beside the buttons: it stands under them, across the screen, and the
+     row of the buttons is that much taller. */
+  #app:is([data-workspace="field"], [data-workspace="trial"]):has(#overview:not([hidden])) {
+    --overview-height: 44px; --workspace-bar-height: calc(58px + var(--overview-height) + env(safe-area-inset-top, 0px));
+  }
+  #app:is([data-workspace="field"], [data-workspace="trial"]):has(#overview:not([hidden])) #workspace-bar { flex-wrap: wrap; align-content: space-between; row-gap: 4px; }
+  #app:is([data-workspace="field"], [data-workspace="trial"]):has(#overview:not([hidden])) #workspace-bar > .workspace-map { order: 1; flex: 1 0 100%; }
+  /* Upright the meter has no free place: under the overview it would stand over the column and the name of the faction,
+     under the tools of a design over its figures. */
+  .workspace-map > .frame-meter { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #workspace-bar button, #workspace-surface-content button, #workspace-surface-close { transition: none; }
+}
+@media (max-width: 740px) {
+  #workspace-bar #trial-name { display: none; }
+}

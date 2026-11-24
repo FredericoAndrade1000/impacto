@@ -1,0 +1,242 @@
+/* Field tasks are temporary surfaces. Only their shared chrome scrolls. */
+#field-tools { display: flex; align-items: center; gap: 5px; min-width: 0; }
+#field-tools .field-tool { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 6px 10px; font-size: 12.5px; white-space: nowrap; }
+.field-button-icon { display: inline-flex; flex: none; align-items: center; justify-content: center; }
+.field-button-icon svg { width: 18px; height: 18px; }
+.field-tool-count { font-size: 10px; min-width: 15px; border-radius: 8px; color: var(--muted); font-variant-numeric: tabular-nums; }
+#field-tools .field-tool[aria-expanded=true] { color: var(--accent-strong); border-color: var(--accent); background: #f0b87424; }
+/* Something new waits in the window of the faction: its count stands out on the button. */
+#field-tools .field-tool[data-attention=true] .field-tool-count { padding: 1px 5px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-weight: 750; line-height: 1.35; }
+.sidebar[data-mode=test] .field-pages { display: block; min-width: 0; }
+.field-page { min-width: 0; overflow: visible; }
+.field-page > section { padding: 14px; }
+.field-page :is(button, input, select, summary) { min-height: 44px; max-width: 100%; }
+.field-page .icon-button { width: 44px; height: 44px; }
+
+/* The player's constructions, in a column at the left of the field, group by group with a hairline between groups: those
+   that fight, those that work for the faction, those that stay where they were built. Each is a small picture of it in its
+   glass, its key in a corner — and beside it a camera, on the one the camera goes with —, a mark of what holds it or what it
+   does when that is worth one, and under it a hairline of how full its tanks are — of how far along it is, while it is
+   built, mended or taken down. Picked, it is edged in the olive of the field; in hand, in amber. Only its buttons take a click or a touch: between them the field takes it. A box of selection, drawn
+   from a button or over the field, picks those whose buttons it touches (squad-ux.js). */
+.viewport { --pawn-width: 66px; }
+.field-pawns { position: absolute; z-index: 4; left: var(--left); top: var(--top); bottom: var(--bottom); width: var(--pawn-width);
+  display: flex; flex-direction: column; gap: 3px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; pointer-events: none; }
+.field-pawns::-webkit-scrollbar { display: none; }
+.pawn-group { display: flex; flex: none; flex-direction: column; gap: 3px; }
+.pawn-group + .pawn-group::before { content: ''; height: 1px; margin: 3px 12px 2px; border-radius: 1px; background: #e9eddfb3; box-shadow: 0 1px 2px #000000c0; }
+.pawn { position: relative; flex: none; width: 100%; height: 36px; padding: 0; overflow: hidden;
+  color: #dfe4d6; background: var(--glass); border: 1px solid var(--glass-line); border-radius: 8px; box-shadow: 0 3px 10px #0005;
+  pointer-events: auto; -webkit-touch-callout: none; user-select: none; }
+.pawn:hover:not(:disabled) { background: #1c2a23f0; border-color: #ffffff40; }
+.pawn:disabled { opacity: .45; }
+/* One another member of the faction holds: dimmed, and its art greyed, as theirs while they hold it. */
+.pawn[data-held=true] { opacity: .55; }
+.pawn[data-held=true] .pawn-art { filter: grayscale(1); }
+/* The picture keeps clear of the key, the mark and the hairline. The mark of a design is its colour through the mask
+   of the design (squad-ux.js), as sharp as the screen is, and what of it is damaged in the colours of a stock that falls
+   short — a piece damaged — and of one that something stands still for — a piece lost —, each through a mask of its own
+   over the same box; with no design, the icon of what it is. */
+.pawn-art { position: absolute; inset: 3px 5px 6px; display: grid; place-items: center; pointer-events: none; }
+.pawn-art > svg { width: 100%; height: 100%; stroke-width: 2; }
+.pawn-art.design > span { position: absolute; inset: 0; background: currentColor; mask: var(--art) center / contain no-repeat; }
+.pawn-art.design > [data-layer=hurt] { background: var(--accent); }
+.pawn-art.design > [data-layer=lost] { background: var(--danger); }
+.pawn-art[data-flip=true] { transform: scaleX(-1); }
+.pawn kbd { position: absolute; left: 3px; top: 1px; padding: 0; border: 0; background: transparent; color: var(--text); font-size: 9.5px; line-height: 1.1;
+  text-shadow: 0 1px 2px #000000c0, 0 0 4px #000000a0; pointer-events: none; }
+.pawn .pawn-mark { position: absolute; right: 2px; top: 2px; width: 13px; height: 13px; color: var(--accent); filter: drop-shadow(0 1px 1px #000000c0); pointer-events: none; }
+.pawn[data-mark=""] .pawn-mark { display: none; }
+.pawn[data-mark=fire] .pawn-mark { color: var(--danger); }
+.pawn[data-mark=manual] .pawn-mark { color: var(--accent-strong); }
+.pawn .pawn-watch { position: absolute; left: 11px; top: 2px; width: 11px; height: 11px; color: var(--accent); filter: drop-shadow(0 1px 1px #000000c0); pointer-events: none; }
+.pawn:not([data-watched=true]) .pawn-watch { display: none; }
+/* The hairline of its tanks is olive; amber, the colour of a notice, when they run as low as a supply vehicle is sent for;
+   and all of it in the colour of danger when they are dry. That of how far along it is built, mended or taken down is
+   amber. One with no tank has none. */
+.pawn > i { position: absolute; left: 6px; right: 6px; bottom: 2px; height: 2px; border-radius: 99px; pointer-events: none;
+  background: linear-gradient(90deg, var(--gauge, var(--olive)) var(--fill, 0%), #ffffff26 var(--fill, 0%)); }
+.pawn:is([data-gauge=progress], [data-gauge=low]) > i { --gauge: var(--accent); }
+.pawn[data-gauge=empty] > i { background: var(--danger); }
+.pawn[data-gauge=""] > i { display: none; }
+.pawn[data-selected=true] { border-color: var(--olive); box-shadow: inset 0 0 0 1px var(--olive), 0 3px 10px #0005; background: linear-gradient(#b9cc8b1f, #b9cc8b1f), var(--glass); }
+.pawn[data-manual=true] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent), 0 3px 10px #0005; background: linear-gradient(#f0b87424, #f0b87424), var(--glass); }
+.pawn[data-alert=true] { outline: 1.5px solid var(--danger); outline-offset: -1px; }
+/* With no construction on the field, where the column would be: what to do, and the aid when the faction may ask for it. */
+.field-empty { position: absolute; z-index: 4; left: var(--left); top: var(--top); width: min(280px, calc(100% - 2 * var(--edge, 12px))); padding: 12px;
+  border: 1px solid var(--glass-line); border-radius: 10px; background: var(--glass); box-shadow: 0 4px 16px #0004; }
+@media (max-width: 639px) { .field-empty { top: auto; bottom: var(--edge, 12px); } }
+
+/* Contextual actions remain outside the temporary surface. The dock has no box: its buttons stand over the field, each in
+   its own glass, as those of the top row do, and its words wear the shadow that keeps them on sky and on ground. Only
+   its buttons and its menu take a click or a touch; between them the field takes it. The dock of a works being placed
+   (publication-placement.js) is the same. */
+:is(#field-dock, .publication-dock) { position: absolute; z-index: 5; left: 50%; bottom: var(--edge, 12px); transform: translateX(-50%); width: min(740px, calc(100% - 28px)); box-sizing: border-box;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 10px; text-shadow: 0 1px 2px #000000c0, 0 0 8px #00000070; pointer-events: none; }
+:is(#field-dock, .publication-dock) :is(button, summary, .field-more-menu) { pointer-events: auto; }
+:is(#field-dock, .publication-dock) :is(button, .field-more-actions > summary) { border-color: var(--glass-line); background: var(--glass); box-shadow: 0 4px 14px #0005; text-shadow: none; }
+:is(#field-dock, .publication-dock) :is(button, .field-more-actions > summary):hover:not(:disabled) { border-color: #ffffff40; background: #1d2a24f0; }
+/* Beside the column at the left, the dock keeps clear of it. */
+.viewport:has(> .field-pawns:not([hidden])) :is(#field-dock, .publication-dock) { width: min(740px, calc(100% - 2 * (var(--left) + var(--pawn-width) + 8px))); }
+/* A notice, as wide, at most, as leaves the column of the constructions at its side clear. */
+.viewport:has(> .field-pawns:not([hidden])) > #toast { max-width: min(460px, calc(100% - 2 * (var(--left) + var(--pawn-width) + 8px))); }
+.field-dock-heading { min-width: 0; display: grid; gap: 1px; }
+/* A test's dock has no name, as the row at the top names what is tried, and is no wider than what it has needs: the gun in
+   hand stands under the speed of the vehicle in hand, or in its place where none is told, beside the buttons. */
+#app[data-workspace="trial"] #field-dock { width: min(480px, calc(100% - 28px)); }
+/* Beside the button that inspects, the line of the piece picked keeps its state on one line. */
+#app[data-workspace="trial"] #field-dock:has(#inspect:not([hidden])) { width: min(560px, calc(100% - 28px)); }
+#app[data-workspace="trial"] #field-dock:not(:has(> .field-status:not([hidden]))) { width: auto; }
+#field-dock:has(> .field-dock-heading[hidden]) > .field-status { grid-column: 1; grid-row: 1; }
+#field-dock:has(> .field-dock-heading[hidden]) > .field-dock-actions { grid-column: 2; grid-row: 1; }
+#app[data-workspace="trial"] #field-dock:has(> .field-dock-heading:not([hidden])) > .field-dock-actions { grid-column: 2; grid-row: 1 / span 2; }
+#app[data-workspace="trial"] #field-dock:has(> .field-dock-heading:not([hidden])) > .field-status { grid-column: 1; grid-row: 2; }
+.field-mode { font-size: 9px; font-weight: 750; letter-spacing: .07em; color: var(--accent-strong); }
+/* The name of what is spoken of, and how fast it goes while it goes or is in hand. */
+.field-dock-name { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.field-dock-heading strong { min-width: 0; font-size: 13px; line-height: 1.35; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.field-dock-speed { flex: none; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.field-dock-name > small { flex: none; color: var(--accent-strong); font-size: 11px; font-weight: 650; }
+.field-dock-actions { display: flex; align-items: center; gap: 5px; }
+.field-dock-actions > button { display: inline-flex; justify-content: center; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 6px 9px; font-size: 12px; }
+.field-dock-actions > .field-camera { padding: 6px; }
+.field-dock-actions .field-details[data-services=true] .field-button-icon { position: relative; }
+.field-dock-actions .field-details[data-services=true] .field-button-icon::after {
+  content: ''; position: absolute; top: -2px; right: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-strong);
+}
+:is(#field-dock, .publication-dock) :is(#unit-control, #publication-confirm, #road-confirm, .field-release, .field-camera[aria-pressed=true], .field-inspect[aria-pressed=true]) { color: var(--accent-strong); border-color: var(--accent); background: linear-gradient(#f0b87424, #f0b87424), var(--glass); }
+.field-command-options { grid-column: 1 / -1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 5px; }
+.field-order-reasons { grid-column: 1 / -1; min-width: 0; display: grid; gap: 5px; }
+.field-order-reason { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; white-space: normal; overflow-wrap: anywhere; }
+:is(#field-dock, .publication-dock) .squad-orders { display: flex; flex: 1 1 auto; gap: 5px; margin: 0; min-width: 0; }
+:is(#field-dock, .publication-dock) .squad-orders button { display: flex; flex: 1 1 0; position: relative; justify-content: center; align-items: center; gap: 6px; min-width: 0; min-height: 44px; height: auto; padding: 6px 10px; font-size: 12px; }
+:is(#field-dock, .publication-dock) .squad-orders button > span:not(.field-button-icon) { font-size: inherit; white-space: nowrap; }
+:is(#field-dock, .publication-dock) .squad-orders button > small { color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+:is(#field-dock, .publication-dock) .squad-orders kbd { right: 3px; bottom: 1px; font-size: 8px; }
+#field-dock :is(.squad-orders, .field-postures) button[aria-pressed=true] { background: linear-gradient(#f0b87424, #f0b87424), var(--glass); color: var(--accent-strong); border-color: var(--accent); }
+.field-more-actions { position: relative; flex: 0 0 auto; }
+.field-more-actions > summary { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 10px; box-sizing: border-box; font-size: 12px; list-style: none; cursor: pointer; border: 1px solid; border-radius: 8px; }
+.field-more-actions > summary::-webkit-details-marker { display: none; }
+.field-more-actions[open] > summary { color: var(--accent-strong); border-color: var(--accent); }
+.field-more-actions:not([open]) > .field-more-menu { display: none; }
+.field-more-menu { position: absolute; z-index: 6; right: 0; bottom: calc(100% + 5px); display: grid; gap: 8px; width: 240px; max-height: calc(100dvh - 180px); overflow-y: auto; padding: 8px; box-sizing: border-box; background: #17241ff5; border: 1px solid var(--glass-line); border-radius: 10px; box-shadow: 0 5px 20px #0006; text-shadow: none; }
+#field-dock .field-more-menu button { box-shadow: none; }
+.field-more-group { display: grid; gap: 5px; align-content: start; }
+#field-dock .field-more-group > .squad-orders { flex-direction: column; }
+/* Its groups — the other orders, what is done to the constructions picked and the stance — stand apart by a hairline: one
+   under the other, or, on a short screen, side by side. */
+.field-more-menu > :not([hidden]) ~ :not([hidden]) { padding-top: 8px; border-top: 1px solid var(--glass-line); }
+@media (max-height: 700px) {
+  /* Side by side it may be wider than the room left of Mais ações: it stands on the whole row of orders and keeps within it. */
+  .field-command-options { position: relative; }
+  .field-more-actions { position: static; }
+  .field-more-menu { grid-auto-flow: column; grid-auto-columns: minmax(0, 200px); width: auto; max-width: 100%; align-items: start; }
+  .field-more-menu > :not([hidden]) ~ :not([hidden]) { padding: 0 0 0 8px; border-top: 0; border-left: 1px solid var(--glass-line); }
+}
+#field-dock .field-unit-actions button[data-value="abandon"]:not(:disabled) { color: var(--danger); }
+.field-postures { display: grid; grid-template-columns: 1fr; gap: 4px; }
+.field-postures > span { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+.field-postures > button { min-height: 44px; padding: 6px; font-size: 12px; }
+.field-dock-status { grid-column: 1 / -1; margin: 0; font-size: 11.5px; line-height: 1.4; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#field-dock .field-order-prompt { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--accent-strong); }
+.field-order-prompt > span { flex: 1; min-width: 0; font-size: 12px; line-height: 1.35; }
+.field-order-prompt > button { display: flex; flex: none; align-items: center; gap: 5px; min-height: 44px; padding: 6px 10px; }
+#field-dock[data-armed=true] .field-command-options { display: none; }
+/* Touch actions share one footer row. Its actual content sets the height, so
+   the dock cannot drift into the HUD when the viewport is short or has a notch. */
+.viewport:has(> .touch-pad:not([hidden])) {
+  grid-template-rows: max-content max-content minmax(0, 1fr) max-content max-content;
+  align-content: stretch;
+}
+.viewport:has(> .touch-pad:not([hidden])) > .touch-pad {
+  position: relative; inset: auto; grid-column: 1 / -1; grid-row: 5; align-self: end;
+}
+.viewport:has(> .touch-pad:not([hidden])) > #field-dock[data-manual=true] {
+  position: relative; inset: auto; transform: none; grid-column: 1 / -1; grid-row: 5;
+  justify-self: center; align-self: end; width: max-content;
+  max-width: calc(100% - 2 * (2 * var(--touch-pedal-size) + var(--touch-pedal-gap) + 8px));
+  grid-template-columns: max-content;
+}
+/* Driven with the pedals at the sides, the dock keeps of its heading only the speed, over its buttons: the name and what
+   the player does are for a reader alone. */
+.viewport:has(> .touch-pad:not([hidden])) > #field-dock[data-manual=true] .field-dock-heading { position: absolute; left: 2px; bottom: calc(100% + 2px); }
+.viewport:has(> .touch-pad:not([hidden])) > #field-dock[data-manual=true] :is(.field-mode, .field-dock-name > strong) {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.viewport:has(> .touch-pad:not([hidden])) > #field-dock[data-manual=true] .field-dock-status { display: none; }
+/* The column ends over the pedals. */
+.viewport:has(> .touch-pad:not([hidden])) > .field-pawns { bottom: calc(var(--bottom) + var(--touch-trigger-size) + 8px); }
+.viewport:has(> .touch-pad:not([hidden])) > #toast {
+  position: relative; inset: auto; transform: none; grid-column: 1 / -1; grid-row: 4;
+  justify-self: center; align-self: end; width: max-content; max-width: min(460px, 100%); box-sizing: border-box; margin: 0;
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .viewport:has(> .touch-pad:not([hidden])) {
+    grid-template-rows: max-content max-content max-content max-content minmax(0, 1fr) max-content max-content max-content;
+  }
+  .viewport:has(> .touch-pad:not([hidden])) > #toast { grid-row: 6; }
+  .viewport:has(> .touch-pad:not([hidden])) > #field-dock[data-manual=true] { grid-row: 7; max-width: 100%; }
+  .viewport:has(> .touch-pad:not([hidden])) > .touch-pad { grid-row: 8; }
+}
+
+/* Original condition, services and armament controls retain their bindings. */
+.field-empty-card { margin: 14px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.field-empty-card h3 { margin: 0 0 8px; font-size: 15px; color: var(--text); overflow-wrap: anywhere; }
+.field-controls .field-turn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; }
+
+@media (max-width: 900px) {
+  :is(#field-dock, .publication-dock) { width: calc(100% - 20px); gap: 5px 8px; }
+  .field-dock-actions > button { padding: 6px; gap: 4px; }
+  .field-dock-heading strong { font-size: 12px; }
+  :is(#field-dock, .publication-dock) .squad-orders button { padding: 5px 8px; gap: 4px; }
+  :is(#field-dock, .publication-dock) .squad-orders kbd { display: none; }
+  .field-dock-status { font-size: 11px; }
+  .field-page > section { padding: 10px; }
+}
+@media (max-width: 740px) {
+  :is(#field-dock, .publication-dock) .squad-orders button, .field-more-actions > summary { font-size: 11px; }
+  :is(#field-dock, .publication-dock) .squad-orders button .field-button-icon svg { width: 16px; height: 16px; }
+  .field-order-prompt > span { font-size: 11px; }
+}
+/* On a phone the tools of the field are known by their icons, a count riding the corner of its button: the overview has
+   the rest of the row of the top. The button of the conversation stands in the lower right corner (chat.css): the
+   orders at the foot keep as clear of it at both sides, and the trigger of the pedals stands at its left. */
+@media (max-width: 900px), (max-height: 520px) {
+  .viewport:has(> .field-chat:not([hidden])) :is(#field-dock, .publication-dock) { max-width: calc(100% - 2 * (var(--right) + 52px)); }
+  .viewport:has(> .field-chat:not([hidden])) > .touch-pad { margin-right: 52px; }
+  #field-tools .field-tool { position: relative; flex-shrink: 0; min-width: 44px; }
+  #field-tools .field-button-label, #field-tools .field-tool-count:empty { display: none; }
+  #field-tools .field-tool-count { position: absolute; top: 2px; right: 3px; min-width: 0; margin: 0; font-size: 9.5px; line-height: 1; }
+}
+/* Upright, the column ends well above the dock, which takes the width of the screen. */
+@media (max-width: 600px) and (orientation: portrait) {
+  .field-pawns { bottom: auto; max-height: 45%; }
+  .viewport:has(> .field-pawns:not([hidden])) :is(#field-dock, .publication-dock) { width: calc(100% - 20px); }
+  .viewport:has(> .field-pawns:not([hidden])) > #toast { max-width: min(380px, calc(100% - 20px)); }
+}
+
+#workspace-bar #test-console-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 6px 10px; }
+#test-console-toggle[aria-expanded=true] { color: var(--accent-strong); border-color: var(--accent); background: var(--accent-ink); }
+#test-console-toggle kbd { font-size: 10px; }
+#app[data-workspace] > .sidebar[data-field-task=test] { overflow: clip; }
+#field-page-test .test-console-group { min-width: 0; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+#field-page-test .test-console-group > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; cursor: pointer; font-weight: 600; list-style: none; }
+#field-page-test .test-console-group > summary::after { content: '+'; flex: none; color: var(--muted); }
+#field-page-test .test-console-group[open] > summary::after { content: '−'; }
+#field-page-test .test-console-group > :is(h3, p) { margin-top: 0; }
+#field-page-test .test-console-group > select { margin-bottom: 8px; }
+#field-page-test fieldset { display: grid; gap: 8px; min-width: 0; margin: 12px 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
+#field-page-test :is(input, select, button) { width: 100%; }
+#field-page-test .test-console-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+#field-page-test .test-console-actions > button { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+#field-page-test .test-console-check { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+#field-page-test .test-console-check > input { flex: none; width: 20px; min-height: 20px; height: 20px; margin: 0; }
+#field-page-test .helper { overflow-wrap: anywhere; }
+/* The Infraestrutura page: the post's button reads as the roads' do, its name beside its icon, and why it is off beneath it. */
+#field-page-infra .catalog-button { justify-content: center; }
+#field-page-infra .unit-held:not(:empty) { display: block; margin-top: 8px; }
+@media (max-width: 900px), (max-height: 520px) {
+  #workspace-bar #test-console-toggle { flex: 0 0 44px; width: 44px; padding: 6px 8px; }
+  #test-console-toggle :is(.field-button-label, kbd) { display: none; }
+}
+@media (pointer: coarse) { #test-console-toggle kbd { display: none; } }

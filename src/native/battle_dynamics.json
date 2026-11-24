@@ -1,0 +1,11 @@
+{
+  "sourceSHA256": "3830d06d3dec872e83d565f5b2e5522a35429e559186e672b869fafbb8114486",
+  "profile": "release",
+  "target": "wasm32-unknown-unknown",
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "buildSHA256": "1b05036cf7ff5114829f6120d419570483a042e455c9191553f02df7a184aee0",
+  "binarySHA256": "43d4dcb1057dfe6f0adf560de7e5ef72ea6c9f04e16ce175be61995c492cd42a",
+  "javascriptSHA256": "5deec7be61a5a88f1bc74b22664cdb54612cbb1f8a6ec541d53c42ca29149ff9",
+  "bytes": 3708432,
+  "builtAt": "2026-11-24T02:01:22.756Z"
+}

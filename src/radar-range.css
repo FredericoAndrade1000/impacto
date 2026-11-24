@@ -1,0 +1,8 @@
+.squad-marks .radar-range .reach, .squad-marks .radar-range .rise, .squad-marks .radar-range .arc {
+  fill: none; stroke: #9fd8e0; stroke-width: 1.2; stroke-dasharray: 1 5; stroke-linecap: round;
+}
+.squad-marks .radar-range .reach { opacity: .45; }
+.squad-marks .radar-range .rise { opacity: .4; }
+.squad-marks .radar-range .arc { opacity: .65; }
+.squad-marks .radar-range .limits { stroke: #9fd8e0; stroke-width: 1.5; }
+.squad-marks .radar-range .origin { fill: #9fd8e0; stroke: #152723; stroke-width: 1; }

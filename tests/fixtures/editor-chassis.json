@@ -1,0 +1,152 @@
+{
+  "version": 10,
+  "preset": "vehicle",
+  "name": "Chassi de teste do editor",
+  "seed": 6173,
+  "launcher": {
+    "x": 1.65,
+    "y": 1.42
+  },
+  "chassis": {
+    "model": "wheeled",
+    "points": [
+      {
+        "x": -54,
+        "y": -5
+      },
+      {
+        "x": 54,
+        "y": -5
+      }
+    ],
+    "topPlate": {
+      "material": "steel",
+      "thicknessMm": 12
+    },
+    "axles": [
+      -35,
+      -1,
+      34
+    ]
+  },
+  "nodes": [
+    {
+      "id": "hull-0",
+      "x": -54,
+      "y": -4.88
+    },
+    {
+      "id": "hull-1",
+      "x": -6,
+      "y": -4.88
+    },
+    {
+      "id": "hull-2",
+      "x": -6,
+      "y": 22.12
+    },
+    {
+      "id": "hull-3",
+      "x": -41,
+      "y": 22.12
+    },
+    {
+      "id": "hull-4",
+      "x": -54,
+      "y": 8.120000000000001
+    },
+    {
+      "id": "vision-top",
+      "x": -51.214285714285715,
+      "y": 11.120000000000001
+    },
+    {
+      "id": "vision-bottom",
+      "x": -54,
+      "y": 8.120000000000001
+    }
+  ],
+  "plates": [
+    {
+      "id": "hull:rear",
+      "a": "hull-1",
+      "b": "hull-2",
+      "material": "steel",
+      "thicknessMm": 15
+    },
+    {
+      "id": "hull:roof",
+      "a": "hull-2",
+      "b": "hull-3",
+      "material": "steel",
+      "thicknessMm": 10
+    },
+    {
+      "id": "hull:glacis",
+      "a": "hull-3",
+      "b": "vision-top",
+      "material": "steel",
+      "thicknessMm": 20
+    },
+    {
+      "id": "hull:vision",
+      "a": "vision-top",
+      "b": "vision-bottom",
+      "material": "glass",
+      "thicknessMm": 90
+    },
+    {
+      "id": "hull:front",
+      "a": "hull-4",
+      "b": "hull-0",
+      "material": "steel",
+      "thicknessMm": 15
+    }
+  ],
+  "components": [
+    {
+      "id": "engine",
+      "kind": "engine",
+      "sizeScale": 0.8612748753939372,
+      "pose": {
+        "x": -36,
+        "y": 0.7521592025211987,
+        "angle": 0
+      }
+    },
+    {
+      "id": "fuel",
+      "kind": "fuel",
+      "pose": {
+        "x": -16,
+        "y": 2.4399999999999995,
+        "angle": 0
+      },
+      "sizeScale": 1
+    },
+    {
+      "id": "command",
+      "kind": "command",
+      "pose": {
+        "x": -31,
+        "y": 9.0643184050424,
+        "angle": 0
+      },
+      "sizeScale": 1
+    },
+    {
+      "id": "sensor-0",
+      "kind": "sensor",
+      "sensorMode": "visual",
+      "pose": {
+        "x": -32.250000000000014,
+        "y": 24.62,
+        "angle": 0
+      },
+      "sizeScale": 1
+    }
+  ],
+  "appearance": {
+    "paint": "#5c706b"
+  }
+}

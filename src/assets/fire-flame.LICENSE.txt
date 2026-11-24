@@ -1,0 +1,20 @@
+Unity Labs fire flipbook
+
+Author: Unity Technologies / Thomas ICHE (Unity Labs Paris)
+License: CC0 1.0 Universal
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
+Publisher/license statement: https://unity.com/blog/engine-platform/free-vfx-image-sequences-flipbooks
+Source: https://unity3d.com/files/labs/downloads/vfx/assets01/Flame02/Flame02-flipbooks.zip
+Original file: Flame02_16x4.tga
+
+Adaptation: all 64 original frames; premultiplied-alpha
+bilinear resampling, vertical orientation for the game's upward Y axis;
+52x104 pixels inside each 64x128 tile, packed into 512x1024 RGBA PNG.
+The game copies these into its existing particle atlas once at startup.
+No Unity runtime or Unity engine code is included.
+
+Reproduce using scripts/prepare-fire-flipbook.ts and the original TGA.
+
+Source ZIP SHA-256: f37b12cdae090591d537ed3bb50396f03833a49864362bf665d6817b7282c954
+Original TGA SHA-256: 6ae2158bc06e0b035196db2695c19e7cb29a23f59b345d4c5c2764c6c10ce3a6
+Prepared PNG SHA-256: 694d3baab243b0ec75378f0ca79f5f73b129545c0af0f62302cc3180f9cc88fa

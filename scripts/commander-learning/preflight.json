@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "training": [
+    [
+      {
+        "name": "pilot-duel",
+        "factions": 2,
+        "slot": 0,
+        "seed": 310001,
+        "seconds": 600,
+        "spacing": 4200,
+        "center": -7000
+      },
+      {
+        "name": "pilot-pressure",
+        "factions": 2,
+        "slot": 1,
+        "seed": 310002,
+        "seconds": 900,
+        "spacing": 3000,
+        "center": 7000
+      },
+      {
+        "name": "pilot-outer",
+        "factions": 4,
+        "slot": 0,
+        "seed": 310003,
+        "seconds": 900,
+        "spacing": 4000,
+        "center": -3000
+      },
+      {
+        "name": "pilot-inner",
+        "factions": 4,
+        "slot": 2,
+        "seed": 310004,
+        "seconds": 1200,
+        "spacing": 3600,
+        "center": 3000
+      }
+    ]
+  ],
+  "evaluation": [
+    {
+      "name": "probe-0",
+      "factions": 2,
+      "slot": 1,
+      "seed": 320001,
+      "seconds": 600,
+      "spacing": 4200,
+      "center": -6000
+    },
+    {
+      "name": "probe-1",
+      "factions": 2,
+      "slot": 0,
+      "seed": 320002,
+      "seconds": 900,
+      "spacing": 3000,
+      "center": 8000
+    },
+    {
+      "name": "probe-2",
+      "factions": 4,
+      "slot": 1,
+      "seed": 320003,
+      "seconds": 900,
+      "spacing": 4000,
+      "center": -2000
+    },
+    {
+      "name": "probe-3",
+      "factions": 4,
+      "slot": 3,
+      "seed": 320004,
+      "seconds": 1200,
+      "spacing": 3600,
+      "center": 4000
+    }
+  ]
+}

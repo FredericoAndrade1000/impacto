@@ -1,0 +1,75 @@
+.first-objectives { position: absolute; z-index: 5; left: var(--left, 12px); top: calc(var(--top, 54px) + 140px);
+  width: min(320px, calc(100% - 2 * var(--edge, 12px))); max-height: var(--objectives-space, calc(100% - 330px));
+  display: flex; flex-direction: column; min-height: 0; box-sizing: border-box;
+  color: var(--text); background: var(--glass, #17251ff5); border: 1px solid var(--glass-line, #435247);
+  border-radius: 10px; box-shadow: 0 4px 16px #0003; overflow: hidden; }
+/* Beside the column of the player's constructions, not over it; and, where there is room, beside the card of a player with
+   nothing on the field, which has the way to another base or to the aid. */
+.viewport:has(> .field-pawns:not([hidden])) > .first-objectives { left: calc(var(--left) + var(--pawn-width) + 8px); width: min(320px, calc(100% - var(--left) - var(--pawn-width) - 8px - var(--edge, 12px))); }
+@media (min-width: 640px) { .viewport:has(> .field-empty:not([hidden])) > .first-objectives { left: calc(var(--left) + 288px); width: min(320px, calc(100% - var(--left) - 288px - var(--edge, 12px))); } }
+.first-objectives[hidden] { display: none; }
+.first-objectives > header { display: flex; align-items: center; gap: 8px; flex: none; min-height: 44px; padding: 2px 4px 2px 12px; border-bottom: 1px solid var(--line); }
+.first-objectives h2 { margin: 0; flex: 1; min-width: 0; font-size: 14px; }
+.first-objectives-count { flex: none; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.first-objectives-close { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 0; background: transparent; }
+.first-objectives-close svg { width: 18px; height: 18px; }
+.first-objectives-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 8px; }
+.first-objectives-caption { margin: 0 4px 6px; color: var(--muted); font-size: 11px; }
+.first-objectives ul { list-style: none; margin: 0; padding: 0; }
+.first-objectives li > button { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 7px 8px;
+  border: 1px solid transparent; border-radius: 6px; background: transparent; font-size: 12px; text-align: left; white-space: normal; }
+.first-objectives li > button[aria-pressed=true] { background: var(--accent-ink, #f0b87418); border-color: var(--line-strong); }
+.first-objectives li[data-complete=true] > button { color: var(--olive, #b2ca95); }
+.first-objectives-check { flex: 0 0 16px; text-align: center; font-size: 16px; }
+.first-objectives-check svg { display: block; width: 16px; height: 16px; }
+/* The controls are not an objective: their row stands apart, above the objectives. */
+#first-objectives-controls { margin-bottom: 2px; padding-bottom: 2px; border-bottom: 1px solid var(--line); }
+.first-objectives-help { margin: 8px 4px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 12px; line-height: 1.45; }
+.first-objectives-help strong { font-size: 12px; }
+.first-objectives-help p { margin: 5px 0 0; color: var(--muted); }
+.first-objectives-help ul { margin-top: 5px; color: var(--muted); }
+.first-objectives-help li { position: relative; padding-left: 10px; }
+.first-objectives-help li::before { content: '·'; position: absolute; left: 1px; }
+.first-objectives-help li + li { margin-top: 4px; }
+.first-objectives-action, .first-objectives-alternate { display: block; width: 100%; min-height: 44px; margin-top: 9px;
+  padding: 8px; font-size: 12px; line-height: 1.35; white-space: normal; text-align: center; }
+.first-objectives-action { color: var(--accent-strong); border-color: var(--accent); background: var(--accent-ink); }
+.first-objectives-alternate { margin-top: 5px; background: transparent; color: var(--muted); }
+.first-objectives-dismiss { display: block; width: 100%; min-height: 44px; margin-top: 4px; padding: 6px 8px; border: 0; background: transparent;
+  color: var(--faint, var(--muted)); font-size: 11.5px; text-decoration: underline; text-underline-offset: 2px; }
+.first-objectives-dismiss:hover { color: var(--muted); }
+#first-objectives-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+#first-objectives-toggle[aria-pressed=true] { color: var(--accent-strong); border-color: var(--accent); background: var(--accent-ink); }
+#project-tools #first-objectives-toggle { display: inline-flex; align-items: center; gap: 5px; }
+#project-tools #first-objectives-toggle small { font-size: 10px; color: var(--muted); }
+@media (max-width: 600px) {
+  #workspace-bar #project-tools #first-objectives-toggle > .field-button-icon { display: inline-flex; }
+  #workspace-bar #project-tools #first-objectives-toggle > small { display: none; }
+  /* Nine touch controls need two rows on a phone: the pages and the settings above, the project's tools below. The
+     shared height also moves the canvas and temporary surfaces below the complete toolbar. */
+  #app[data-workspace="project"]:has(#project-tools #first-objectives-toggle:not([hidden])) {
+    --workspace-bar-height: calc(96px + env(safe-area-inset-top, 0px));
+  }
+  #app[data-workspace="project"]:has(#project-tools #first-objectives-toggle:not([hidden])) #workspace-bar { flex-wrap: wrap; align-content: center; gap: 2px 6px; }
+  #app[data-workspace="project"]:has(#project-tools #first-objectives-toggle:not([hidden])) .workspace-nav { flex: 1 0 auto; }
+  #app[data-workspace="project"]:has(#project-tools #first-objectives-toggle:not([hidden])) #project-tools { order: 1; flex: 1 0 100%; justify-content: flex-end; }
+}
+/* The actual control remains the hit target. No mask or click-catching layer
+   sits over the field, its orders, dialogs or placement preview. */
+.objective-target { outline: 3px solid var(--accent, #f0b874) !important; outline-offset: 3px;
+  box-shadow: 0 0 0 6px #f0b87430 !important; animation: objective-target-pulse 1.6s ease-in-out infinite; }
+@keyframes objective-target-pulse { 50% { outline-color: #ffe5ad; box-shadow: 0 0 0 8px #f0b87414; } }
+@media (prefers-reduced-motion: reduce) { .objective-target { animation: none; } }
+@media (max-width: 600px) and (orientation: portrait) {
+  .first-objectives { top: calc(var(--top, 50px) + 190px); }
+  #first-objectives-toggle .field-button-label { display: none; }
+}
+@media (max-height: 600px) {
+  .first-objectives { top: calc(var(--top, 50px) + 6px); }
+  .first-objectives-help { margin: 4px 2px; padding-bottom: 6px; }
+  .first-objectives-help strong { display: none; }
+  .first-objectives-help p { margin-top: 3px; font-size: 11px; line-height: 1.35; }
+  .first-objectives-help ul { margin-top: 0; font-size: 11px; line-height: 1.35; }
+  .first-objectives-help li + li { margin-top: 2px; }
+  .first-objectives-action { margin-top: 6px; }
+}

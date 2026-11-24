@@ -1,0 +1,35 @@
+node_modules/
+.vite/
+dist/
+*.log
+__pycache__/
+.env*
+!/.env.example
+data/
+directory-data/
+antes-*/
+field.json*
+field.before-*.json
+field.unreadable.*.json
+*.journal
+*.jsonl
+diaries/
+replays/
+dumps/
+*.dmp
+*.dump
+screenshots/
+native/.tools/
+native/dynamics/target/
+native/artifacts/
+
+# Builds Rust e cópias de experimentos
+target/
+target-*/
+.fingerprint/
+# Resultados de validação/benchmark (gerados)
+validation/
+output/
+diagnostics/
+.claude/
+.codex*

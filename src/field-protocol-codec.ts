@@ -1,0 +1,301 @@
+import { isIndustryLevels, isUpgradeId } from './industry.ts';
+import { isDuelView } from './duel.ts';
+import { isAuthoredConstruction } from './construction-codec.ts';
+import { isWireMessage } from './message-contract.ts';
+import type { FactionView, RoomSquadView, ChatMessage, AiStatus } from './field-contract.ts';
+import type { WelcomeMessage, CommandKind, CommandResult, CommandResults, ServerReply, ChatHistory, SquadMetadata, TestAct, TestResultFor, LibraryAct, LibraryResultFor } from './field-protocol-contract.ts';
+import { array, union, tuple, object, optional, literal, numeric, textual, logical, undefinedValue, absent, prefixed } from './wire-shape.ts';
+import type { Guard } from './wire-shape.ts';
+
+// Metadata is checked at its cold transport boundary. Physical frame items remain opaque.
+const libraryResultGuards: { [Act in LibraryAct]: Guard<LibraryResultFor<Act>> } = {
+  get: object({ models: array(object({ id: textual, name: textual, author: textual, by: textual, at: numeric, blueprint: isAuthoredConstruction })) }),
+  publish: object({ model: object({ id: textual, name: textual, replaced: logical }) }),
+  remove: object({ actor: optional(object({ id: textual, blueprint: isAuthoredConstruction })), selected: optional(union(literal(null), textual)) }),
+};
+const libraryResultGuard = union(libraryResultGuards.get, libraryResultGuards.publish, libraryResultGuards.remove);
+const g0 = object({"ferro": numeric, "ligas": numeric, "silica": numeric, "combustivel": numeric});
+const g1 = union(literal("waiting"), literal("short"));
+const g2 = union(literal("ammo"), literal("fuel"), literal("repair"), literal("work"), literal("road"));
+const g3 = union(undefinedValue, textual);
+const g4 = object({"kind": g2, "n": numeric, "fixed": optional(numeric), "name": optional(g3)});
+const g5 = array(g4);
+const g6 = object({"level": g1, "missing": numeric, "for": g5});
+const g7 = object({"ferro": optional(g6), "ligas": optional(g6), "silica": optional(g6), "combustivel": optional(g6)});
+const g8 = object({"ferro": numeric, "ligas": numeric, "silica": numeric, "petroleo": numeric});
+const g9 = union(literal(1), literal(-1));
+const g10 = object({"x": numeric, "y": numeric, "facing": g9, "radius": numeric});
+const g11 = union(literal(null), g10);
+const pendingUpgradeGuard = object({ id: numeric, upgrade: isUpgradeId, by: textual, startedAt: numeric, until: numeric, cost: g0 });
+const g14 = union(literal(null), numeric);
+const industryGuard = object({ levels: isIndustryLevels, pending: union(literal(null), pendingUpgradeGuard) });
+const g16 = object({"selectMiner": logical, "collectOre": logical, "deliverOre": logical, "directControl": logical, "fabricateVehicle": logical, "buildDefense": logical});
+const g17 = object({"fieldId": textual, "completed": g16});
+const g18 = union(literal(null), g0);
+const g19 = object({"base": g18, "lorry": g18, "reserve": numeric, "aid": g0, "offered": logical, "wait": optional(numeric)});
+const g20 = union(literal(null), g19);
+const g21 = object({"at": numeric, "base": g14, "from": g14, "lorry": logical, "aid": g0, "aidAt": optional(numeric)});
+const g22 = union(literal(null), g21);
+const g23 = union(literal(null), textual);
+const g24 = object({"country": textual, "field": optional(absent), "colours": optional(absent), "emblem": optional(absent)});
+const g25 = union(literal("plain"), literal("horizontal2"), literal("horizontal3"), literal("vertical2"), literal("vertical3"), literal("diagonal"), literal("quarters"), literal("cross"), literal("saltire"), literal("canton"), literal("chevron"), literal("border"));
+const g26 = tuple(numeric, numeric, numeric);
+const g27 = union(literal("none"), literal("star"), literal("disc"), literal("diamond"), literal("ring"));
+const g28 = object({"country": optional(absent), "field": g25, "colours": g26, "emblem": g27});
+const g29 = union(g24, g28);
+const g30 = object({"name": textual, "nation": g23, "flag": g29});
+const g31 = union(literal(null), g30);
+const g32 = object({"at": numeric, "from": numeric, "by": g31, "dismantled": numeric, "returned": g0, "cargo": g8, "stock": g0, "yard": g8});
+const g33 = union(literal(null), g32);
+const g34 = object({"name": textual, "nation": g23});
+const g35 = object({"at": numeric, "from": g34});
+const g36 = union(literal(null), g35);
+const g37 = tuple(numeric, numeric);
+const g38 = array(g37);
+const g39 = union(literal(null), g38);
+const g40 = union(literal("advancing"), literal("contested"), literal("receding"));
+const g41 = object({"progress": numeric, "at": numeric, "state": g40});
+const g42 = union(literal(null), g41);
+const g43 = object({"name": textual, "nation": g23, "flag": g29, "progress": numeric, "at": numeric, "state": g40, "id": textual, "post": optional(textual), "x": optional(numeric), "sheltered": logical, "full": optional(logical)});
+const g44 = array(g43);
+const g45 = object({"at": numeric, "x": numeric, "by": g31, "yard": g8});
+const g46 = union(literal(null), g45);
+const g47 = object({"at": numeric, "x": numeric, "of": g31});
+const g48 = union(literal(null), g47);
+const g49 = object({"at": numeric, "of": g31, "dismantled": numeric, "stock": g0, "yard": g8});
+const g50 = union(literal(null), g49);
+const g51 = object({"name": textual, "nation": g23, "flag": g29, "id": textual, "x": numeric, "facing": g9, "radius": numeric, "seen": logical, "at": g14, "sheltered": logical});
+const g52 = array(g51);
+const g53 = object({"name": textual, "nation": g23, "flag": g29, "id": textual, "of": textual, "x": numeric, "facing": g9, "radius": numeric, "seen": logical, "at": g14, "sheltered": logical});
+const g54 = array(g53);
+const g55 = union(undefinedValue, literal(false), literal(true));
+const g56 = union(literal("leader"), literal("member"), literal("admin"));
+export const isAiStatus: Guard<AiStatus> = union(literal('active'), literal('paused'));
+const aiStatus = optional(isAiStatus);
+const g57 = object({"id": textual, "name": textual, "connected": g55, "role": g56, ai: aiStatus});
+const g58 = array(g57);
+const g59 = object({"id": textual, "name": textual, "connected": g55, "invited": logical, ai: aiStatus});
+const g60 = array(g59);
+const g61 = object({"name": textual, "nation": g23, "flag": g29, "id": textual, "color": g23, "members": g60, "seen": logical, "at": g14, "x": g14, "defeated": g14});
+const g62 = array(g61);
+const g63 = object({"id": g23, "name": g23, "nation": g23, "flag": g29, "ref": textual, "wealth": numeric, ai: aiStatus});
+const g64 = array(g63);
+const g65 = object({"name": textual, "nation": g23, "flag": g29, "factionId": textual, "ref": textual, "members": numeric});
+const g66 = array(g65);
+const g67 = object({"id": g23, "name": g23, "nation": g23, "flag": g29, "ref": textual, ai: aiStatus});
+const g68 = union(literal(null), g67);
+const g69 = object({"id": g23, "name": g23, "nation": g23, "flag": g29, ai: aiStatus});
+const g70 = object({"id": textual, "name": textual, "connected": g55, "from": g69, ai: aiStatus});
+const g71 = array(g70);
+const g72 = object({"id": textual, "name": textual, "author": textual, "by": textual, "at": numeric});
+const g73 = array(g72);
+const g74 = object({"ref": textual, "name": textual, "nation": g23, "flag": g29});
+const g75 = object({"id": textual, "from": g74, "to": g74, "give": g0, "want": g0, "acceptedAt": optional(undefinedValue)});
+const g76 = array(g75);
+const g77 = union(literal("declaration"), literal("alliance"));
+const g78 = object({"id": textual, "from": g74, "to": g74, "text": textual, "kind": optional(g77), "acceptedAt": g14});
+const g79 = array(g78);
+const g80 = object({"vehicles": numeric, "fixed": numeric});
+const g81 = union(literal("work"), literal("dismantle"), literal("collect"), literal("fetch"), literal("deliver"), literal("go"), literal("load"), literal("return"), literal("aside"));
+const g82 = union(literal(""), literal("immobile"), literal("waiting-stock"), literal("no-room"), literal("waiting-place"), literal("waiting-fuel"), literal("waiting-material"), literal("waiting-dismantle"), literal("waiting-grade"), literal("target-lost"), literal("threat"), literal("danger"), literal("blocked-way"), literal("no-loader"), prefixed("stuck-"), literal("no-landing"), literal("out-of-range"), literal("refuelling"), literal("thruster-lost"), literal("forced-landing"), literal("mending"), literal("manual-order"), literal("manual-control"), literal("target-moving"));
+const g83 = object({"phase": g81, "reason": g82});
+const g84 = union(literal(null), g83);
+const g85 = object({"progress": numeric, "seconds": numeric, "building": logical, "sent": g84});
+const g86 = union(literal(null), g85);
+const g87 = object({"progress": numeric, "at": numeric, "state": g40, "by": g31});
+const g88 = union(literal(null), g87);
+const g89 = object({"id": textual, "x": numeric, "facing": g9, "radius": numeric, "eye": numeric, "sight": numeric, "takedown": g86, "siege": g88});
+const g90 = array(g89);
+const g91 = object({"kind": textual, "color": g23, "spans": g38});
+const g92 = array(g91);
+const g93 = object({"cost": g0, "seconds": numeric});
+const g94 = union(literal(null), g93);
+const g95 = object({"at": numeric, "until": numeric, "fuelLitres": numeric, "rounds": numeric});
+const g96 = object({"kind": literal("load"), "until": optional(numeric), "waiting": optional(literal(true)), "limited": optional(literal(true))});
+const g97 = object({"reach": numeric, "ready": logical, "reason": textual, "working": g23});
+const g98 = union(literal("ferro"), literal("ligas"), literal("silica"), literal("petroleo"), literal("supplies"));
+const g99 = union(literal("repair"), literal("work"), literal("dismantle"), literal("rearm"), literal("build"), literal("grade"), literal("pave"), literal("heap"), literal("haul"));
+const g100 = union(literal("work"), literal("collect"), literal("fetch"), literal("deliver"), literal("go"), literal("load"), literal("return"), literal("aside"), literal("out"), literal("home"), literal("unload"));
+const g101 = object({"reason": g82, "passing": optional(g98), "post": optional(literal(true)), "kind": g99, "phase": g100, "targetId": textual});
+const g102 = object({"reason": g82, "passing": optional(g98), "post": optional(literal(true)), "kind": literal(null), "phase": literal("return"), "targetId": literal(null)});
+const g103 = object({"reason": g82, "passing": optional(g98), "post": optional(literal(true)), "kind": literal(null), "phase": literal("aside"), "targetId": literal(null)});
+const g104 = object({"kind": literal(null), "phase": literal("paused"), "targetId": literal(null), "reason": g82});
+const g105 = object({"kind": literal(null), "phase": literal("idle"), "targetId": g23, "reason": g82});
+const g106 = union(g101, g102, g103, g104, g105);
+const g107 = object({"kind": literal("build"), "until": numeric, "cost": undefinedValue, "payer": undefinedValue, "partial": literal(false)});
+const g108 = object({"kind": literal("turn"), "until": numeric, "cost": undefinedValue, "payer": undefinedValue, "partial": literal(false), "aloft": optional(literal(true))});
+const g109 = object({"kind": literal("repair"), "until": numeric, "cost": g0, "payer": g23, "partial": logical});
+const g110 = object({"kind": literal("dismantle"), "progress": numeric, "seconds": numeric, "to": g23, "building": logical, "sent": g84});
+const g111 = union(literal(null), g107, g108, g109, g110);
+const g112 = object({"solid": numeric, "liquid": numeric, "supplies": numeric});
+const g113 = union(literal("fuel"), literal("engine"));
+const g114 = object({"limit": g113, "pace": optional(absent), "tool": optional(absent)});
+const g115 = union(literal("fuel"), literal("engine"), literal("power"));
+const g116 = object({"pace": numeric, "limit": optional(g115), "tool": optional(absent)});
+const g117 = union(literal("blade"), literal("paver"));
+const g118 = object({"limit": literal("ground"), "tool": g117, "pace": optional(absent)});
+const g119 = union(g114, g116, g118);
+const g120 = object({"held": g0, "fill": numeric});
+const g121 = object({"supplier": g23, "stock": g18, "held": textual, "calmUntil": optional(numeric), "resupply": g0});
+const g122 = union(literal(null), g121);
+const g123 = object({"supplier": g23, "stock": g18, "held": textual, "calmUntil": optional(numeric)});
+const g124 = union(literal(null), g123);
+const g125 = object({"id": textual, "vehicle": logical, "value": g0, "built": g0, "repair": g0, "repairSeconds": numeric, "rearm": g0, "mend": g94, "atBase": logical, "atPost": optional(logical), "calm": logical, "calmUntil": optional(numeric), "fuelLow": optional(logical), "refilled": optional(g95), "cargoWork": optional(g96), "builder": optional(g97), "road": optional(logical), "auto": optional(logical), "job": optional(g106), "homing": optional(logical), "aloft": optional(logical), "still": logical, "service": g111, "declined": logical, "cargo": g8, "fill": g112, "loading": g23, "extracting": g23, "tools": optional(g119), "supplies": g18, "serves": logical, "load": g18, "mix": optional(g120), "point": g122, "mender": g124});
+const g126 = array(g125);
+const g127 = object({"inReach": logical, "calmIn": g14, "id": textual, "name": textual, "x": numeric, "until": numeric, "value": g0, "cargo": g8});
+const g128 = array(g127);
+const g129 = object({"id": textual, "left": numeric, "stock": numeric, "at": g14, "seen": logical, "loading": logical, "extracting": logical, "active": logical});
+const g130 = array(g129);
+const g131 = union(literal("withdrawal"), literal("announcement"), literal("collection"));
+const g132 = object({"id": textual, "type": literal("airdrop"), "feature": literal("airdrop"), "x": numeric, "refined": literal(true), "supplies": g0, "material": optional(absent), "reserve": optional(absent), "stock": optional(absent), "left": optional(absent), "arrivesAt": numeric, "expiresAt": numeric, "retireAt": optional(numeric), "guarded": literal(true), "phase": g131, "active": logical, "seen": literal(true)});
+const g133 = object({"id": textual, "type": literal("airdrop"), "feature": literal("airdrop"), "x": numeric, "material": literal("ferro"), "reserve": numeric, "refined": optional(absent), "supplies": optional(absent), "stock": optional(numeric), "left": optional(numeric), "arrivesAt": numeric, "expiresAt": numeric, "retireAt": optional(numeric), "guarded": literal(true), "phase": g131, "active": logical, "seen": literal(true)});
+const g134 = union(literal(null), g132, g133);
+const g135 = union(literal(1), literal(-1));
+const g136 = object({"phase": g81, "reason": g82});
+const g137 = union(literal(null), g136);
+const g138 = object({"id": textual, "name": g3, "x": numeric, "facing": g135, "cost": g0, "delivered": g0, "progress": numeric, "share": numeric, "seconds": numeric, "building": logical, "waiting": logical, "sent": g137, "supplying": logical, "blocked": textual, "from": g23, "lack": g0, "post": literal(true), "blueprint": optional(absent)});
+const g139 = object({"id": textual, "name": g3, "x": numeric, "facing": g135, "cost": g0, "delivered": g0, "progress": numeric, "share": numeric, "seconds": numeric, "building": logical, "waiting": logical, "sent": g137, "supplying": logical, "blocked": textual, "from": g23, "lack": g0, "post": optional(absent), "blueprint": isAuthoredConstruction});
+const g140 = union(g138, g139);
+const g141 = array(g140);
+const g142 = object({"id": textual, "x": numeric, "stock": g0});
+const g143 = array(g142);
+const g144 = union(literal("graded"), literal("asphalt"));
+const g145 = union(literal("grade"), literal("pave"));
+const g146 = array(g145);
+const g147 = object({"id": textual, "x0": numeric, "x1": numeric, "kind": g144, "graded": numeric, "paved": numeric, "working": g146, "coming": logical});
+const g148 = array(g147);
+export const factionFieldGuards: { [Key in keyof FactionView]-?: Guard<FactionView[Key]> } = {
+  duel: union(undefinedValue, isDuelView),
+  id: textual, ref: textual, stock: g0, wants: g7, yard: g8, base: g11, industry: industryGuard, objectives: g17,
+  recovery: g20, recovered: g22, fell: g33, removed: g36, explored: g39, siege: g42, taking: g44,
+  lost: g46, seized: g48, taken: g50, bases: g52, outposts: g54, members: g58, known: g62,
+  strangers: g60, ranking: g64, invites: g66, request: g68, requests: g71, library: g73,
+  trades: g76, accords: g79, count: numeric, counts: g80, posts: g90, territory: g92,
+  units: g126, wrecks: g128, deposits: g130, activity: g134, works: g141, heaps: g143, roadworks: g148,
+  name: textual, nation: g23, flag: g29,
+};
+const g149 = object({ ...factionFieldGuards, duel: optional(isDuelView) });
+const g150 = union(literal("return"), literal("hold"), literal("fire"));
+const g151 = union(undefinedValue, numeric);
+const g152 = union(undefinedValue, literal("ammo"), literal("fuel"), literal("work"), literal("order"), literal("mend"), literal("forced"));
+const g153 = union(undefinedValue, literal(true));
+const g154 = object({"x": numeric, "height": optional(g151), "land": optional(g152), "home": optional(g153)});
+const g155 = union(literal(null), g154);
+const g156 = object({"targetId": textual, "point": optional(absent)});
+const g157 = object({"x": numeric, "y": numeric});
+const g158 = object({"point": g157, "targetId": optional(absent)});
+const g159 = union(literal(null), g156, g158);
+const g160 = union(literal("load"), literal("out"), literal("home"), literal("unload"));
+const g161 = union(undefinedValue, literal("immobile"), literal("blocked-way"), prefixed("stuck-"));
+const g162 = union(literal("ferro"), literal("ligas"), literal("silica"), literal("petroleo"));
+const g163 = union(undefinedValue, literal(false));
+const g164 = object({"depositId": textual, "phase": g160, "blocked": optional(g161), "empty": optional(g55), "far": optional(g55), "fled": optional(g55), "fuel": optional(g55), "full": optional(g55), "interrupted": optional(g3), "mend": optional(g55), "once": optional(g55), "parkedAt": optional(g151), "threat": optional(g3), "waiting": optional(g55), "material": g162, "refined": optional(g163)});
+const g165 = object({"depositId": textual, "phase": g160, "blocked": optional(g161), "empty": optional(g55), "far": optional(g55), "fled": optional(g55), "fuel": optional(g55), "full": optional(g55), "interrupted": optional(g3), "mend": optional(g55), "once": optional(g55), "parkedAt": optional(g151), "threat": optional(g3), "waiting": optional(g55), "refined": literal(true), "material": optional(absent)});
+const g166 = union(literal(null), g164, g165);
+const g167 = object({"x": numeric});
+const g168 = union(literal(null), g167);
+const g169 = object({"event": textual, "channel": textual, "x": numeric, "side": optional(absent)});
+const g170 = object({"event": textual, "channel": textual, "side": numeric, "x": optional(absent)});
+const g171 = union(literal(null), g169, g170);
+const g172 = object({"id": textual, "name": textual});
+const g173 = object({"id": textual, "role": textual, "defeated": logical, "stance": g150, "move": g155, "attack": g159, "haul": g166, "counter": g168, "alert": logical, "heard": g171, "activity": textual, "reason": textual, "haltEvent": optional(g3), "targetId": g23, "reserved": optional(logical), "by": optional(g172)});
+const g174 = array(g173);
+const g175 = array(textual);
+const g176 = object({"manual": g23, "units": g174, "out": g175});
+const g177 = union(literal("global"), literal("faction"), literal("allies"));
+const g178 = object({"id": textual, "of": textual, "by": textual, "nation": textual, "at": numeric, "scope": g177, "text": textual, "to": optional(g175)});
+const g179 = object({"id": textual, "blueprint": isAuthoredConstruction});
+const g180 = array(g179);
+const g181 = union(undefinedValue, literal(null), textual);
+const g182 = array(g178);
+const g183 = object({"ref": g181, "global": g182, "faction": g182});
+const g184 = union(literal(1), literal(4), literal(2), literal(8));
+const g185 = object({"type": literal("welcome"), "playerId": textual, "token": textual, "name": textual, "selected": g23, "base": g11, "faction": g149, "actors": g180, "chat": optional(g183), "watch": optional(union(literal(null), object({ x: numeric, y: numeric, zoom: numeric }))), "persistenceFailed": optional(logical), "testTools": optional(logical), "factor": optional(g184)});
+const g186 = object({"token": textual});
+const g187 = object({"name": textual});
+const g188 = object({"actor": optional(g179), "selected": optional(g23)});
+const g189 = object({"actor": optional(g179), "selected": optional(g23), "base": g11});
+const g190 = object({"actor": g179});
+const g191 = object({"selected": textual});
+const g192 = object({"removed": textual, "selected": g23, "refund": g0, "cargo": g8});
+const g193 = object({"dismantling": textual, "seconds": numeric, "value": g0});
+const g194 = union(g192, g193);
+const g195 = object({"kept": textual, "heap": optional(g23)});
+const g196 = object({"removed": textual, "selected": g23});
+const g197 = object({"partial": logical, "seconds": numeric, "cost": g0});
+const g198 = object({"refund": g0, "lost": g0, "supplier": g23, "gone": logical});
+const g199 = object({"dumped": g8});
+const g200 = object({"auto": logical});
+const g201 = object({"homing": logical});
+const g202 = object({"id": textual, "name": optional(g3), "x": numeric});
+const g203 = object({"id": textual, "x": optional(numeric)});
+const g204 = object({"from": numeric, "to": numeric});
+const publicationReceiptFields = { cost: optional(g0), seconds: optional(numeric), work: optional(g202), post: optional(g203),
+  blocked: optional(g3), relocated: optional(g204), actor: optional(g179), selected: optional(g23) };
+const g205 = object(publicationReceiptFields);
+const manufactureReceipt = object({ ...publicationReceiptFields, cost: g0 });
+const g206 = object({"dismantling": textual, "seconds": numeric, "value": g0});
+const g207 = object({"kept": textual});
+const g208 = object({"id": textual, "stock": g0});
+const g209 = union(literal(null), g208);
+const g210 = object({"cancelled": textual, "heap": g209});
+const g211 = object({"id": textual, "x0": numeric, "x1": numeric, "kind": g144});
+const g212 = object({"road": g211});
+const g213 = object({"cancelled": textual});
+const g214 = object({"salvaged": textual, "value": g0, "cargo": g8, "left": g8});
+const g215 = object({"refused": optional(isWireMessage), "held": optional(g175), "turning": optional(g175), "seconds": optional(numeric), "aloft": optional(logical), "actor": optional(g179), "selected": optional(g23)});
+const g216 = object({"towing": logical});
+const upgradeReceiptGuard = object({ upgrade: isUpgradeId, pending: optional(numeric), already: optional(literal(true)) });
+const cancelUpgradeReceiptGuard = object({ cancelled: numeric, refund: g0, already: optional(literal(true)) });
+const g222 = object({"offered": optional(textual), "cancelled": optional(textual), "traded": optional(textual)});
+const g223 = object({"proposed": optional(textual), "ended": optional(textual), "accepted": optional(textual)});
+const g224 = object({"sent": textual});
+const g225 = object({"id": textual, "name": textual, "x": numeric, "facing": numeric, "mobile": logical, "active": logical});
+const g226 = array(g225);
+const g227 = object({"actors": g226});
+const g228 = object({"factor": g184});
+const g229 = object({"stock": g0});
+const g230 = object({"actor": g179});
+const g231 = object({"changed": textual});
+const g232 = union(g227, g228, g229, g230, g231);
+const g233 = object({"accepted": logical});
+const g234 = object({"drive": g188, "aim": g188, "trigger": g188, "rekey": g186, "rename": g187, "release": g188, "recover": g189, "blueprint": g190, "select": g191, "remove": g194, "cancel-dismantle": g195, "abandon": g196, "repair": g197, "cancel-repair": g198, "dump-cargo": g199, "auto": g200, "homing": g201, "spawn": manufactureReceipt, "replace": manufactureReceipt, "relocate": g205, "post": manufactureReceipt, "remove-post": g206, "keep-post": g207, "cancel-work": g210, "road": g212, "cancel-road": g213, "salvage": g214, "squad": g215, "tow": g216, "invite": g188, "join-faction": g188, "decline": g188, "member": g188, "leave-faction": g188, "identity": g188, "apply": g188, "answer": g188, "library": libraryResultGuard, "upgrade": upgradeReceiptGuard, "cancel-upgrade": cancelUpgradeReceiptGuard, "trade": g222, "accord": g223, "chat": g224, "objectives": g188, "test": g232, "fire": g233});
+const g235 = object({"type": literal("reply"), "request": optional(numeric), "error": optional(textual), "userMessage": optional(isWireMessage), "unknownKey": optional(logical), "nameTaken": optional(logical), "retryable": optional(logical), "outdated": optional(logical), "persistenceFailed": optional(logical), "factor": optional(g184)});
+const g236 = union(literal(null), g176);
+const g237 = object({"squad": g236, "selected": g23});
+
+export const isFactionView: Guard<FactionView> = g149;
+export const isRoomSquadView: Guard<RoomSquadView> = g176;
+export const isChatMessage: Guard<ChatMessage> = g178;
+export const isWelcomeMessage: Guard<WelcomeMessage> = g185;
+export const isCommandResults: Guard<CommandResults> = g234;
+export const isServerReply: Guard<ServerReply> = g235;
+export const isChatHistory: Guard<ChatHistory> = g183;
+export const isSquadMetadata: Guard<SquadMetadata> = g237;
+
+export const commandResultGuards: { [Kind in CommandKind]: Guard<CommandResults[Kind]> } = {"drive": g188, "aim": g188, "trigger": g188, "rekey": g186, "rename": g187, "release": g188, "recover": g189, "blueprint": g190, "select": g191, "remove": g194, "cancel-dismantle": g195, "abandon": g196, "repair": g197, "cancel-repair": g198, "dump-cargo": g199, "auto": g200, "homing": g201, "spawn": manufactureReceipt, "replace": manufactureReceipt, "relocate": g205, "post": manufactureReceipt, "remove-post": g206, "keep-post": g207, "cancel-work": g210, "road": g212, "cancel-road": g213, "salvage": g214, "squad": g215, "tow": g216, "invite": g188, "join-faction": g188, "decline": g188, "member": g188, "leave-faction": g188, "identity": g188, "apply": g188, "answer": g188, "library": libraryResultGuard, "upgrade": upgradeReceiptGuard, "cancel-upgrade": cancelUpgradeReceiptGuard, "trade": g222, "accord": g223, "chat": g224, "objectives": g188, "test": g232, "fire": g233};
+export function decodeCommandResult<Kind extends CommandKind>(kind: Kind, value: unknown): CommandResult<Kind> {
+  const check = commandResultGuards[kind];
+  if (!check(value)) throw new Error('Resposta de comando inválida: ' + kind);
+  return value;
+}
+const testBill = object({ ferro: numeric, ligas: numeric, silica: numeric, combustivel: numeric });
+const testChanged = object({ changed: textual });
+export const isTestAct = (value: unknown): value is TestAct => typeof value === 'string' && ['list', 'resources', 'speed', 'spawn', 'repair', 'resupply', 'reposition'].includes(value);
+const testResultGuards: { [Act in TestAct]: Guard<TestResultFor<Act>> } = {
+  list: object({ actors: array(object({ id: textual, name: textual, x: numeric, facing: numeric, mobile: logical, active: logical })) }),
+  resources: object({ stock: testBill }), speed: object({ factor: union(literal(1), literal(2), literal(4), literal(8)) }),
+  spawn: object({ actor: object({ id: textual, blueprint: isAuthoredConstruction }) }), repair: testChanged, resupply: testChanged, reposition: testChanged,
+};
+export function decodeTestResultFor<Act extends TestAct>(act: Act, value: unknown): TestResultFor<Act> {
+  const check = testResultGuards[act];
+  if (!check(value)) throw new Error('Resposta de teste inválida: ' + act);
+  return value;
+}
+
+export const isLibraryAct = (value: unknown): value is LibraryAct => value === 'get' || value === 'publish' || value === 'remove';
+export function decodeLibraryResultFor<Act extends LibraryAct>(act: Act, value: unknown): LibraryResultFor<Act> {
+  const check = libraryResultGuards[act];
+  if (!check(value)) throw new Error('Resposta de biblioteca inválida: ' + act);
+  return value;
+}

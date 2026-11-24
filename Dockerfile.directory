@@ -1,0 +1,11 @@
+FROM node:24-bookworm-slim
+WORKDIR /directory
+RUN mkdir /data && chown node:node /data
+COPY package.json ./
+COPY src/server-directory-contract.ts src/wire-shape.ts ./src/
+COPY server/directory-cli.ts server/server-directory.ts server/directory-probe.ts server/network-address.ts server/request-budget.ts server/server-origins.ts ./server/
+USER node
+ENV IMPACTO_DIRECTORY_DATA=/data IMPACTO_DIRECTORY_HOST=0.0.0.0
+EXPOSE 8080
+ENTRYPOINT ["node", "server/directory-cli.ts"]
+CMD ["serve"]

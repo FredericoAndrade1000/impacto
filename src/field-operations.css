@@ -1,0 +1,16 @@
+.unit-field-operations { display: grid; gap: 8px; margin: 10px 0; min-width: 0; }
+.sidebar .unit-field-operations section { display: grid; gap: 6px; min-width: 0; padding: 0; border: 0; }
+.unit-field-operations button { min-height: 44px; width: 100%; white-space: normal; }
+.unit-operation-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
+.unit-operation-toggle b { flex: 0 0 auto; font-size: .8em; color: var(--muted, #a4b29b); }
+.unit-operation-toggle[aria-pressed=true] { border-color: var(--accent, #ffc978); }
+.unit-operation-toggle[aria-pressed=true] b { color: var(--accent, #ffc978); }
+.field-operation-status { display: block; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; color: var(--muted, #a4b29b); }
+.field-operation-status:empty { display: none; }
+.unit-field-operations [hidden], .unit-field-operations[hidden] { display: none !important; }
+/* A vehicle on a cable: what it pulls or what pulls it, beside the button that lets go. */
+.unit-tow { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 10px 0; }
+.unit-tow[hidden] { display: none; }
+.unit-tow > div { display: grid; gap: 2px; min-width: 0; }
+.unit-tow-line { font-size: 13px; overflow-wrap: anywhere; }
+.unit-tow button { flex: 0 0 auto; min-height: 44px; }

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "id": "galaxy-a15-4g",
+  "benchmark": "impacto-mobile-1",
+  "viewport": [844, 390],
+  "dpr": 1,
+  "cpu": {
+    "rate": 4,
+    "status": "historical-cpu-proxy",
+    "reference": "Speedometer 3.0, 2026-10-18: S20 FE Snapdragon 865 5.29 +/-0.40, published A15 3.66, desktop CPU4 3.74 +/-0.21. Main thread only; recalibrate on another host."
+  },
+  "gpu": {
+    "slowdown": null,
+    "status": "missing-matched-reference",
+    "reference": "Historical S20 FE game captures do not contain valid GPU timers. Never derive a desktop-to-A15 GPU multiplier from Speedometer or capped FPS."
+  },
+  "transfers": {
+    "bytesPerSecond": null,
+    "scope": "observed-webgl-uploads",
+    "status": "missing-matched-reference"
+  },
+  "network": {
+    "downloadBytesPerSecond": 1000000,
+    "uploadBytesPerSecond": 250000,
+    "rttMs": 80,
+    "reference": "Synthetic shared 8 Mbps down / 2 Mbps up / 80 ms RTT condition; not a device specification. Applied to TCP, including compressed WebSocket bytes."
+  },
+  "limitations": [
+    "GPU timing and observed upload pacing are relative budgets, not hardware GPU or RAM emulation.",
+    "No per-tab control of physical RAM/VRAM bandwidth, cache, memory capacity or thermal throttling is claimed.",
+    "A diagnostic run with a missing domain must never report simulated A15 FPS."
+  ]
+}

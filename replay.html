@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Impacto · Replays</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/replay.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">≋</span><div><strong>Replays</strong><small>Observador · somente leitura</small></div></div>
+    <label class="recording"><span>Gravação</span><select id="recordings" aria-label="Gravação"></select></label>
+    <button id="refresh" title="Atualizar lista">↻</button><button id="open" class="primary" disabled>Abrir replay</button>
+    <button id="cancel" hidden>Cancelar</button>
+    <select id="language" aria-label="Idioma"><option value="auto">Automático</option><option value="pt-BR">Português</option><option value="en">English</option><option value="es">Español</option></select>
+  </header>
+  <main>
+    <section class="stage" aria-label="Campo do replay">
+      <div id="viewport"></div>
+      <div class="caption"><span class="live-dot"></span><div><span id="status" role="status">Escolha uma gravação para começar.</span><strong id="duel-result" role="status" hidden></strong></div></div>
+      <div id="empty" class="empty"><strong>Observe as interações no campo</strong><p>Abra uma gravação, escolha uma facção ou veículo e percorra a linha do tempo.</p><span>O campo ativo continua independente.</span></div>
+      <div class="camera-help">Arraste para mover · roda para aproximar · espaço para pausar</div>
+      <div class="overview"><div class="map-heading"><span>Visão geral</span><span id="map-span"></span></div><div id="map" role="group" aria-label="Navegar pelo campo"><div id="map-window"></div><div id="map-marks"></div></div></div>
+    </section>
+    <aside>
+      <label>Facção<select id="factions" disabled></select></label>
+      <div id="faction-info" class="faction-info"></div>
+      <div class="section-line"><h2>Veículos e estruturas</h2><span id="unit-count"></span></div>
+      <label class="structure-filter"><input id="structures" type="checkbox"> Somente estruturas</label>
+      <select id="units" size="6" aria-label="Veículos e estruturas" disabled></select>
+      <div class="unit-actions"><button id="focus" disabled>Localizar</button><button id="follow" disabled aria-pressed="false">Acompanhar</button></div>
+      <div id="unit-info" class="unit-info"><p>Selecione um veículo para ver sua atividade.</p></div>
+      <div class="section-line"><h2>Eventos</h2><span id="marker-count"></span></div>
+      <div id="events" class="events"><p>Decisões, disparos e perdas aparecem aqui.</p></div>
+    </aside>
+  </main>
+  <footer>
+    <div class="timeline-row"><output id="clock">00:00 / 00:00</output><input id="timeline" type="range" min="0" max="1" step="any" value="0" disabled aria-label="Tempo do replay"><span id="verification">—</span></div>
+    <div class="transport"><div class="transport-buttons"><button id="back" disabled title="Voltar um segundo">−1 s</button><button id="play" class="primary" disabled>Reproduzir</button><button id="next" disabled title="Avançar um segundo">+1 s</button></div>
+      <label class="speed">Velocidade<select id="speed"><option>0.25×</option><option>0.5×</option><option selected>1×</option><option>2×</option><option>4×</option><option>8×</option><option>16×</option><option>32×</option></select></label>
+      <select id="chapters" hidden aria-label="Capítulo do replay"></select>
+      <span id="detail" class="detail">Visão de observador sem neblina de guerra.</span>
+    </div>
+  </footer>
+  <script type="module" src="/src/replay-bootstrap.ts"></script>
+</body>
+</html>
